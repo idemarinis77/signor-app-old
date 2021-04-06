@@ -34,9 +34,10 @@ public class SignorManager {
     public final SignorStyleManager signorStyleManager;
     public final CytoUtils utils;
     public CyNetwork cyNetwork;
+    public CyNetworkView cyNetworkView;
     public Config CONFIG = new Config();
     public Network currentNetwork;
-    public Boolean PTMtableTocreate = false;
+    //public Boolean PTMtableTocreate = false;
   
     public SignorManager(CyServiceRegistrar registrar) {        
         utils = new CytoUtils(registrar);
@@ -133,9 +134,9 @@ public class SignorManager {
                 String map_attribute = CONFIG.EDGEFIELDMAP.get(attribute);
                 try {
                     signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(CONFIG.NAMESPACE, map_attribute, attributes[a]);
-                    if (map_attribute.equals("RESIDUE") && !attributes[a].isEmpty() && !PTMtableTocreate){
+                    /*if (map_attribute.equals("RESIDUE") && !attributes[a].isEmpty() && !PTMtableTocreate){
                         PTMtableTocreate = true;
-                    }
+                    }*/
                 }
                 catch (Exception e){
                     this.utils.error(CONFIG.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[a]+" "+e.toString());
@@ -148,5 +149,6 @@ public class SignorManager {
     public void installView(CyNetworkView view){
         utils.getService(CyNetworkViewManager.class).addNetworkView(view);
         utils.getService(CyApplicationManager.class).setCurrentNetworkView(view);
+        cyNetworkView = view;
     }
  }

@@ -78,13 +78,13 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             network.setNetwork(cynet);
             manager.setCurrentNetwork(network);
             
-            if(manager.PTMtableTocreate.equals(true)){
+           // if(manager.PTMtableTocreate.equals(true)){
                 Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableNode.buildPTMTable(manager, "PTMNode");
                 
                 Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableEdge.buildPTMTable(manager, "PTMEdge");
-            }
+            //}
             
             CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
             CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");

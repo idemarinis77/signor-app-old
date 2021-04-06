@@ -24,7 +24,7 @@ import it.uniroma2.signor.internal.utils.IconUtils;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.event.*;
 import it.uniroma2.signor.internal.utils.TimeUtils;
-import it.uniroma2.signor.internal.utils.DataManager;
+import it.uniroma2.signor.internal.utils.DataUtils;
 
 import java.awt.BorderLayout;
 import java.time.Instant;
@@ -40,10 +40,14 @@ import org.cytoscape.model.CyNetwork;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.cytoscape.application.events.SetCurrentNetworkViewListener;
+import org.cytoscape.application.events.SetCurrentNetworkViewEvent;
+
 public class SignorLegendPanel extends JPanel implements 
         CytoPanelComponent, 
         SelectedNodesAndEdgesListener,
-        SignorNetworkCreatedListener {       
+        SignorNetworkCreatedListener, 
+        SetCurrentNetworkViewListener {       
     
     CyServiceRegistrar registrar;
     //SignorLegendController controller;
@@ -69,7 +73,7 @@ public class SignorLegendPanel extends JPanel implements
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
                 ptmviewON.setEnabled(false);
-                DataManager.PopulatePTMTables(manager); }
+                DataUtils.PopulatePTMTables(manager); }
         };
         ActionListener listenerDEF = new ActionListener() {
             
@@ -162,6 +166,10 @@ public class SignorLegendPanel extends JPanel implements
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");
         }
         
+    }
+    @Override
+    public void handleEvent (SetCurrentNetworkViewEvent e) {
+        manager.utils.info("E' cambiata la network "+e.getNetworkView().toString());
     }
 
 }
