@@ -14,6 +14,13 @@ import org.cytoscape.model.CyNetworkTableManager;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableManager;
+
+import org.cytoscape.view.model.CyNetworkView;
+import org.cytoscape.application.CyApplicationManager;
+import org.cytoscape.view.model.CyNetworkViewManager;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
+import java.awt.Color;
+
 /**
  *
  * @author amministratore
@@ -23,7 +30,11 @@ public class DataManager {
     public static void PopulatePTMTables(SignorManager manager){
         Config CONFIG = new Config();
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
-        CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
+        
+        CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
+        CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
+        CyNetworkViewManager networkViewManager = manager.utils.getService(CyNetworkViewManager.class);
+        //CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
         try {
            if( tableManager.getAllTables(true).contains(manager.currentNetwork.PTMnodeTable) &&
                tableManager.getAllTables(true).contains(manager.currentNetwork.PTMedgeTable)){
@@ -37,11 +48,21 @@ public class DataManager {
                   
                        String interaction = cyrow.get(CONFIG.NAMESPACE, "INTERACTION", String.class);
                        String sequence = cyrow.get(CONFIG.NAMESPACE, "SEQUENCE", String.class);
-                       CyNode cyNode = manager.cyNetwork.addNode();
+                       CyNode cyNode = manager.cyNetwork.addNode();                      
+                       
+
+               manager.utils.flushEvents();
+               networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.MAGENTA);
+               networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 20.0);    
+               networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 20.0);  
+               networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0.0); 
+                       
+                       
                        manager.currentNetwork.PTMnodeTable.getRow(cyNode.getSUID()).set(CONFIG.NAMESPACEPTM, "RESIDUE", cyrow.get(CONFIG.NAMESPACE, "RESIDUE", String.class));
                        manager.currentNetwork.PTMnodeTable.getRow(cyNode.getSUID()).set(CONFIG.NAMESPACEPTM, "TYPE", "residue");
                        manager.currentNetwork.PTMnodeTable.getRow(cyNode.getSUID()).set(CONFIG.NAMESPACEPTM, "SEQUENCE", cyrow.get(CONFIG.NAMESPACE, "SEQUENCE", String.class));
                        
+                                      
                        CyNode cyNodeSourceParent = cyEdgeParent.getSource();
                        CyNode cyNodeTargetParent = cyEdgeParent.getTarget();
                        CyEdge cyEdge = manager.cyNetwork.addEdge(cyNodeSourceParent, cyNode, false);
@@ -51,9 +72,13 @@ public class DataManager {
                        manager.currentNetwork.PTMedgeTable.getRow(cyEdge.getSUID()).set(CONFIG.NAMESPACEPTM, "INTERACTION", interaction);           
                    }                   
                }
-               manager.PTMtableTocreate =false;
-               //cyNetworktableManager.setTable(manager.cyNetwork, CyNode.class , CONFIG.NAMESPACEPTM, manager.currentNetwork.PTMnodeTable);
-               //manager.utils.flushEvents();
+               manager.PTMtableTocreate = false;
+
+               
+               /*CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
+               cyNetworktableManager.setTable(manager.cyNetwork, CyNode.class , CONFIG.NAMESPACEPTM, manager.currentNetwork.PTMnodeTable);*/
+               //
+               manager.utils.info(tableManager.getAllTables(true).toString());
             }
         }
         catch (Exception e) {
