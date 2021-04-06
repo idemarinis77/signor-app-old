@@ -39,6 +39,7 @@ public class Table {
                 break;
         }       
     }
+    
     public void buildPTMTable(SignorManager manager, String title) {
         var PTMtableFactory = manager.utils.getService(CyTableFactory.class);                  
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
@@ -66,7 +67,7 @@ public class Table {
                     manager.currentNetwork.SetPTMEdgeTable(PTMEDGEtable);
                 }
             break;
-        }    
+        }  
     }
 
 }

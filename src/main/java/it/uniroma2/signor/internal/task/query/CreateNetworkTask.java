@@ -53,7 +53,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
         Config CONFIG = new Config();     
         try {
             monitor.setTitle("Querying Signor Network");            
-            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL+terms);
+            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
             CyNetwork cynet = manager.createNetwork(netname);
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             ArrayList<String> results = HttpUtils.parseWS(br, CONFIG.HEADERALLSEARCH);
