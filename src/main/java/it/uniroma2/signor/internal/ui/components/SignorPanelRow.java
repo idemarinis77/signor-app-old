@@ -78,6 +78,7 @@ public class SignorPanelRow extends JPanel{
     }
     
     public void signorPanelRowDetailEdge(JPanel jp, EasyGBC gbc, CyRow edgenode){
+
         SignorLabelStyledBold id = new SignorLabelStyledBold("ID");
         this.add(id, gbc.position(0,0));
         JLabel id_value = new JLabel(edgenode.get(CONFIG.NAMESPACE, "SIGNOR_ID", String.class));
@@ -90,7 +91,7 @@ public class SignorPanelRow extends JPanel{
         
         SignorLabelStyledBold organism = new SignorLabelStyledBold("ORGANISM");
         this.add(organism, gbc.position(0,2));
-        JLabel organism_value = new JLabel(edgenode.get(CONFIG.NAMESPACE, "TAX_ID", String.class));
+        JLabel organism_value = new JLabel(edgenode.get(CONFIG.NAMESPACE, "TAX_ID", Integer.class).toString());
         this.add(organism_value, gbc.right());
         
         SignorLabelStyledBold modification = new SignorLabelStyledBold("MODIFICATION");

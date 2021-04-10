@@ -31,11 +31,11 @@ public class Table {
         switch(title){
             case "Node":
             CONFIG.NODEFIELD.forEach((k, v) ->
-                    manager.cyNetwork.getDefaultNodeTable().createColumn(CONFIG.NAMESPACE, k, v, false));
+                    manager.lastCyNetwork.getDefaultNodeTable().createColumn(CONFIG.NAMESPACE, k, v, false));
                 break;            
             case "Edge":
             CONFIG.EDGEFIELD.forEach((k, v) -> 
-                   manager.cyNetwork.getDefaultEdgeTable().createColumn(CONFIG.NAMESPACE, k, v, false));
+                   manager.lastCyNetwork.getDefaultEdgeTable().createColumn(CONFIG.NAMESPACE, k, v, false));
                 break;
         }       
     }
@@ -44,7 +44,7 @@ public class Table {
         var PTMtableFactory = manager.utils.getService(CyTableFactory.class);                  
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
         Set<CyTable> alltable = tableManager.getAllTables(true);
-        String prefix_col = manager.cyNetwork.getRow(manager.cyNetwork).get(CyNetwork.NAME, String.class)+" - ";
+        String prefix_col = manager.lastCyNetwork.getRow(manager.lastCyNetwork).get(CyNetwork.NAME, String.class)+" - ";
         
         switch(title){
             case "PTMNode":
@@ -54,7 +54,7 @@ public class Table {
                     CONFIG.PTMNODEFIELD.forEach((k, v) ->
                         PTMNODEtable.createColumn(CONFIG.NAMESPACEPTM, k, v, isMutable));             
                     tableManager.addTable(PTMNODEtable);
-                    manager.currentNetwork.SetPTMNodeTable(PTMNODEtable);
+                    manager.lastNetwork.SetPTMNodeTable(PTMNODEtable);
                 }
             break;
             case "PTMEdge":
@@ -64,7 +64,7 @@ public class Table {
                     CONFIG.PTMEDGEFIELD.forEach((k, v) ->
                         PTMEDGEtable.createColumn(CONFIG.NAMESPACEPTM, k, v, isMutable));
                     tableManager.addTable(PTMEDGEtable);
-                    manager.currentNetwork.SetPTMEdgeTable(PTMEDGEtable);
+                    manager.lastNetwork.SetPTMEdgeTable(PTMEDGEtable);
                 }
             break;
         }  

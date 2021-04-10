@@ -22,8 +22,6 @@ import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.subnetwork.CySubNetwork;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
-import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
-import java.util.Properties;
 import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.model.CyNetworkViewManager;
@@ -37,18 +35,17 @@ public class SignorManager {
     public final SignorStyleManager signorStyleManager;
     public final PresentationManager presentationManager;
     public final CytoUtils utils;
-    public CyNetwork cyNetwork;
-    public CyNetworkView cyNetworkView;
-    public Network currentNetwork;
-    SignorLegendPanel signorPanel;
+    public CyNetwork lastCyNetwork;
+    public Network lastNetwork;
+    public CyNetworkView lastCyNetworkView;
+    //SignorLegendPanel signorPanel;
     //public Boolean PTMtableTocreate = false;
   
     public SignorManager(CyServiceRegistrar registrar) {        
-        utils = new CytoUtils(registrar);
-        
+        utils = new CytoUtils(registrar);        
         presentationManager = new PresentationManager(this);
         signorStyleManager = new SignorStyleManager(this, Config.FILESTYLE);
-        signorStyleManager.setupStyles();
+        signorStyleManager.setupDefaultStyle();
     }
     
     public CyNetwork createNetwork(String name) {
@@ -84,22 +81,21 @@ public class SignorManager {
             name = name + " - " + index;
         }
         cyNetwork.getRow(cyNetwork).set(CyNetwork.NAME, name);
-        this.cyNetwork = cyNetwork;
+        this.lastCyNetwork = cyNetwork;
         return cyNetwork;
     }
     
     public void setCurrentNetwork(Network network){
-        this.currentNetwork = network;
+        this.lastNetwork = network;
     }
    
     public CyNetwork createElementsFromLine(ArrayList<String> results){
-        CyNetwork signornet = this.cyNetwork;
+        CyNetwork signornet = this.lastCyNetwork;
         HashMap<String, CyNode> entity_read = new HashMap <String, CyNode>();
         for (int i = 0; i < results.size(); i++) {            
             String[] attributes = results.get(i).split("\t");
             CyNode nodeSource;
-            CyNode nodeTarget;
-            
+            CyNode nodeTarget;            
             if (!entity_read.containsKey(attributes[0])){
                 nodeSource = signornet.addNode();
                 entity_read.put(attributes[0], nodeSource);
@@ -139,10 +135,18 @@ public class SignorManager {
                 String attribute = Config.HEADERSINGLESEARCH[a];
                 String map_attribute = Config.EDGEFIELDMAP.get(attribute);
                 try {
-                    signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[a]);
-                    /*if (map_attribute.equals("RESIDUE") && !attributes[a].isEmpty() && !PTMtableTocreate){
-                        PTMtableTocreate = true;
-                    }*/
+                    if((a == attributes.length -1) && attributes[a].startsWith("0.")){
+                        //I'm reading the last field (Score) 
+                        //Some lines could have no score, so I double check also the "0." at the beginning of the field
+                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Double.parseDouble(attributes[a]));
+                    }
+                    else if (a == 12){
+                        //I'm reading TAX_ID and it's of Integer type
+                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Integer.parseInt(attributes[a]));
+                    }
+                    else {
+                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[a]);
+                    }
                 }
                 catch (Exception e){
                     this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[a]+" "+e.toString());
@@ -151,10 +155,5 @@ public class SignorManager {
         }
         utils.flushEvents();
         return signornet;
-    }
-    public void installView(CyNetworkView view){
-        utils.getService(CyNetworkViewManager.class).addNetworkView(view);
-        utils.getService(CyApplicationManager.class).setCurrentNetworkView(view);
-        cyNetworkView = view;
     }
  }

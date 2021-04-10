@@ -45,7 +45,7 @@ public class CyActivator extends AbstractCyActivator {
                 // Issue error and return
             }
             // Get a handle on the CyServiceRegistrar
-            Config CONFIG = new Config();
+
             CyServiceRegistrar registrar = getService(bc, CyServiceRegistrar.class);
             SignorManager manager = new SignorManager(registrar);            
             CyApplicationManager cyApplicationManagerServiceRef = getService(bc,CyApplicationManager.class);
@@ -77,12 +77,12 @@ public class CyActivator extends AbstractCyActivator {
               //CyNetwork current = manager.data.getCurrentCyNetwork();
               CyNetwork cynet = manager.utils.getService(CyApplicationManager.class).getCurrentNetwork();
               try {
-                if (cynet.getRow(cynet).get(CyNetwork.NAME, String.class).startsWith(CONFIG.NTWPREFIX)){
+                if (cynet.getRow(cynet).get(CyNetwork.NAME, String.class).startsWith(Config.NTWPREFIX)){
                     manager.utils.execute(showResults.createTaskIterator(), true);
                 }
               }
               catch(Exception e){
-                  
+                manager.utils.error(e.toString());
               }
             }
             

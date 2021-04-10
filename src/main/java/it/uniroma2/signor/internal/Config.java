@@ -124,11 +124,11 @@ public class Config {
         {
            put("ENTITYA", "ENTITY");
            put("TYPEA", "TYPE");
-           put("IDA", "IDA");
+           put("IDA", "ID");
            put("DATABASEA", "DATABASE");
            put("ENTITYB", "ENTITY");
            put("TYPEB", "TYPE");
-           put("IDB", "IDB");
+           put("IDB", "ID");
            put("DATABASEB", "DATABASE");
         }
     };

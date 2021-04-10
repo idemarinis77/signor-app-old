@@ -75,18 +75,16 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
             //Apply style
             manager.signorStyleManager.applyStyle(ntwView);
-            manager.installView(ntwView);            
+            manager.signorStyleManager.installView(ntwView);            
             
             network.setNetwork(cynet);
             manager.setCurrentNetwork(network);
             
-           // if(manager.PTMtableTocreate.equals(true)){
-                Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                PTMTableNode.buildPTMTable(manager, "PTMNode");
+            Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+            PTMTableNode.buildPTMTable(manager, "PTMNode");
                 
-                Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                PTMTableEdge.buildPTMTable(manager, "PTMEdge");
-            //}
+            Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+            PTMTableEdge.buildPTMTable(manager, "PTMEdge");
             
             CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
             CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
@@ -100,7 +98,8 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
             insertTasksAfterCurrentTask(taskIterator);
             manager.utils.showResultsPanel();
-            manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));      
+            manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));    
+            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
         }
         catch (Exception e){
             manager.utils.error(e.toString()+"Problem fectching data from "+URL);

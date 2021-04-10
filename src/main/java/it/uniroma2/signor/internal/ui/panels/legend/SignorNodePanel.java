@@ -68,10 +68,10 @@ public class SignorNodePanel extends JPanel {
         nodesPanel.removeAll();
         this.selectionRunning=true;
         //EasyGBC gbc=new EasyGBC();        
-        Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(manager.currentNetwork.getCyNetwork(), CyNetwork.SELECTED, true);        
+        Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(manager.lastNetwork.getCyNetwork(), CyNetwork.SELECTED, true);        
         SignorPanelRow node_current_info = new SignorPanelRow(3,3, this.manager);
         CyNode node_current = selectedNodes.iterator().next();
-        CyRow rownode = this.manager.cyNetwork.getDefaultNodeTable().getRow(node_current.getSUID());
+        CyRow rownode = this.manager.lastCyNetwork.getDefaultNodeTable().getRow(node_current.getSUID());
         node_current_info.signorPanelRowDetailNode(nodesPanel,gbc, rownode);       
     }
 }

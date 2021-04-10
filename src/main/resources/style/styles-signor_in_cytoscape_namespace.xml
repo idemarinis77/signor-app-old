@@ -104,7 +104,7 @@
             <visualProperty default="#FFFF00" name="EDGE_TARGET_ARROW_SELECTED_PAINT"/>
             <visualProperty default="false" name="EDGE_SELECTED"/>
             <visualProperty default="NONE" name="EDGE_TARGET_ARROW_SHAPE">
-                <discreteMapping attributeName="interaction" attributeType="string">
+                <discreteMapping attributeName="SIGNOR::Interaction" attributeType="string">
                     <discreteMappingEntry attributeValue="down-regulates quantity" value="T"/>
                     <discreteMappingEntry attributeValue="up-regulates quantity" value="DELTA"/>
                     <discreteMappingEntry attributeValue="form complex" value="OPEN_SQUARE"/>
@@ -125,7 +125,7 @@
             <visualProperty default="#FF0000" name="EDGE_STROKE_SELECTED_PAINT"/>
             <visualProperty default="true" name="EDGE_VISIBLE"/>
             <visualProperty name="EDGE_UNSELECTED_PAINT">
-                <discreteMapping attributeName="interaction" attributeType="string">
+                <discreteMapping attributeName="SIGNOR::Interaction" attributeType="string">
                     <discreteMappingEntry attributeValue="down-regulates quantity" value="#FF3333"/>
                     <discreteMappingEntry attributeValue="up-regulates quantity" value="#0066CC"/>
                     <discreteMappingEntry attributeValue="form complex" value="#6AD863"/>

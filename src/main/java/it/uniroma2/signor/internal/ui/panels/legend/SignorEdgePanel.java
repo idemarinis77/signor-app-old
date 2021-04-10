@@ -68,11 +68,12 @@ public class SignorEdgePanel extends JPanel {
         edgesPanel.removeAll();
         this.selectionRunning=true;
         //EasyGBC gbc=new EasyGBC();        
-        Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(manager.currentNetwork.getCyNetwork(), CyNetwork.SELECTED, true);   
+        Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(manager.lastNetwork.getCyNetwork(), CyNetwork.SELECTED, true);   
         
         SignorPanelRow edge_current_info = new SignorPanelRow(6,2, this.manager);
         CyEdge edge_current = selectedEdges.iterator().next();
-        CyRow rowedge = this.manager.cyNetwork.getDefaultEdgeTable().getRow(edge_current.getSUID());
+        
+        CyRow rowedge = this.manager.lastCyNetwork.getDefaultEdgeTable().getRow(edge_current.getSUID());
         edge_current_info.signorPanelRowDetailEdge(edgesPanel,gbc, rowedge);       
     }
 }

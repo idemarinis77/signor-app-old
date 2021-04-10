@@ -60,9 +60,7 @@ public class SignorLegendPanel extends JPanel implements
         SignorNetworkCreatedListener, 
         SetCurrentNetworkViewListener,
         SetCurrentNetworkListener {       
-    
-    //CyServiceRegistrar registrar;
-    //SignorLegendController controller;
+
     private final JTabbedPane tabs = new JTabbedPane(JTabbedPane.BOTTOM);
     private static final Icon icon = IconUtils.createImageIcon("/images/signor_logo.png");
     private SignorNodePanel snp;
@@ -72,29 +70,23 @@ public class SignorLegendPanel extends JPanel implements
     JRadioButton ptmviewON= new JRadioButton("PTM View");
     JRadioButton defviewON = new JRadioButton("Default View");
 
-    //public SignorLegendPanel(CyServiceRegistrar reg, SignorManager manager) {
     public SignorLegendPanel(SignorManager manager) {
 
-        //registrar = reg;
-        //controller = ctrl;	 
-        this.manager = manager;
-        
+        this.manager = manager;        
         snp = new SignorNodePanel(manager);
         sep = new SignorEdgePanel(manager);
 	
         ActionListener listenerPTM = new ActionListener() {
-
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
                 ptmviewON.setEnabled(false);
                 DataUtils.PopulatePTMTables(manager); }
         };
-        ActionListener listenerDEF = new ActionListener() {
-            
+        ActionListener listenerDEF = new ActionListener() {            
             @Override public void actionPerformed(ActionEvent e) { 
                 ptmviewON.setEnabled(true);
-                defviewON.setEnabled(false);}
-                //controller.createLegend("default"); }
+                defviewON.setEnabled(false); }
+                //da implementare il ritorno al default
         };       
 
         EasyGBC gbc=new EasyGBC();
@@ -161,18 +153,14 @@ public class SignorLegendPanel extends JPanel implements
             new Thread(() -> snp.selectedNodes()).start();
             new Thread(() -> sep.selectedEdges()).start();
         }
-    }        
-
-    
-
-     
+    }      
+  
     public void showCytoPanel() {
         CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);
         CytoPanel cytoPanel = swingApplication.getCytoPanel(CytoPanelName.EAST);
         if (cytoPanel.indexOfComponent(Config.identifier_panel)<=0) {
             manager.utils.registerService(this, CytoPanelComponent.class, new Properties());
         }
-        //cytoPanel.setState(CytoPanelState.DOCK);
         if (cytoPanel.getState() == CytoPanelState.HIDE)
             cytoPanel.setState(CytoPanelState.DOCK);
 
@@ -184,7 +172,6 @@ public class SignorLegendPanel extends JPanel implements
 //            legendPanel.networkChanged(currentNetwork);
 //        }
     }
-
     public void hideCytoPanel() {
         manager.utils.unregisterService(this, CytoPanelComponent.class);
     }
@@ -192,7 +179,7 @@ public class SignorLegendPanel extends JPanel implements
     @Override
     public void handleEvent(SignorNetworkCreatedEvent event){
         try {
-            if (DataUtils.isSignorNetwork(manager) && this.manager.currentNetwork.parameters.get("SINGLESEARCH").equals(true)
+            if (DataUtils.isSignorNetwork(manager) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
                 && !tabSingleSearchAdded){            
                 tabs.add("SUMMARY", new JPanel());
                 tabs.add("RELATIONS", new JPanel());
@@ -207,8 +194,7 @@ public class SignorLegendPanel extends JPanel implements
         }
         catch (Exception e){
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");
-        }
-        
+        }        
     }
     
     @Override

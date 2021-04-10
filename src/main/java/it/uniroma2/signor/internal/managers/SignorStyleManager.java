@@ -29,7 +29,6 @@ public class SignorStyleManager {
     final VisualMappingManager vmm;
     private final SignorManager manager;
     private String filename;
-    private Config CONFIG = new Config();
     private VisualStyle visualStyle;
     //private final SignorManager signormanager;
     //final CyServiceRegistrar registrar;
@@ -40,11 +39,11 @@ public class SignorStyleManager {
         vmm = manager.utils.getService(VisualMappingManager.class);
     } 
 
-    public void setupStyles(){
+    public void setupDefaultStyle(){
         //DefaultSignorStyle dfsm = new SignorPTMStyle(sm, filename);        
         Boolean newStyle = true;
         for (VisualStyle createdStyle : vmm.getAllVisualStyles()) {
-            if (createdStyle.getTitle().equals(CONFIG.SIGNOR_VER_STYLE)) {
+            if (createdStyle.getTitle().equals(Config.SIGNOR_VER_STYLE)) {
                 newStyle = false;                
                 break;
             }
@@ -56,13 +55,17 @@ public class SignorStyleManager {
     }
     public void applyStyle(CyNetworkView view){
         for (VisualStyle createdStyle : vmm.getAllVisualStyles()) {
-            if (createdStyle.getTitle().equals(CONFIG.SIGNOR_VER_STYLE)) { 
+            if (createdStyle.getTitle().equals(Config.SIGNOR_VER_STYLE)) { 
                 vmm.setVisualStyle(createdStyle, view);
                 createdStyle.apply(view);
                 view.updateView();           
                 break;
             }
-        }
-        
+        }        
+    }
+    public void installView(CyNetworkView view){
+        manager.utils.getService(CyNetworkViewManager.class).addNetworkView(view);
+        manager.utils.getService(CyApplicationManager.class).setCurrentNetworkView(view);
+        manager.lastCyNetworkView = view;
     }
 }
