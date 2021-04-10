@@ -25,7 +25,7 @@ import it.uniroma2.signor.internal.Config;
 
 public class Network {
         //implements AddedEdgesListener, AboutToRemoveEdgesListener, RemovedEdgesListener {
-    ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
+    //ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
     public final SignorManager manager;
     CyNetwork cyNetwork;
     CyTable edgeTable;
@@ -62,9 +62,9 @@ public class Network {
         this.PTMedgeTable = cytable;
     }
     
-    public Boolean isSignorNetwork(){
-        return this.cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(CONFIG.NTWPREFIX);
-    }
+//    public Boolean isSignorNetwork(){
+//        return this.cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(CONFIG.NTWPREFIX);
+//    }
 
     public void setNetwork(CyNetwork cyNetwork) {
         this.cyNetwork = cyNetwork;

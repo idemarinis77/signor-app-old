@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.cytoscape.application.swing.CytoPanelComponent;
+import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.service.util.CyServiceRegistrar;
 import java.awt.Color;
@@ -25,10 +26,14 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.event.*;
 import it.uniroma2.signor.internal.utils.TimeUtils;
 import it.uniroma2.signor.internal.utils.DataUtils;
+import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.task.query.SignorPanelTask;
 
 import java.awt.BorderLayout;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNode;
@@ -39,17 +44,24 @@ import org.cytoscape.model.CyNetwork;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
+import org.cytoscape.application.events.SetCurrentNetworkEvent;
+import org.cytoscape.application.events.SetCurrentNetworkListener;
 import org.cytoscape.application.events.SetCurrentNetworkViewListener;
 import org.cytoscape.application.events.SetCurrentNetworkViewEvent;
+import org.cytoscape.application.swing.CySwingApplication;
+import org.cytoscape.application.swing.CytoPanel;
+import org.cytoscape.application.swing.CytoPanelState;
+import org.cytoscape.view.model.CyNetworkView;
 
 public class SignorLegendPanel extends JPanel implements 
         CytoPanelComponent, 
+        CytoPanelComponent2,
         SelectedNodesAndEdgesListener,
         SignorNetworkCreatedListener, 
-        SetCurrentNetworkViewListener {       
+        SetCurrentNetworkViewListener,
+        SetCurrentNetworkListener {       
     
-    CyServiceRegistrar registrar;
+    //CyServiceRegistrar registrar;
     //SignorLegendController controller;
     private final JTabbedPane tabs = new JTabbedPane(JTabbedPane.BOTTOM);
     private static final Icon icon = IconUtils.createImageIcon("/images/signor_logo.png");
@@ -60,8 +72,10 @@ public class SignorLegendPanel extends JPanel implements
     JRadioButton ptmviewON= new JRadioButton("PTM View");
     JRadioButton defviewON = new JRadioButton("Default View");
 
-    public SignorLegendPanel(CyServiceRegistrar reg, SignorManager manager) {
-        registrar = reg;
+    //public SignorLegendPanel(CyServiceRegistrar reg, SignorManager manager) {
+    public SignorLegendPanel(SignorManager manager) {
+
+        //registrar = reg;
         //controller = ctrl;	 
         this.manager = manager;
         
@@ -91,8 +105,7 @@ public class SignorLegendPanel extends JPanel implements
         ButtonGroup group = new ButtonGroup();
         
         ptmviewON.addActionListener(listenerPTM);
-        defviewON.addActionListener(listenerDEF);
-       
+        defviewON.addActionListener(listenerDEF);       
         
         group.add(ptmviewON);
         group.add(defviewON);
@@ -103,9 +116,9 @@ public class SignorLegendPanel extends JPanel implements
         tabs.add("Nodes", snp); 
         tabs.add("Edges", sep);
 
-        add(tabs, BorderLayout.CENTER);      
-        manager.utils.registerService(this, SignorNetworkCreatedListener.class, new Properties());
-        manager.utils.registerService(this, SelectedNodesAndEdgesListener.class, new Properties());
+        add(tabs, BorderLayout.CENTER);    
+        manager.utils.registerAllServices(this, new Properties());
+        manager.utils.setDetailPanel(this);
     }
     public Component getComponent() {		
         return this;
@@ -115,6 +128,9 @@ public class SignorLegendPanel extends JPanel implements
     }
     public String getTitle() {		
         return "SIGNOR";	
+    }
+    public String getIdentifier() {
+        return Config.identifier_panel;
     }
     public Icon getIcon() {		
         return icon;	
@@ -147,9 +163,36 @@ public class SignorLegendPanel extends JPanel implements
         }
     }        
 
+    
+
+     
+    public void showCytoPanel() {
+        CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);
+        CytoPanel cytoPanel = swingApplication.getCytoPanel(CytoPanelName.EAST);
+        if (cytoPanel.indexOfComponent(Config.identifier_panel)<=0) {
+            manager.utils.registerService(this, CytoPanelComponent.class, new Properties());
+        }
+        //cytoPanel.setState(CytoPanelState.DOCK);
+        if (cytoPanel.getState() == CytoPanelState.HIDE)
+            cytoPanel.setState(CytoPanelState.DOCK);
+
+//        // Tell tabs
+//        Network currentNetwork = manager.data.getCurrentNetwork();
+//        if (currentNetwork != null) {
+//            nodePanel.networkChanged(currentNetwork);
+//            edgePanel.networkChanged(currentNetwork);
+//            legendPanel.networkChanged(currentNetwork);
+//        }
+    }
+
+    public void hideCytoPanel() {
+        manager.utils.unregisterService(this, CytoPanelComponent.class);
+    }
+    
+    @Override
     public void handleEvent(SignorNetworkCreatedEvent event){
         try {
-            if (this.manager.currentNetwork.isSignorNetwork() && this.manager.currentNetwork.parameters.get("SINGLESEARCH").equals(true)
+            if (DataUtils.isSignorNetwork(manager) && this.manager.currentNetwork.parameters.get("SINGLESEARCH").equals(true)
                 && !tabSingleSearchAdded){            
                 tabs.add("SUMMARY", new JPanel());
                 tabs.add("RELATIONS", new JPanel());
@@ -167,9 +210,38 @@ public class SignorLegendPanel extends JPanel implements
         }
         
     }
+    
     @Override
-    public void handleEvent (SetCurrentNetworkViewEvent e) {
-        manager.utils.info("E' cambiata la network "+e.getNetworkView().toString());
+    public void handleEvent(SetCurrentNetworkEvent e) {
+        manager.utils.info("Network event "+e.getNetwork().toString());
+        /*Network network = manager.data.getNetwork(event.getNetwork());
+        if (network != null && ModelUtils.ifHaveIntactNS(network.getCyNetwork())) {
+            if (!registered) {
+                showCytoPanel();
+            }
+            // Tell tabs
+            nodePanel.networkChanged(network);
+            edgePanel.networkChanged(network);
+            legendPanel.networkChanged(network);
+        } else {
+            hideCytoPanel();
+        }*/
     }
 
+    @Override
+    public void handleEvent(SetCurrentNetworkViewEvent e) {
+        manager.utils.info("Network view event "+e.getNetworkView().toString());
+    /*    CyNetworkView cyView = e.getNetworkView();
+        if (cyView != null) {
+            updateRadioButtons(cyView);
+            legendPanel.networkViewChanged(cyView);
+            edgePanel.networkViewChanged(cyView);
+            NetworkView view = manager.data.getNetworkView(cyView);
+            if (view != null) {
+                setupFilters(view);
+            }
+        }*/
+    }
+
+   
 }

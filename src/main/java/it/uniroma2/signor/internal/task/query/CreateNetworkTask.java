@@ -6,6 +6,8 @@
 package it.uniroma2.signor.internal.task.query;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.managers.SignorManager;
+import it.uniroma2.signor.internal.task.query.SignorPanelTask;
+import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.event.*;
 import org.cytoscape.model.*;
@@ -56,7 +58,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
             CyNetwork cynet = manager.createNetwork(netname);
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
-            ArrayList<String> results = HttpUtils.parseWS(br, CONFIG.HEADERALLSEARCH);
+            ArrayList<String> results = HttpUtils.parseWS(br, CONFIG.HEADERSINGLESEARCH);
             
             //Create tables
             Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
@@ -97,10 +99,11 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             Set<View<CyNode>> nodeViews = new HashSet<>(ntwView.getNodeViews());
             TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
             insertTasksAfterCurrentTask(taskIterator);
+            manager.utils.showResultsPanel();
             manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));      
         }
         catch (Exception e){
-            manager.utils.error(e.toString()+"Problem fectching data from "+URL+terms);
+            manager.utils.error(e.toString()+"Problem fectching data from "+URL);
         }
     }
      @ProvidesTitle

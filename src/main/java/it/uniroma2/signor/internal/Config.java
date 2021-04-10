@@ -90,11 +90,11 @@ public class Config {
     public static final String CONNECTSCOPE = "connect";
     public static final String SHORTESTPATHSCOPE = "shortest path";
     public static final String INCFIRSTNEISCOPE = "include first neighbor";
-    public static final String[] HEADERALLSEARCH = {"ENTITYA", "TYPEA", "IDA", "DATABASEA", "ENTITYB", "TYPEB", "IDB",
+    public static final String[] HEADERSINGLESEARCH = {"ENTITYA", "TYPEA", "IDA", "DATABASEA", "ENTITYB", "TYPEB", "IDB",
                                                     "DATABASEB", "EFFECT", "MECHANISM", "RESIDUE", "SEQUENCE", "TAX_ID", 
                                                     "CELL_DATA", "TISSUE_DATA", "MODULATOR_COMPLEX", "TARGET_COMPLEX", "MODIFICATIONA",
                                                     "MODASEQ", "MODIFICATIONB", "MODBSEQ", "PMID", "DIRECT", "NOTES", "ANNOTATOR", 
-                                                    "SENTENCE", "SCORE", "SIGNOR_ID"};
+                                                    "SENTENCE", "SIGNOR_ID", "SCORE"};
 
     public static final HashMap<String,Class<?>> PTMNODEFIELD= new HashMap(){
         {
@@ -237,5 +237,6 @@ public class Config {
         }
     };
     
+    public static final String identifier_panel = "it.uniroma2.signor.app.details";
     
 }

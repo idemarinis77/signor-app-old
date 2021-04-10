@@ -10,13 +10,13 @@ import org.cytoscape.application.swing.CytoPanelState;
 public class SignorLegendAction extends AbstractCyAction {
 	private static final long serialVersionUID = 1L;
 	private CySwingApplication desktopApp;
-	private final CytoPanel cytoPanelWest;
+	private final CytoPanel cytoPanelEast;
 	private SignorLegendPanel legendPanel;
 	
 	public SignorLegendAction(CySwingApplication desktop, SignorLegendPanel myPanel){
 		super("Signor PANEL");
 		desktopApp = desktop;
-		cytoPanelWest = this.desktopApp.getCytoPanel(CytoPanelName.EAST);
+		cytoPanelEast = this.desktopApp.getCytoPanel(CytoPanelName.EAST);
 		legendPanel = myPanel;
 	}
 	
@@ -26,14 +26,14 @@ public class SignorLegendAction extends AbstractCyAction {
 	 * @param e - The event record provide the command name, source, key modifiers, etc.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		// If the state of the cytoPanelWest is HIDE, show it
-		if (cytoPanelWest.getState() == CytoPanelState.HIDE) 
-			cytoPanelWest.setState(CytoPanelState.DOCK);
+		// If the state of the cytoPanelEast is HIDE, show it
+		if (cytoPanelEast.getState() == CytoPanelState.HIDE) 
+			cytoPanelEast.setState(CytoPanelState.DOCK);
 
 		// Select my panel
-		int index = cytoPanelWest.indexOfComponent(legendPanel);
+		int index = cytoPanelEast.indexOfComponent(legendPanel);
 		if (index >= 0)
-			cytoPanelWest.setSelectedIndex(index);
+			cytoPanelEast.setSelectedIndex(index);
 	}
 
 }

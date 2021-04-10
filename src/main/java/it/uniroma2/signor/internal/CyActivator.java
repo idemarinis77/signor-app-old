@@ -19,6 +19,8 @@ import java.util.Properties;
 
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericQueryFactory;
+import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
+import it.uniroma2.signor.internal.Config;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
@@ -28,6 +30,8 @@ import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CyAction;
 import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
 import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendAction;
+import org.cytoscape.model.CyEdge;
+import org.cytoscape.model.CyNetwork;
 
 public class CyActivator extends AbstractCyActivator {
 	public CyActivator() {
@@ -41,6 +45,7 @@ public class CyActivator extends AbstractCyActivator {
                 // Issue error and return
             }
             // Get a handle on the CyServiceRegistrar
+            Config CONFIG = new Config();
             CyServiceRegistrar registrar = getService(bc, CyServiceRegistrar.class);
             SignorManager manager = new SignorManager(registrar);            
             CyApplicationManager cyApplicationManagerServiceRef = getService(bc,CyApplicationManager.class);
@@ -52,7 +57,7 @@ public class CyActivator extends AbstractCyActivator {
                 registerService(bc, signorQuery, NetworkSearchTaskFactory.class, propsSearch);
             }
 
-            if (haveGUI) {
+            /*if (haveGUI) {
                 CyNetworkManager cyNetworkManagerServiceRef = getService(bc,CyNetworkManager.class);
                 CySwingApplication cytoscapeDesktopService = getService(bc,CySwingApplication.class);
                 
@@ -63,17 +68,23 @@ public class CyActivator extends AbstractCyActivator {
                 
                 registerService(bc,signorLegendGeneral,CytoPanelComponent.class);
                 registerService(bc,signorLegendAction,CyAction.class);     
-            }
-         /*    if (haveGUI) {
-            ShowDetailPanelTaskFactory showResults = new ShowDetailPanelTaskFactory(manager);
-            showResults.reregister();
-            manager.utils.setShowDetailPanelTaskFactory(showResults);
+            }*/
+            if (haveGUI) {
+              SignorPanelFactory showResults = new SignorPanelFactory(manager);
+              showResults.reregister();
+              manager.utils.setShowDetailPanelTaskFactory(showResults);
 
-            CyNetwork current = manager.data.getCurrentCyNetwork();
-            if (ModelUtils.isIntactNetwork(current)) {
-                manager.utils.execute(showResults.createTaskIterator(), true);
+              //CyNetwork current = manager.data.getCurrentCyNetwork();
+              CyNetwork cynet = manager.utils.getService(CyApplicationManager.class).getCurrentNetwork();
+              try {
+                if (cynet.getRow(cynet).get(CyNetwork.NAME, String.class).startsWith(CONFIG.NTWPREFIX)){
+                    manager.utils.execute(showResults.createTaskIterator(), true);
+                }
+              }
+              catch(Exception e){
+                  
+              }
             }
-        }*/
             
 //          Properties propsSettings = new Properties();
 //          propsSettings.setProperty(PREFERRED_MENU, "Apps.SIGNOR");

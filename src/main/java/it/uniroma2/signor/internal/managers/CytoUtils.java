@@ -14,6 +14,8 @@ import org.cytoscape.work.TaskIterator;
 import org.cytoscape.work.TaskManager;
 import org.cytoscape.work.TaskObserver;
 import org.cytoscape.application.CyUserLog;
+import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
+import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 /*import uk.ac.ebi.intact.app.internal.tasks.details.factories.ShowDetailPanelTaskFactory;
 import uk.ac.ebi.intact.app.internal.ui.panels.detail.DetailPanel;*/
 
@@ -27,9 +29,9 @@ public class CytoUtils {
     final Logger logger;
     final TaskManager<?, ?> dialogTaskManager;
     final SynchronousTaskManager<?> synchronousTaskManager;
-    /*final CommandExecutorTaskFactory commandExecutorTaskFactory;
-    ShowDetailPanelTaskFactory detailPanelTaskFactory;
-    DetailPanel detailPanel;*/
+    //final CommandExecutorTaskFactory commandExecutorTaskFactory;
+    SignorPanelFactory signorPanelFactory;
+    SignorLegendPanel signorLegendPanel;
 
     public CytoUtils(CyServiceRegistrar registrar) {
         this.logger = Logger.getLogger(CyUserLog.NAME);
@@ -95,30 +97,30 @@ public class CytoUtils {
         );
     }
 
-    /*public void setShowDetailPanelTaskFactory(ShowDetailPanelTaskFactory factory) {
-        detailPanelTaskFactory = factory;
+    public void setShowDetailPanelTaskFactory(SignorPanelFactory factory) {
+        signorPanelFactory = factory;
     }
 
-    public void setDetailPanel(DetailPanel detailPanel) {
-        this.detailPanel = detailPanel;
+    public void setDetailPanel(SignorLegendPanel detailPanel) {
+        this.signorLegendPanel = detailPanel;
     }
 
     public void showResultsPanel() {
-        if (detailPanel == null) {
-            execute(detailPanelTaskFactory.createTaskIterator(), true);
+        if (signorLegendPanel == null) {
+            execute(signorPanelFactory.createTaskIterator(), true);
         } else {
             // Make sure we show it
-            detailPanel.showCytoPanel();
+            signorLegendPanel.showCytoPanel();
         }
     }
 
     public void hideResultsPanel() {
-        if (detailPanel != null) {
-            detailPanel.hideCytoPanel();
+        if (signorLegendPanel != null) {
+            signorLegendPanel.hideCytoPanel();
         }
     }
 
-    public boolean haveEnhancedGraphics() {
+ /*   public boolean haveEnhancedGraphics() {
         return getService(AvailableCommands.class).getNamespaces().contains("enhancedGraphics");
     }
 
