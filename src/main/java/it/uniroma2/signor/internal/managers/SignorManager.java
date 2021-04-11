@@ -115,7 +115,7 @@ public class SignorManager {
             } 
             if (!entity_read.containsKey(attributes[4])){
                 nodeTarget = signornet.addNode();
-                entity_read.put(attributes[4], nodeSource);
+                entity_read.put(attributes[4], nodeTarget);
             }
             else {
                 nodeTarget = entity_read.get(attributes[4]);
@@ -141,8 +141,12 @@ public class SignorManager {
                         signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Double.parseDouble(attributes[a]));
                     }
                     else if (a == 12){
+                        //I'm reading TAX_ID blank 
+                        if(attributes[a].isBlank())
+                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, 0);
                         //I'm reading TAX_ID and it's of Integer type
-                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Integer.parseInt(attributes[a]));
+                        else 
+                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Integer.parseInt(attributes[a]));
                     }
                     else {
                         signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[a]);
