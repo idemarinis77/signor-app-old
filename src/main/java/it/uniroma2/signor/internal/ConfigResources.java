@@ -51,8 +51,8 @@ public class ConfigResources {
        SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        CONNECTQUERY("CONNECTSEARCH",(o, s) ->  "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       PATHQUERY("PATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s);
+       DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s);
+
         
         public String name;
         public BiFunction<String, String, String> queryFunction;
@@ -68,9 +68,8 @@ public class ConfigResources {
            put("signor", images_path+"signor_logo_small.png"); 
            put("uniprot", images_path+"uniprot_logo_small.png");
            put("pubmed", images_path+"PubMed_logo_small.png");
-           put("pubmed", images_path+"uniprot_logo_small.png");
            put("chebi", images_path+"ChEBI_logo_small.png");
-           put("pubchem", images_path+"PubChem_small.png");
+           put("pubchem", images_path+"PubChem_logo_small.png");
            put("mentha", images_path+"mentha_logo_small.png");
            put("ndex", images_path+"ndex_logo_small.png");
            put("drugbank", images_path+"drugbank_logo_small.png");
@@ -82,4 +81,6 @@ public class ConfigResources {
         
     public static String FILESTYLE = "/style/styles-signor_in_cytoscape_namespace.xml";
     public static String SIGNOR_VER_STYLE="SIGNOR_NS_0.1";
+   
+    public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
 }

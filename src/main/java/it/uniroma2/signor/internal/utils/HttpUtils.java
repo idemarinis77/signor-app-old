@@ -93,5 +93,19 @@ public class HttpUtils {
         }
         return results;
     }
+    public static ArrayList<String> parseWSNoheader(BufferedReader br){        
+        String strCurrentLine;
+        ArrayList<String> results = new ArrayList<String>();
+        try {
+            while ((strCurrentLine = br.readLine()) != null) {
+                   
+                    results.add(strCurrentLine);
+                }
+        }
+        catch (Exception e){
+            return null;
+        }
+        return results;
+    }
 
 }
