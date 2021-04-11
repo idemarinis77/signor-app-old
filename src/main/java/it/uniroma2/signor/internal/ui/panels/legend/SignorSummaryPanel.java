@@ -6,7 +6,10 @@
 package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.utils.EasyGBC;
-
+import it.uniroma2.signor.internal.managers.SignorManager;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 /**
  *
  * @author amministratore
@@ -18,33 +21,47 @@ import java.awt.*;
 import java.time.Instant;
 import java.util.Collection;
 import javax.swing.*;
-
-
+import static java.awt.Component.LEFT_ALIGNMENT;
+import java.util.HashMap;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
 import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
-import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
-import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
-import static java.awt.Component.LEFT_ALIGNMENT;
-import java.util.HashMap;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableUtil;
 
-public class SignorNodePanel extends JPanel {
+public class SignorSummaryPanel extends JPanel {
     private SignorManager manager;
     private JPanel nodesPanel;
 
     private EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
+    private Node rootNode;
+    private static final int SIDES = 2;
+    private static final int SIDE_LENGTH = 60;
+    private static final int GAP = 1;
+    private static final Color BG = Color.LIGHT_GRAY;
+    private static final Color CELL_COLOR = Color.WHITE;
     
-    public SignorNodePanel(SignorManager manager){
-        this.manager = manager;
-        setLayout(new GridBagLayout());        
+    public SignorSummaryPanel(SignorManager manager){
+        this.manager = manager;          
         current_cynetwork_to_serch_into = manager.lastCyNetwork;
+        setBackground(BG);
+        setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
+        setLayout(new GridLayout(SIDES, 8, GAP, GAP));
+        Dimension prefSize = new Dimension(SIDE_LENGTH, SIDE_LENGTH);
+        for (int i = 0; i < SIDES; i++) {
+            for (int j = 0; j < SIDES; j++) {
+                JPanel cell = new JPanel();
+                cell.setBackground(CELL_COLOR);
+                cell.setPreferredSize(prefSize);
+                add(cell);
+            }
+        }
+        
+       
+        /*setLayout(new GridBagLayout());      
         JPanel NodeInfo = new JPanel();
         NodeInfo.setLayout(new BorderLayout());
         NodeInfo.setBackground(Color.WHITE);
@@ -62,17 +79,6 @@ public class SignorNodePanel extends JPanel {
         scrollPane.getVerticalScrollBar().setBlockIncrement(10);
         add(scrollPane, gbc.down().anchor("east").expandBoth());
         revalidate();
-        repaint();        
+        repaint();        */
     }   
-    
-    public void selectedNodes() {
-        nodesPanel.removeAll();
-        this.selectionRunning=true;
-    
-        Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);        
-        SignorPanelRow node_current_info = new SignorPanelRow(3,3, this.manager);
-        CyNode node_current = selectedNodes.iterator().next();
-        CyRow rownode = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID());
-        node_current_info.signorPanelRowDetailNode(nodesPanel,gbc, rownode);       
-    }
 }

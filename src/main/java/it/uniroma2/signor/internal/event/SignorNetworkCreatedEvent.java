@@ -11,7 +11,6 @@ public class SignorNetworkCreatedEvent extends AbstractCyEvent<SignorManager> {
         super(source, SignorNetworkCreatedListener.class);
         this.newNetwork = newNetwork;
     }
-
     public Network getNewNetwork() {
         return newNetwork;
     }

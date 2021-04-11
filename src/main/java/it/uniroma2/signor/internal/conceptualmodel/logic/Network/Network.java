@@ -37,18 +37,17 @@ public class Network {
     private final Map<CyNode, Node> nodes = new HashMap<>();
     private final Map<NodeCouple, List<CyEdge>> coupleToDefaultEdges = new HashMap<>();
     private final Map<CyEdge, Edge> signorEdges = new HashMap<>();
-   
     private final Map<String, String> speciesNameToId = new HashMap<>();
     private final Map<String, String> speciesIdToName = new HashMap<>();    
     private Boolean isPathwayNetwork = false;
     private Boolean isDeasesNetwork = false;
-    private Config CONFIG = new Config();
+    public CyNode rootNode;
 
     public final HashMap<String, ?> parameters;
     
     public Network(SignorManager manager, HashMap<String, ?> parameters) {
         this.manager = manager;
-        this.parameters = parameters;
+        this.parameters = parameters;        
     }
 
     public CyNetwork getCyNetwork() {
@@ -65,10 +64,25 @@ public class Network {
 //    public Boolean isSignorNetwork(){
 //        return this.cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(CONFIG.NTWPREFIX);
 //    }
-
+    public void setCyNodeRoot(String entity){
+        Collection<CyRow> listrow = cyNetwork.getDefaultNodeTable().getMatchingRows​(Config.NAMESPACE, "ID", entity);
+        CyNode rootNode_to_find;
+        for (listrow.iterator(); listrow.iterator().hasNext();){
+            CyRow row = listrow.iterator().next();
+            if (row.get(Config.NAMESPACE, "ID", String.class).equals(entity)){
+                rootNode_to_find = cyNetwork.getNode(row.get("SUID", Long.class));
+                rootNode = rootNode_to_find;
+                Node prova = new Node(this, rootNode_to_find);
+                prova.Summary();
+                break;
+            }
+         }
+        
+    }
+    
     public void setNetwork(CyNetwork cyNetwork) {
         this.cyNetwork = cyNetwork;
-
+        
         cyNetwork.getNodeList().forEach(node -> nodes.put(node, new Node(this, node)));
 
         edgeTable = cyNetwork.getDefaultEdgeTable();

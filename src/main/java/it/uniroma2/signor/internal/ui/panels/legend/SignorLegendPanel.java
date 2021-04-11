@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.swing.CytoPanelName;
-import org.cytoscape.service.util.CyServiceRegistrar;
+
 import java.awt.Color;
 
 import java.awt.GridBagLayout;
@@ -64,6 +64,7 @@ public class SignorLegendPanel extends JPanel implements
     private static final Icon icon = IconUtils.createImageIcon("/images/signor_logo.png");
     private SignorNodePanel snp;
     private SignorEdgePanel sep;
+    private SignorSummaryPanel ssp;
     private SignorManager manager;
     private boolean tabSingleSearchAdded = false;
     JRadioButton ptmviewON= new JRadioButton("PTM View");
@@ -74,6 +75,7 @@ public class SignorLegendPanel extends JPanel implements
         this.manager = manager;        
         snp = new SignorNodePanel(manager);
         sep = new SignorEdgePanel(manager);
+        ssp = new SignorSummaryPanel(manager);
 	
         ActionListener listenerPTM = new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
@@ -180,12 +182,12 @@ public class SignorLegendPanel extends JPanel implements
         try {
             if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
                 && !tabSingleSearchAdded){            
-                tabs.add("SUMMARY", new JPanel());
+                tabs.add("SUMMARY", ssp);
                 tabs.add("RELATIONS", new JPanel());
                 tabs.add("MODIFICATIONS", new JPanel());
-                tabSingleSearchAdded = true;                
+                tabSingleSearchAdded = true;    
+                tabs.setSelectedComponent(ssp);
             }
-            //ptmviewON.setEnabled(true);
             ptmviewON.setSelected(false);
             ptmviewON.setEnabled(true);
             defviewON.setSelected(true);
@@ -198,40 +200,23 @@ public class SignorLegendPanel extends JPanel implements
     
     @Override
     public void handleEvent(SetCurrentNetworkEvent e) {
-        try {
-            manager.utils.info("New current network "+e.getNetwork().toString());
-            CyNetwork newcynet = e.getNetwork();
+        CyNetwork newcynet = e.getNetwork();
 
-            if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
-               snp.current_cynetwork_to_serch_into = newcynet;
-               sep.current_cynetwork_to_serch_into = newcynet;
+        try {
+            if (newcynet != null && !DataUtils.isSignorNetwork(e.getNetwork())){
+                hideCytoPanel();
+            }                    
+            else{
+                showCytoPanel();
+                manager.utils.info("New current network "+e.getNetwork().toString());                  
+                if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
+                   snp.current_cynetwork_to_serch_into = newcynet;
+                   sep.current_cynetwork_to_serch_into = newcynet;                   
+                }
             }
         }
         catch(Exception err){
             manager.utils.error(e.getNetwork().toString()+" "+err.toString());
-        }
-  
-    }
-
-   /* @Override
-    public void handleEvent(SetCurrentNetworkViewEvent e) {
-        try {
-            manager.utils.info("Network view event "+e.getNetworkView().toString());
-        }
-        catch(Exception err){
-            manager.utils.error(e.getNetworkView().toString()+" "+err.toString());
-        }*/
-    /*    CyNetworkView cyView = e.getNetworkView();
-        if (cyView != null) {
-            updateRadioButtons(cyView);
-            legendPanel.networkViewChanged(cyView);
-            edgePanel.networkViewChanged(cyView);
-            NetworkView view = manager.data.getNetworkView(cyView);
-            if (view != null) {
-                setupFilters(view);
-            }
-        }*/
-    //}
-
-   
+        }  
+    }   
 }

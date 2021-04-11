@@ -61,12 +61,10 @@ public class SignorPanelRow extends JPanel{
         SignorLabelStyledBold dbLabel;        
         try{
             String db_value_norm = rownode.get(Config.NAMESPACE, "DATABASE", String.class).toLowerCase();
-            //DA METTERE QUESTAString link_to_db = CONFIG.DBLINKSMAP.get(db_value_norm).queryFunction.apply(rownode.get(CONFIG.NAMESPACE, "ENTITY", String.class));
             String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(rownode.get(Config.NAMESPACE, "ID", String.class));
             BufferedImage dblogo = ImageIO.read(getClass().getResource(ConfigResources.DBLOGOS.get(db_value_norm)));
             dbLabel = new SignorLabelStyledBold(new ImageIcon(dblogo), link_to_db, openBrowser, false);
-            //this.add(dbLabel, gbc.position(2,2));  
-            
+           
             jp.add(this, gbc.down());
             jp.add(dbLabel, gbc.down().anchor("west"));
         }

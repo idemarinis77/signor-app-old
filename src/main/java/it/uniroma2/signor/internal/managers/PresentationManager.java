@@ -7,6 +7,7 @@ package it.uniroma2.signor.internal.managers;
 import java.util.HashMap;
 
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.event.*;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.events.NetworkAddedEvent;
 import org.cytoscape.model.events.NetworkAddedListener;
@@ -23,10 +24,13 @@ import org.cytoscape.view.model.CyNetworkViewManager;
  * @author amministratore
  */
 public class PresentationManager implements         
-        SessionLoadedListener {
+        SessionLoadedListener,
+        SignorNetworkCreatedListener {
     
-    HashMap<CyNetwork, Network> signorNetMap;
+    public HashMap<CyNetwork, Network> signorNetMap;
     SignorManager manager;
+    public HashMap<String, ?> parameters;
+    public String searched_query;
     
     public PresentationManager(SignorManager manager) {        
         this.manager = manager;
@@ -43,7 +47,13 @@ public class PresentationManager implements
            };   
         }
     }
- 
+    public void handleEvent (SignorNetworkCreatedEvent e){
+        manager.utils.info(e.getNewNetwork().toString());
+        Network signornet = e.getNewNetwork();
+        if (signornet.parameters.get("SINGLESEARCH").equals(true)){
+            signornet.setCyNodeRoot(searched_query);
+        }
+    }
     /*@Override
     public void handleEvent (NetworkAddedEvent e){
         manager.utils.info(e.getNetwork().toString()+"Network Aggiunta");

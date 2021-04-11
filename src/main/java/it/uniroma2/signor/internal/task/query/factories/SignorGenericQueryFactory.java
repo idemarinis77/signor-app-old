@@ -55,6 +55,7 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
         String searchoptions = "";
         Boolean firstneighbor=false;
         HashMap<String, ?> parameters;
+  
         try { 
             parameters = chooseSearchoption.getParameter();
             manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 

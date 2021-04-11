@@ -16,7 +16,10 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.stream.Collectors;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigResources;
+import java.io.BufferedReader;
 
+import it.uniroma2.signor.internal.utils.HttpUtils;
 import static java.util.stream.Collectors.toList;
 
 //public class Node extends Interactor implements Comparable<Interactor>, Element {
@@ -26,7 +29,6 @@ public class Node implements Element {
     private final Network network;
     public final CyNode cyNode;
     public final CyRow nodeRow;
-    private Config CONFIG = new Config();
 
 
     public Node(final Network network, final CyNode cyNode) {
@@ -53,69 +55,38 @@ public class Node implements Element {
         }*/
     }
     
-    public HashMap<String,String> makeStyleInfoNode(Long suid){
-        CyRow rownode = this.network.getCyNetwork().getDefaultNodeTable().getRow(suid);
-        HashMap<String, String> parameters = new HashMap(){
-                {put("ID", suid.toString());
-                 put("Name", rownode.get("ENTITY", String.class));
-                 put("Database", rownode.get("DATABASE", String.class));
+    public HashMap<String,String> Summary(){
+        HashMap<String,String> basic_summary = new HashMap<String,String>();
+        String NodeID = this.nodeRow.get(Config.NAMESPACE, "ID", String.class);
+        Config.NODEFIELD.forEach((basic_node_key, basic_node_value) ->{
+            basic_summary.put(basic_node_key , this.nodeRow.get(Config.NAMESPACE, basic_node_key, String.class)); });  
+        //Now I must withdraw information from pathway
+        network.manager.utils.info("Searching pthw for "+NodeID);
+        Integer position_of_id_in_line = Arrays.asList(Config.HEADERPTH).indexOf("IDA");
+        Integer position_of_pthw_desc_in_line = Arrays.asList(Config.HEADERPTH).indexOf("PATHWAY_NAME");
+        try {
+            BufferedReader br =  HttpUtils.getHTTPSignor(ConfigResources.PATHALLRELATIONSQUERY, network.manager);
+            ArrayList<String> relation_pathways = HttpUtils.parseWSNoheader(br);
+            String pathway_found_for_node = "";
+            for(Iterator it = relation_pathways.iterator(); it.hasNext();){                
+                String[] field = it.next().toString().split("\t");      
+                
+                if (field[position_of_id_in_line].equals(NodeID)){
+                    if (!pathway_found_for_node.contains(field[position_of_pthw_desc_in_line])){
+                        pathway_found_for_node += " , "+field[position_of_pthw_desc_in_line];
+                        
+                        network.manager.utils.info("FOUND PTHW "+field[1]);
+                    }
                 }
-        };      
-        return parameters;
-    }
-    /*public List<Edge> getAdjacentEdges() {
-        Network network = getNetwork();
-        return network.getCyNetwork().getAdjacentEdgeList(cyNode, CyEdge.Type.ANY).stream().map(edge -> Edge.createEdge(network, edge)).collect(toList());
-    }*/
-
-    /*public List<Identifier> getIdentifiers() {
-        CyTable identifiersTable = getNetwork().getIdentifiersTable();
-        if (identifiersTable == null) return new ArrayList<>();
-        return identifierAcs.stream().map(identifierAc -> new Identifier(identifiersTable.getRow(identifierAc))).collect(Collectors.toList());
-        //Va inserita porzione di codice che elenca gli Identificativi
-        
-    }*/
-
-
-    /*public List<Feature> getFeatures() {
-        Network network = getNetwork();
-        CyTable featuresTable = network.getFeaturesTable();
-        if (featuresTable == null) return new ArrayList<>();
-        Set<Long> adjacentEdgesSUID = network.getCyNetwork().getAdjacentEdgeList(cyNode, CyEdge.Type.ANY).stream().map(CyIdentifiable::getSUID).collect(Collectors.toSet());
-        return featureAcs.stream()
-                .map(featureAC -> new Feature(network, featuresTable.getRow(featureAC)))
-                .filter(feature -> feature.isPresentIn(adjacentEdgesSUID))
-                .collect(Collectors.toList());
-        Al momento non serve
-    }*/
-
-    /*private JsonNode getDetailsJSON() {
-        if (detailsJSON != null && !detailsJSON.isNull()) return detailsJSON;
-        detailsJSON = HttpUtils.getJSON(INTACT_GRAPH_WS + "network/node/details/" + ac, new HashMap<>(), getNetwork().manager);
-        return detailsJSON;
-    }
-
-    public List<Identifier> getCrossReferences() {
-        List<Identifier> crossReferences = new ArrayList<>();
-        JsonNode xrefs = getDetailsJSON().get("xrefs");
-        if (xrefs == null) return crossReferences;
-        for (JsonNode xref : xrefs) {
-            JsonNode database = xref.get("database");
-            String databaseName = database.get("shortName").textValue();
-            OntologyIdentifier databaseIdentifier = new OntologyIdentifier(database.get("identifier").textValue());
-
-            String identifier = xref.get("identifier").textValue();
-            String qualifier = xref.get("qualifier").textValue();
-
-            crossReferences.add(new Identifier(databaseName, databaseIdentifier, identifier, qualifier));
+            }
+            basic_summary.put("PATHWAYLIST", pathway_found_for_node);            
         }
-        return crossReferences;
+        catch (Exception e){
+            network.manager.utils.error("Found exception while loading Node Summary "+e.toString());
+        }
+        return basic_summary;
     }
-
-    public JsonNode getAliasesJson() {
-        return getDetailsJSON().get("aliases");
-    }*/
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -98,8 +98,10 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
             insertTasksAfterCurrentTask(taskIterator);
             manager.utils.showResultsPanel();
-            manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));    
             manager.presentationManager.updateSignorNetworkCreated(cynet, network);
+            manager.presentationManager.parameters = network.parameters;
+            manager.presentationManager.searched_query = terms;
+            manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));                
         }
         catch (Exception e){
             manager.utils.error(e.toString()+"Problem fectching data from "+URL);
