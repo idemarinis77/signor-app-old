@@ -36,14 +36,15 @@ import org.cytoscape.model.CyTableUtil;
 public class SignorNodePanel extends JPanel {
     private SignorManager manager;
     private JPanel nodesPanel;
-    private Config CONFIG = new Config();
+
     private EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
+    public CyNetwork current_cynetwork_to_serch_into;
     
     public SignorNodePanel(SignorManager manager){
         this.manager = manager;
         setLayout(new GridBagLayout());        
-        
+        current_cynetwork_to_serch_into = manager.lastCyNetwork;
         JPanel NodeInfo = new JPanel();
         NodeInfo.setLayout(new BorderLayout());
         NodeInfo.setBackground(Color.WHITE);
@@ -67,11 +68,11 @@ public class SignorNodePanel extends JPanel {
     public void selectedNodes() {
         nodesPanel.removeAll();
         this.selectionRunning=true;
-        //EasyGBC gbc=new EasyGBC();        
-        Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(manager.lastNetwork.getCyNetwork(), CyNetwork.SELECTED, true);        
+    
+        Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);        
         SignorPanelRow node_current_info = new SignorPanelRow(3,3, this.manager);
         CyNode node_current = selectedNodes.iterator().next();
-        CyRow rownode = this.manager.lastCyNetwork.getDefaultNodeTable().getRow(node_current.getSUID());
+        CyRow rownode = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID());
         node_current_info.signorPanelRowDetailNode(nodesPanel,gbc, rownode);       
     }
 }

@@ -36,15 +36,15 @@ import org.cytoscape.model.CyTableUtil;
 public class SignorEdgePanel extends JPanel {
     private SignorManager manager;
     private JPanel edgesPanel;
-    private Config CONFIG = new Config();
     private EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
+    public CyNetwork current_cynetwork_to_serch_into;
+
     
     public SignorEdgePanel(SignorManager manager){
         this.manager = manager;
         setLayout(new GridBagLayout());
-        
-        
+        current_cynetwork_to_serch_into = manager.lastCyNetwork;        
         JPanel edgeInfo = new JPanel();
         edgeInfo.setLayout(new BorderLayout());
         edgeInfo.setBackground(Color.WHITE);
@@ -67,13 +67,13 @@ public class SignorEdgePanel extends JPanel {
     public void selectedEdges() {
         edgesPanel.removeAll();
         this.selectionRunning=true;
-        //EasyGBC gbc=new EasyGBC();        
-        Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(manager.lastNetwork.getCyNetwork(), CyNetwork.SELECTED, true);   
+ 
+        Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);   
         
         SignorPanelRow edge_current_info = new SignorPanelRow(6,2, this.manager);
         CyEdge edge_current = selectedEdges.iterator().next();
         
-        CyRow rowedge = this.manager.lastCyNetwork.getDefaultEdgeTable().getRow(edge_current.getSUID());
+        CyRow rowedge = current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(edge_current.getSUID());
         edge_current_info.signorPanelRowDetailEdge(edgesPanel,gbc, rowedge);       
     }
 }

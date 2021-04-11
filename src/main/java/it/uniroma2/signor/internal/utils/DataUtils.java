@@ -37,8 +37,7 @@ import org.cytoscape.work.TunableSetter;
  */
 public class DataUtils {
     
-    public static Boolean isSignorNetwork(SignorManager manager){
-        CyNetwork cyNetwork = manager.utils.getService(CyApplicationManager.class).getCurrentNetwork();
+    public static Boolean isSignorNetwork(CyNetwork cyNetwork){
         return cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(Config.NTWPREFIX);
     }
     

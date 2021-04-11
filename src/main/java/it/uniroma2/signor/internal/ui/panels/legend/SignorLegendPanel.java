@@ -57,8 +57,7 @@ public class SignorLegendPanel extends JPanel implements
         CytoPanelComponent, 
         CytoPanelComponent2,
         SelectedNodesAndEdgesListener,
-        SignorNetworkCreatedListener, 
-        SetCurrentNetworkViewListener,
+        SignorNetworkCreatedListener,         
         SetCurrentNetworkListener {       
 
     private final JTabbedPane tabs = new JTabbedPane(JTabbedPane.BOTTOM);
@@ -179,7 +178,7 @@ public class SignorLegendPanel extends JPanel implements
     @Override
     public void handleEvent(SignorNetworkCreatedEvent event){
         try {
-            if (DataUtils.isSignorNetwork(manager) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
+            if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
                 && !tabSingleSearchAdded){            
                 tabs.add("SUMMARY", new JPanel());
                 tabs.add("RELATIONS", new JPanel());
@@ -199,24 +198,29 @@ public class SignorLegendPanel extends JPanel implements
     
     @Override
     public void handleEvent(SetCurrentNetworkEvent e) {
-        manager.utils.info("Network event "+e.getNetwork().toString());
-        /*Network network = manager.data.getNetwork(event.getNetwork());
-        if (network != null && ModelUtils.ifHaveIntactNS(network.getCyNetwork())) {
-            if (!registered) {
-                showCytoPanel();
+        try {
+            manager.utils.info("New current network "+e.getNetwork().toString());
+            CyNetwork newcynet = e.getNetwork();
+
+            if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
+               snp.current_cynetwork_to_serch_into = newcynet;
+               sep.current_cynetwork_to_serch_into = newcynet;
             }
-            // Tell tabs
-            nodePanel.networkChanged(network);
-            edgePanel.networkChanged(network);
-            legendPanel.networkChanged(network);
-        } else {
-            hideCytoPanel();
-        }*/
+        }
+        catch(Exception err){
+            manager.utils.error(e.getNetwork().toString()+" "+err.toString());
+        }
+  
     }
 
-    @Override
+   /* @Override
     public void handleEvent(SetCurrentNetworkViewEvent e) {
-        manager.utils.info("Network view event "+e.getNetworkView().toString());
+        try {
+            manager.utils.info("Network view event "+e.getNetworkView().toString());
+        }
+        catch(Exception err){
+            manager.utils.error(e.getNetworkView().toString()+" "+err.toString());
+        }*/
     /*    CyNetworkView cyView = e.getNetworkView();
         if (cyView != null) {
             updateRadioButtons(cyView);
@@ -227,7 +231,7 @@ public class SignorLegendPanel extends JPanel implements
                 setupFilters(view);
             }
         }*/
-    }
+    //}
 
    
 }
