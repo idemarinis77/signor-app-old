@@ -53,7 +53,9 @@ public class Network {
     public CyNetwork getCyNetwork() {
         return cyNetwork;
     }
-    
+    public Integer numberOfEdes(){
+        return signorEdges.size();
+    }
     public void SetPTMNodeTable (CyTable cytable){
         this.PTMnodeTable = cytable;
     }
@@ -71,7 +73,7 @@ public class Network {
             CyRow row = listrow.iterator().next();
             if (row.get(Config.NAMESPACE, "ID", String.class).equals(entity)){
                 rootNode_to_find = cyNetwork.getNode(row.get("SUID", Long.class));
-                rootNode = rootNode_to_find;
+                this.rootNode = rootNode_to_find;
                 Node prova = new Node(this, rootNode_to_find);
                 prova.Summary();
                 break;
@@ -93,7 +95,6 @@ public class Network {
         for (CyEdge signorEdge : cyNetwork.getEdgeList()) {
             signorEdges.put(signorEdge, (Edge) Edge.createEdge(this, signorEdge));
         }
-
         NodeCouple.putEdgesToCouples(signorEdges.keySet(), coupleToDefaultEdges);
         manager.utils.registerAllServices(this, new Properties());
     }

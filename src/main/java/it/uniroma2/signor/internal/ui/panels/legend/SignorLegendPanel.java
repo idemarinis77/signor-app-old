@@ -27,6 +27,7 @@ import it.uniroma2.signor.internal.event.*;
 import it.uniroma2.signor.internal.utils.TimeUtils;
 import it.uniroma2.signor.internal.utils.DataUtils;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.task.query.SignorPanelTask;
 
 import java.awt.BorderLayout;
@@ -65,6 +66,8 @@ public class SignorLegendPanel extends JPanel implements
     private SignorNodePanel snp;
     private SignorEdgePanel sep;
     private SignorSummaryPanel ssp;
+    private SignorRelationsPanel srp;
+    private SignorModificationsPanel smp;
     private SignorManager manager;
     private boolean tabSingleSearchAdded = false;
     JRadioButton ptmviewON= new JRadioButton("PTM View");
@@ -76,7 +79,8 @@ public class SignorLegendPanel extends JPanel implements
         snp = new SignorNodePanel(manager);
         sep = new SignorEdgePanel(manager);
         ssp = new SignorSummaryPanel(manager);
-	
+	srp = new SignorRelationsPanel(manager);
+      	smp = new SignorModificationsPanel(manager);
         ActionListener listenerPTM = new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
@@ -180,18 +184,23 @@ public class SignorLegendPanel extends JPanel implements
     @Override
     public void handleEvent(SignorNetworkCreatedEvent event){
         try {
-            if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
-                && !tabSingleSearchAdded){            
+            //if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
+            if (this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
+                && !tabSingleSearchAdded){                   
                 tabs.add("SUMMARY", ssp);
-                tabs.add("RELATIONS", new JPanel());
-                tabs.add("MODIFICATIONS", new JPanel());
+                tabs.add("RELATIONS", srp);
+                tabs.add("MODIFICATIONS", smp);
                 tabSingleSearchAdded = true;    
-                tabs.setSelectedComponent(ssp);
+                tabs.setSelectedComponent(ssp);                           
             }
+            ssp.recreateContent();
+            srp.recreateContent();
+            smp.recreateContent();
             ptmviewON.setSelected(false);
             ptmviewON.setEnabled(true);
             defviewON.setSelected(true);
             defviewON.setEnabled(false);
+            manager.utils.info("Nuova rete SIGNOR "+manager.lastCyNetwork);
         }
         catch (Exception e){
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");
@@ -211,7 +220,13 @@ public class SignorLegendPanel extends JPanel implements
                 manager.utils.info("New current network "+e.getNetwork().toString());                  
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
                    snp.current_cynetwork_to_serch_into = newcynet;
-                   sep.current_cynetwork_to_serch_into = newcynet;                   
+                   sep.current_cynetwork_to_serch_into = newcynet; 
+                   ssp.current_cynetwork_to_serch_into = newcynet;  
+                   srp.current_cynetwork_to_serch_into = newcynet;
+                   smp.current_cynetwork_to_serch_into = newcynet;
+                   ssp.recreateContent();
+                   srp.recreateContent();
+                   smp.recreateContent();
                 }
             }
         }

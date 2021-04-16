@@ -40,11 +40,13 @@ public class PresentationManager implements
     public void updateSignorNetworkCreated(CyNetwork cynet, Network netw){
         if(signorNetMap != null){
            signorNetMap.put(cynet, netw);
+           manager.utils.info("Ho aggiunto la rete alla netMap "+signorNetMap.toString());
         }
         else {
            signorNetMap = new HashMap(){
                { put(cynet, netw); }
-           };   
+           };  
+           manager.utils.info("Ho aggiunto la rete alla netMap "+signorNetMap.toString());
         }
     }
     public void handleEvent (SignorNetworkCreatedEvent e){

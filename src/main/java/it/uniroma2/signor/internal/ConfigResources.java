@@ -25,6 +25,7 @@ public class ConfigResources {
         MENTHA("mentha", "Mentha", s -> "http://mentha.uniroma2.it/result.php?q=ID" + s),
         NDEX("ndex", "Ndex", s -> "https://ndexbio.org/"+ s),
         DRUGBANK("drugbank", "DRUGBANK", s -> "https://drugbank.ca/" + s),
+        GENECARDS("genecards", "GENECARDS", s -> "http://www.genecards.org/cgi-bin/carddisp.pl?id=" + s),
         MiRBase("mirBase", "MiRBase", s -> "http://www.mirbase.org/ " + s);
         
         public String name;
