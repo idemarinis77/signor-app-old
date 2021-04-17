@@ -24,7 +24,7 @@ import it.uniroma2.signor.internal.Config;
 //import static uk.ac.ebi.intact.app.internal.utils.ModelUtils.Position;
 
 public class Network {
-        //implements AddedEdgesListener, AboutToRemoveEdgesListener, RemovedEdgesListener {
+    //implements AddedEdgesListener, AboutToRemoveEdgesListener, RemovedEdgesListener {
     //ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
     public final SignorManager manager;
     CyNetwork cyNetwork;
@@ -37,8 +37,7 @@ public class Network {
     private final Map<CyNode, Node> nodes = new HashMap<>();
     private final Map<NodeCouple, List<CyEdge>> coupleToDefaultEdges = new HashMap<>();
     private final Map<CyEdge, Edge> signorEdges = new HashMap<>();
-    private final Map<String, String> speciesNameToId = new HashMap<>();
-    private final Map<String, String> speciesIdToName = new HashMap<>();    
+   
     private Boolean isPathwayNetwork = false;
     private Boolean isDeasesNetwork = false;
     public CyNode rootNode;
@@ -50,6 +49,23 @@ public class Network {
         this.parameters = parameters;        
     }
 
+    public Network(CyNetwork cynet, String netname, SignorManager manager){
+        //Creating netowrk from session
+        this.manager = manager;
+        if(netname.startsWith("SIGNOR NTWP")){
+            isPathwayNetwork = true;
+            parameters = null;
+        }
+        else if(netname.startsWith("SIGNOR NTWD")){
+            isDeasesNetwork = true;
+            parameters = null;
+        }
+        else {
+            parameters = new HashMap() { {put("SINGLESEARCH", true); }};
+        }
+        this.cyNetwork = cynet;
+        setNetwork(cynet);
+    }
     public CyNetwork getCyNetwork() {
         return cyNetwork;
     }
@@ -78,8 +94,7 @@ public class Network {
                 prova.Summary();
                 break;
             }
-         }
-        
+        }        
     }
     
     public void setNetwork(CyNetwork cyNetwork) {
@@ -91,13 +106,16 @@ public class Network {
         nodeTable = cyNetwork.getDefaultNodeTable();
             
         //TableUtil.NullAndNonNullEdges identifiedOrNotEdges = TableUtils.splitNullAndNonNullEdges(cyNetwork, EdgeFields.SIGNOR_ID);
-
+        
         for (CyEdge signorEdge : cyNetwork.getEdgeList()) {
+            
             signorEdges.put(signorEdge, (Edge) Edge.createEdge(this, signorEdge));
         }
+        try {
         NodeCouple.putEdgesToCouples(signorEdges.keySet(), coupleToDefaultEdges);
-        manager.utils.registerAllServices(this, new Properties());
-    }
-
-    
+        }
+        catch (Exception e){
+            manager.utils.error(e.toString());
+        }
+    }    
 }

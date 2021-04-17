@@ -35,9 +35,8 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
     }
     
     public TaskIterator createTaskIterator() {
-        Config CONFIG = new Config();   
-        String netName = CONFIG.NTWPREFIX+terms;
-        String URL = CONFIG.WSSearchoptionMAP.get(search).queryFunction.apply(CONFIG.SPECIES.get(species), terms);           
+        String netName = Config.NTWPREFIX+terms;
+        String URL = Config.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIES.get(species), terms);           
         return new TaskIterator(new CreateNetworkTask(network, terms, URL, netName, parameters)); 
    }  
 

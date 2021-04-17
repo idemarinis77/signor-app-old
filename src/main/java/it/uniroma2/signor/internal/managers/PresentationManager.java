@@ -48,6 +48,8 @@ public class PresentationManager implements
            };  
            manager.utils.info("Ho aggiunto la rete alla netMap "+signorNetMap.toString());
         }
+        manager.lastCyNetwork = cynet;
+        manager.lastNetwork = netw;
     }
     public void handleEvent (SignorNetworkCreatedEvent e){
         manager.utils.info(e.getNewNetwork().toString());

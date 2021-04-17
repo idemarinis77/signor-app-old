@@ -22,6 +22,7 @@ import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.subnetwork.CySubNetwork;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import java.util.Properties;
 import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.model.CyNetworkViewManager;
@@ -34,6 +35,7 @@ import org.cytoscape.view.model.CyNetworkView;
 public class SignorManager {
     public final SignorStyleManager signorStyleManager;
     public final PresentationManager presentationManager;
+    public final SessionLoaderManager sessionLoaderManager;
     public final CytoUtils utils;
     public CyNetwork lastCyNetwork;
     public Network lastNetwork;
@@ -43,7 +45,9 @@ public class SignorManager {
   
     public SignorManager(CyServiceRegistrar registrar) {        
         utils = new CytoUtils(registrar);        
+        sessionLoaderManager = new SessionLoaderManager(this);
         presentationManager = new PresentationManager(this);
+        utils.registerService(sessionLoaderManager, SessionLoadedListener.class, new Properties());
         signorStyleManager = new SignorStyleManager(this, Config.FILESTYLE);
         signorStyleManager.setupDefaultStyle();
     }

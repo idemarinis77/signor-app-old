@@ -26,7 +26,10 @@ public class Edge implements Element {
     public static Edge createEdge(Network network, CyEdge edge) {
         if (network == null || edge == null) return null;
         CyRow edgeRow = network.getCyNetwork().getRow(edge);
-        if (edgeRow == null) return null;
+        if (edgeRow == null){
+            System.out.println("ARCO NULLO");
+            return null;
+        }
         /*Boolean isSummary = EdgeFields.IS_SUMMARY.getValue(edgeRow);
         if (isSummary) {
             return new SummaryEdge(network, edge);
