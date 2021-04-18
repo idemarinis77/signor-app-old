@@ -8,6 +8,7 @@ package it.uniroma2.signor.internal.utils;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import java.util.List;
 import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.model.CyEdge;
@@ -16,6 +17,7 @@ import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableManager;
 import org.cytoscape.task.hide.HideTaskFactory;
+import org.cytoscape.task.hide.UnHideTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.model.CyNetworkViewManager;
@@ -45,20 +47,20 @@ public class DataUtils {
     
     public static void PopulatePTMTables(SignorManager manager){
         try {
-        CyTableManager tableManager = manager.utils.getService(CyTableManager.class);        
-        CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
-        CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
-        CyNetworkViewManager networkViewManager = manager.utils.getService(CyNetworkViewManager.class);
-        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
-        Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
-        //CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
-           if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
-               tableManager.getAllTables(true).contains(networksignor.PTMedgeTable)){
-               //Starting populating PTM Table form Node and Edge tables default
-               List<CyRow> listrow = currentnet.getDefaultEdgeTable().getAllRows();
-               for(int i =0;  i< listrow.size(); i ++){                   
-                   CyRow cyrow = listrow.get(i);
-                   if (!cyrow.get(Config.NAMESPACE, "RESIDUE", String.class).isEmpty()) {
+            CyTableManager tableManager = manager.utils.getService(CyTableManager.class);        
+            CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
+            CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
+            CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
+            Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
+            Boolean ptm_already_loaded = currentnet.getDefaultNetworkTable().getColumn("PTM LOADED").getValues(Boolean.class).get(0);
+            //CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
+            if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
+                tableManager.getAllTables(true).contains(networksignor.PTMedgeTable) && !ptm_already_loaded){
+                //Starting populating PTM Table form Node and Edge tables default
+                List<CyRow> listrow = currentnet.getDefaultEdgeTable().getAllRows();
+                for(int i =0;  i< listrow.size(); i ++){                   
+                    CyRow cyrow = listrow.get(i);
+                    if (!cyrow.get(Config.NAMESPACE, "RESIDUE", String.class).isEmpty()) {
                        Long parent_edge_uid = cyrow.get("SUID", Long.class);
                        CyEdge cyEdgeParent = currentnet.getEdge(parent_edge_uid);
                   
@@ -102,7 +104,7 @@ public class DataUtils {
         }
         catch (Exception e) {
             //manager.utils.info(manager.lastCyNetwork.getSUID().toString());
-            manager.utils.info(e.toString()+"*****");            
+            manager.utils.info(e.toString()+" in Populate PTM Tables");            
         }
             
     }
@@ -113,8 +115,9 @@ public class DataUtils {
         CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
         CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
         Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
-        if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
+        if(tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
                tableManager.getAllTables(true).contains(networksignor.PTMedgeTable)){
+            
             List uid_edge_to_hide = networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, "EdgeParent").getValues(Long.class);
             Map<CyEdge, Long> edges_to_hide = new HashMap<>();
             for (Object uid_edge: uid_edge_to_hide){
@@ -123,6 +126,67 @@ public class DataUtils {
             }
             HideTaskFactory htfactory = manager.utils.getService(HideTaskFactory.class);
             manager.utils.execute(htfactory.createTaskIterator(networkView, null, edges_to_hide.keySet()));
+        }           
+    }
+    
+    public static void ShowDefaultView(SignorManager manager){
+        try {
+            CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
+            CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
+            CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
+            CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
+            Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
+
+            if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
+                   tableManager.getAllTables(true).contains(networksignor.PTMedgeTable)){
+                
+                List<CyNode> cynl = currentnet.getNodeList();
+                List<CyEdge> cyel = currentnet.getEdgeList();
+                
+                //Grouping node and edges of PTM Tables and edges to view in Default                
+                Map<CyNode, Long> ptm_nodes_to_hide = new HashMap<>();
+                Map<CyEdge, Long> ptm_edges_to_hide = new HashMap<>();
+                Map<CyEdge, Long> def_edges_to_unhide = new HashMap<>();
+                
+
+                for (CyNode cynode: cynl){
+                    try {
+                        if (networksignor.PTMnodeTable.getRow(cynode.getSUID()).get(Config.NAMESPACEPTM, "TYPE", String.class) == "residue"){
+                            ptm_nodes_to_hide.put(cynode, cynode.getSUID());
+                        }
+                    }
+                    catch (Exception e){
+                        manager.utils.info(e.toString());
+                    }
+                }               
+                
+                
+                for (CyEdge cyedge: cyel){
+                    try {
+                        //if (networksignor.PTMedgeTable.getRow(cyedge.getSUID()).get(Config.NAMESPACEPTM, "EdgeParent", String.class) != ""){
+                        Long suid = cyedge.getSUID();
+                        if(networksignor.PTMedgeTable.getColumn("SUID").getValues(Long.class).contains(suid)){
+                            ptm_edges_to_hide.put(cyedge, cyedge.getSUID());
+                        }
+                        else if (networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, "EdgeParent").getValues(Long.class).contains(suid)){
+                            def_edges_to_unhide.put(cyedge, cyedge.getSUID());
+                        }
+                    }
+                    catch (Exception e){
+                        manager.utils.error(e.toString());
+                    }
+                }
+                
+                HideTaskFactory htfactory = manager.utils.getService(HideTaskFactory.class);
+                manager.utils.execute(htfactory.createTaskIterator(networkView, ptm_nodes_to_hide.keySet(), ptm_edges_to_hide.keySet()));               
+                                
+                UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
+                manager.utils.execute(unfactory.createTaskIterator(networkView, null, def_edges_to_unhide.keySet()));
+            }
+        }
+        catch (Exception e) {
+            //manager.utils.info(manager.lastCyNetwork.getSUID().toString());
+            manager.utils.info(e.toString()+" in ShowDefaultView");            
         }
         
     }
