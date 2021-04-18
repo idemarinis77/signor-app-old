@@ -81,17 +81,18 @@ public class SignorLegendPanel extends JPanel implements
         ssp = new SignorSummaryPanel(manager);
 	srp = new SignorRelationsPanel(manager);
       	smp = new SignorModificationsPanel(manager);
+        
         ActionListener listenerPTM = new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
                 ptmviewON.setEnabled(false);
-                manager.utils.info("Sono in pTM");
                 DataUtils.PopulatePTMTables(manager); }
         };
         ActionListener listenerDEF = new ActionListener() {            
             @Override public void actionPerformed(ActionEvent e) { 
                 ptmviewON.setEnabled(true);
-                defviewON.setEnabled(false); }
+                defviewON.setEnabled(false);
+                DataUtils.ShowDefaultView(manager); }
                 //da implementare il ritorno al default
         };       
 

@@ -63,6 +63,7 @@ public class ConfigResources {
             this.queryFunction = queryFunction;
         }
     }
+    public static String icon_path = "/images/signor_logo.png";
     public static String images_path = "/images/";
     public static final HashMap<String,String> DBLOGOS= new HashMap(){
         {           

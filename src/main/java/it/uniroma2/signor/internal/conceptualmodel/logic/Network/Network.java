@@ -32,7 +32,7 @@ public class Network {
     CyTable nodeTable;
     public CyTable PTMnodeTable;
     public CyTable PTMedgeTable;
-    
+   
 
     private final Map<CyNode, Node> nodes = new HashMap<>();
     private final Map<NodeCouple, List<CyEdge>> coupleToDefaultEdges = new HashMap<>();
@@ -90,8 +90,6 @@ public class Network {
             if (row.get(Config.NAMESPACE, "ID", String.class).equals(entity)){
                 rootNode_to_find = cyNetwork.getNode(row.get("SUID", Long.class));
                 this.rootNode = rootNode_to_find;
-                Node prova = new Node(this, rootNode_to_find);
-                prova.Summary();
                 break;
             }
         }        

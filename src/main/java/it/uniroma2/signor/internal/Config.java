@@ -77,7 +77,7 @@ public class Config {
     }    
 
     public static final String SIGNOR_ID="it.uniroma2.signor";
-    public static final String SIGNOR_NAME = "Signor single query";
+    public static final String SIGNOR_NAME = "Signor single/bridge query";
     public static final String SIGNOR_DESC = "Query SIGNOR Database to create your casual network";
     public static final String SIGNOR_URL="https://signor.uniroma2.it";
     
@@ -115,6 +115,16 @@ public class Config {
            put("NodeSourceSUID", Long.class);           
            put("NodeTargetSUID", Long.class);           
            put("INTERACTION", String.class);
+        }
+    };
+        //Fields from TSV for Nodes,
+    public static final HashMap<String,Class<?>> NETWORKFIELD= new HashMap(){
+        {
+           put("QUERYTYPE", String.class);
+           put("SINGLESEARCH", Boolean.class);
+           put("ORGANISM", String.class);
+           put("PTM LOADED", Boolean.class);
+           put("DATA", String.class);
         }
     };
     //Fields from TSV for Nodes,

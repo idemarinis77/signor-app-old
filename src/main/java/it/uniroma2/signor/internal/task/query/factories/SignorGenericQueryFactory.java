@@ -11,6 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.Icon;
 
+import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.IconUtils;
 import it.uniroma2.signor.internal.ui.components.SearchQueryComponent;
@@ -24,15 +26,13 @@ import java.util.HashMap;
  * @author amministratore
  */
 public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory {
-    static String SIGNOR_ID="it.uniroma2.signor";
-    static String SIGNOR_NAME = "Signor single query";
-    static String SIGNOR_DESC = "Query SIGNOR Database to create your causal network";
+
     static URL SIGNOR_URL;
-    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon("/images/signor_logo.png");
+    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
     
     static {
         try {
-            SIGNOR_URL = new URL("https://signor.uniroma2.it");
+            SIGNOR_URL = new URL(Config.SIGNOR_URL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
     
     
     public SignorGenericQueryFactory(SignorManager manager) {
-         super(SIGNOR_ID, SIGNOR_NAME,SIGNOR_DESC, SIGNOR_ICON, SIGNOR_URL);
+         super(Config.SIGNOR_ID, Config.SIGNOR_NAME,Config.SIGNOR_DESC, SIGNOR_ICON, SIGNOR_URL);
          this.manager = manager;
     }
     public boolean isReady() {
@@ -52,17 +52,15 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
 
     public TaskIterator createTaskIterator() {
         String terms = queryComponent.getQueryText();
-        String searchoptions = "";
-        Boolean firstneighbor=false;
         HashMap<String, ?> parameters;
   
         try { 
             parameters = chooseSearchoption.getParameter();
             manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 
-            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), SIGNOR_NAME, parameters, terms));
+            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), Config.SIGNOR_NAME, parameters, terms));
         }
         catch (Exception e){
-            manager.utils.error("non riesco a "+e.getMessage()+" "+e.toString());
+            manager.utils.error("Problems in performing SIGNOR search "+e.toString());
         }
         return null;
     }

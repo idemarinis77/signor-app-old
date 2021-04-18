@@ -79,13 +79,14 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             
             network.setNetwork(cynet);
             manager.setCurrentNetwork(network);
+            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
             
             Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             PTMTableNode.buildPTMTable(manager, "PTMNode");
                 
             Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             PTMTableEdge.buildPTMTable(manager, "PTMEdge");
-            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
+
             manager.presentationManager.parameters = network.parameters;
             manager.presentationManager.searched_query = terms;
             network.setCyNodeRoot(terms);
