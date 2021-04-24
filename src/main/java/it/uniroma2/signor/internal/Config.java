@@ -95,12 +95,7 @@ public class Config {
                                                     "CELL_DATA", "TISSUE_DATA", "MODULATOR_COMPLEX", "TARGET_COMPLEX", 
                                                     "MODIFICATIONA","MODASEQ", "MODIFICATIONB", "MODBSEQ", "PMID", 
                                                     "DIRECT", "NOTES", "ANNOTATOR", "SENTENCE", "SIGNOR_ID", "SCORE"};
-    public static final String[] HEADERPTH = {"PATHWAY_ID", "PATHWAY_NAME", "ENTITYA", "REGULATOR_LOCATION", "TYPEA", "IDA", "DATABASEA",
-                                                    "ENTITYB", "TARGET_LOCATION", "TYPEB", "IDB", "DATABASEB", "EFFECT", 
-                                                    "MECHANISM", "RESIDUE", "SEQUENCE", "TAX_ID", "CELL_DATA",
-                                                    "TISSUE_DATA", "MODULATOR_COMPLEX", "TARGET_COMPLEX", "MODIFICATIONA", "MODASEQ", 
-                                                    "MODIFICATIONB", "MODBSEQ", "PMID", "DIRECT", "NOTES", "ANNOTATOR", 
-                                                    "SENTENCE", "SIGNOR_ID",};
+    
 
     public static final HashMap<String,Class<?>> PTMNODEFIELD= new HashMap(){
         {
@@ -117,16 +112,22 @@ public class Config {
            put("INTERACTION", String.class);
         }
     };
-        //Fields from TSV for Nodes,
+    //Fields for Networks,
     public static final HashMap<String,Class<?>> NETWORKFIELD= new HashMap(){
         {
-           put("QUERYTYPE", String.class);
+           put("QUERY", String.class);
            put("SINGLESEARCH", Boolean.class);
-           put("ORGANISM", String.class);
+           put("ALLSEARCH", Boolean.class);
+           put("CONNECTSEARCH", Boolean.class);           
+           put("SHORTESTPATHSEARCH", Boolean.class);
+           put("INCFIRSTNEISEARCH", Boolean.class);
+           put("SPECIES", String.class);
            put("PTM LOADED", Boolean.class);
-           put("DATA", String.class);
         }
     };
+    
+    public static final String NODEID = "ID";
+    public static final String NODETYPE = "TYPE";
     //Fields from TSV for Nodes,
     public static final HashMap<String,Class<?>> NODEFIELD= new HashMap(){
         {
@@ -148,6 +149,30 @@ public class Config {
            put("DATABASEB", "DATABASE");
         }
     };
+    
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_COMPLEX = {"FORMED BY", "ID", "FORMED BY ENTITY", "LINK"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_CHEMICAL = {"NAME", "SYNONYMS", "ID", "FORMULA", "IUPAC"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN = {"NAME", "ID", "DESCRIPTION", "SEQUENCE", "FORMED BY"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY = {"NAME", "ID", "FORMED BY"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_STIMULUS = {"NAME", "ID", "DESCRIPTION"};
+    
+    public static final String[] ROOT_NODE_COMMONS_ADDINFO = {"NAME", "FORMED BY", "DESCRIPTION"};
+    public static final String PATHWAYLISTADDINFO = "PATHWAYLIST";
+    
+    public static final HashMap<String,Class<?>> NODEFIELDADDITIONAL= new HashMap(){
+        {
+           put(ROOT_NODE_COMMONS_ADDINFO[0], String.class);
+           put(ROOT_NODE_COMMONS_ADDINFO[1], String.class);
+           put(ROOT_NODE_COMMONS_ADDINFO[2], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_COMPLEX[2], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[1], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[3], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[4], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN[3], String.class);
+           put(PATHWAYLISTADDINFO, String.class);
+        }
+    };
+
     public static final HashMap<String,Class<?>> EDGEFIELD = new HashMap(){
         {
            put("Interaction", String.class);
@@ -197,41 +222,7 @@ public class Config {
            put("SIGNOR_ID", "SIGNOR_ID");           
         }
     };
-    public static final HashMap<String,String> FIELDPTHWORDER= new HashMap(){
-        {
-           put("ENTITYA", "ENTITY");
-           put("TYPEA", "TYPE");
-           put("IDA", "IDA");
-           put("DATABASEA", "DATABASE");
-           put("ENTITYB", "ENTITY");
-           put("TYPEB", "TYPE");
-           put("IDB", "IDB");
-           put("PATHWAY_ID", "PATHWAY_ID");
-           put("PATHWAY_NAME", "PATHWAY_NAME");
-           put("EFFECT", "EFFECT");
-           put("TARGET_LOCATION", "TARGET_LOCATION");
-           put("MECHANISM", "MECHANISM");
-           put("RESIDUE", "RESIDUE");
-           put("SEQUENCE", "SEQUENCE");
-           put("TAX_ID", "TAX_ID");
-           put("CELL_DATA", "CELL_DATA");
-           put("PMID", "PMID");
-           put("DIRECT", "DIRECT");
-           put("ANNOTATOR", "ANNOTATOR");
-           put("SENTENCE", "SENTENCE");
-           put("SIGNOR_ID", "SIGNOR_ID");
-           put("REGULATOR_LOCATION", "REGULATOR_LOCATION");
-           put("NOTES", "NOTES");
-           put("TISSUE_DATA", "TISSUE_DATA");
-           put("MODIFICATIONA", "MODIFICATIONA");
-           put("MODBSEQ", "MODBSEQ");
-           put("MODULATOR_COMPLEX", "MODULATOR_COMPLEX"); 
-           put("TARGET_COMPLEX", "TARGET_COMPLEX");
-           put("MODIFICATIONB", "MODIFICATIONB");
-           put("MODASEQ", "MODASEQ");
-        }
-    };
-     
+    
     public static String FILESTYLE = "/style/styles-signor_in_cytoscape_namespace.xml";
     public static String SIGNOR_VER_STYLE="SIGNOR_NS_0.1";
     

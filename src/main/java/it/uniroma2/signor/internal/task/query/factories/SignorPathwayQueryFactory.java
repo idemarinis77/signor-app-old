@@ -12,10 +12,11 @@ import java.net.URL;
 import javax.swing.Icon;
 
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigPathway;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.IconUtils;
-import it.uniroma2.signor.internal.ui.components.SearchQueryComponent;
+import it.uniroma2.signor.internal.ui.components.SearchPTHQueryComponent;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.task.query.SignorGenericQueryTask;
 import it.uniroma2.signor.internal.ui.components.ChooseSearchoption;
@@ -25,10 +26,10 @@ import java.util.HashMap;
  *
  * @author amministratore
  */
-public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory {
+public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory {
 
     static URL SIGNOR_URL;
-    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
+    private static final Icon SIGNORPTH_ICON=IconUtils.createImageIcon(ConfigResources.iconpth_path);
     
     static {
         try {
@@ -38,12 +39,12 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
         }
     }
     SignorManager manager;
-    private SearchQueryComponent queryComponent = null;
+    private SearchPTHQueryComponent queryComponent = null;
     private ChooseSearchoption chooseSearchoption = new ChooseSearchoption(manager); 
     
     
-    public SignorGenericQueryFactory(SignorManager manager) {
-         super(Config.SIGNOR_ID, Config.SIGNOR_NAME,Config.SIGNOR_DESC, SIGNOR_ICON, SIGNOR_URL);
+    public SignorPathwayQueryFactory(SignorManager manager) {
+         super(Config.SIGNOR_ID, ConfigPathway.SIGNORPTH_NAME,ConfigPathway.SIGNORPTH_DESC, SIGNORPTH_ICON, SIGNOR_URL);
          this.manager = manager;
     }
     public boolean isReady() {
@@ -52,28 +53,29 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
 
     public TaskIterator createTaskIterator() {
         String terms = queryComponent.getQueryText();
-        HashMap<String, ?> parameters;
+        HashMap<String, Object> parameters;
   
         try { 
             parameters = chooseSearchoption.getParameter();
-            manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 
+            parameters.put("QUERY", terms);
+            manager.utils.info("Performing SIGNOR PTH search for "+parameters.toString()); 
             return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), Config.SIGNOR_NAME, parameters, terms));
         }
         catch (Exception e){
-            manager.utils.error("Problems in performing SIGNOR search "+e.toString());
+            manager.utils.error("Problems in performing SIGNOR PTH search "+e.toString());
         }
         return null;
     }
 
     public JComponent getQueryComponent() {
         if (queryComponent == null)
-            queryComponent = new SearchQueryComponent();
+            queryComponent = new SearchPTHQueryComponent();
         return queryComponent;
     }
 
     @Override
     public JComponent getOptionsComponent() {        
-        return chooseSearchoption;
+        return null;
     }
 
 }

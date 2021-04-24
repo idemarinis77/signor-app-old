@@ -9,6 +9,8 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.task.query.factories.AlgorithmFactory;
+import it.uniroma2.signor.internal.task.query.AlgorithmTask;
 import java.util.List;
 import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.model.CyEdge;
@@ -29,11 +31,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.view.layout.CyLayoutAlgorithm;
-import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
-import org.cytoscape.view.model.View;
-import org.cytoscape.work.TaskIterator;
-import org.cytoscape.work.TunableSetter;
+
+
 
 /**
  *
@@ -45,14 +44,23 @@ public class DataUtils {
         return cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(Config.NTWPREFIX);
     }
     
+    public static void writeNetworkPTMInfo(SignorManager manager, Network network){
+        CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
+        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
+        currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, "PTM LOADED", true);
+        network.ptm_already_loaded = true;       
+    }
+    
     public static void PopulatePTMTables(SignorManager manager){
+        CyTableManager tableManager = manager.utils.getService(CyTableManager.class);        
+        CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
+        CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
+        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
         try {
-            CyTableManager tableManager = manager.utils.getService(CyTableManager.class);        
-            CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
-            CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
-            CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
+
             Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
-            Boolean ptm_already_loaded = currentnet.getDefaultNetworkTable().getColumn("PTM LOADED").getValues(Boolean.class).get(0);
+            //Boolean ptm_already_loaded = currentnet.getDefaultNetworkTable().getColumn("PTM LOADED").getValues(Boolean.class).get(0);
+            Boolean ptm_already_loaded = networksignor.ptm_already_loaded;
             //CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
             if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
                 tableManager.getAllTables(true).contains(networksignor.PTMedgeTable) && !ptm_already_loaded){
@@ -66,18 +74,18 @@ public class DataUtils {
                   
                        String interaction = cyrow.get(Config.NAMESPACE, "INTERACTION", String.class);
                        String sequence = cyrow.get(Config.NAMESPACE, "SEQUENCE", String.class);
-                       CyNode cyNode = currentnet.addNode();            
-                       
-                       manager.utils.flushEvents(); 
+                       CyNode cyNode = currentnet.addNode();         
+                                   
+                       manager.utils.flushEvents();
                        networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.MAGENTA);
                        networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 20.0);    
                        networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 20.0);  
                        networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0.0);               
-               
+                       
+                       
                        networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, "RESIDUE", cyrow.get(Config.NAMESPACE, "RESIDUE", String.class));
                        networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, "TYPE", "residue");
-                       networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, "SEQUENCE", cyrow.get(Config.NAMESPACE, "SEQUENCE", String.class));
-                       
+                       networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, "SEQUENCE", cyrow.get(Config.NAMESPACE, "SEQUENCE", String.class));                   
                                       
                        CyNode cyNodeSourceParent = cyEdgeParent.getSource();
                        CyNode cyNodeTargetParent = cyEdgeParent.getTarget();
@@ -93,21 +101,29 @@ public class DataUtils {
                        networksignor.PTMedgeTable.getRow(cyEdge2.getSUID()).set(Config.NAMESPACEPTM, "NodeSourceSUID", cyNodeSourceParent.getSUID());
                        networksignor.PTMedgeTable.getRow(cyEdge2.getSUID()).set(Config.NAMESPACEPTM, "NodeTargetSUID", cyNodeTargetParent.getSUID());
                        networksignor.PTMedgeTable.getRow(cyEdge2.getSUID()).set(Config.NAMESPACEPTM, "INTERACTION", interaction); 
+                       //manager.utils.flushEvents();
                    }                   
                }
                //manager.PTMtableTocreate = false;               
                /*CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
                cyNetworktableManager.setTable(manager.cyNetwork, CyNode.class , CONFIG.NAMESPACEPTM, manager.currentNetwork.PTMnodeTable);*/
                //
-            }
+            }          
+
             HideEdgeParentPTM(manager);
+            manager.utils.info(networkView.getNodeViews().toString()+" la dimensione e "+networkView.getNodeViews().size());
+            AlgorithmFactory algfactory = new AlgorithmFactory(networkView, manager);            
+            manager.utils.execute(algfactory.createTaskIterator());
+            writeNetworkPTMInfo(manager, networksignor);
         }
         catch (Exception e) {
             //manager.utils.info(manager.lastCyNetwork.getSUID().toString());
-            manager.utils.info(e.toString()+" in Populate PTM Tables");            
+            manager.utils.info(e.toString()+" in Populate PTM Tables");   
         }
             
     }
+
+    
     
     public static void HideEdgeParentPTM(SignorManager manager){
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);

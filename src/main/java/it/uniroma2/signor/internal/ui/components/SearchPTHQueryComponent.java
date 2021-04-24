@@ -9,18 +9,18 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SearchQueryComponent extends JTextField {
+public class SearchPTHQueryComponent extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final String DEF_SEARCH_TEXT = "Enter one term per line |    Options →";
     final int vgap = 1;
     final int hgap = 5;
     final String tooltip;
     Color msgColor;
-    private JTextArea queryTextArea = null;
+    private JComboBox organism = new JComboBox(CONFIG.SPECIES.keySet().toArray());
     private JScrollPane queryScroll = null;
     private JPopupMenu popup = null;
 
-    public SearchQueryComponent() {
+    public SearchPTHQueryComponent() {
         super();
         init();
         tooltip = "Press " + (LookAndFeelUtil.isMac() ? "Command" : "Ctrl") + "+ENTER to run the search";
@@ -28,7 +28,7 @@ public class SearchQueryComponent extends JTextField {
 
     void init() {
         msgColor = UIManager.getColor("Label.disabledForeground");
-        setEditable(false);
+        queryTextArea.setEditable(false);
         setMinimumSize(getPreferredSize());
         setBorder(BorderFactory.createEmptyBorder(vgap, hgap, vgap, hgap));
         setFont(getFont().deriveFont(LookAndFeelUtil.getSmallFontSize()));
@@ -44,7 +44,7 @@ public class SearchQueryComponent extends JTextField {
         // when it has been updated by the user, so Cytoscape can give a better
         // feedback to the user of whether or not the whole search component is ready
         // (e.g. Cytoscape may enable or disable the search button)
-        getDocument().addDocumentListener(new DocumentListener() {
+        queryTextArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 fireQueryChanged();
@@ -68,7 +68,7 @@ public class SearchQueryComponent extends JTextField {
     public void paint(Graphics g) {
         super.paint(g);
 
-        if (getText() == null || getText().trim().isEmpty()) {
+        if (queryTextArea.getText() == null || queryTextArea.getText().trim().isEmpty()) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHints(
                     new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON));
@@ -121,7 +121,7 @@ public class SearchQueryComponent extends JTextField {
         String text = queryTextArea.getText();
         if (text.length() > 30)
             text = text.substring(0, 30) + "...";
-        setText(text);
+        queryTextArea.setText(text);
     }
 
     private void fireQueryChanged() {
@@ -145,7 +145,7 @@ public class SearchQueryComponent extends JTextField {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // System.out.println("\n\nENTER");
-                SearchQueryComponent.this.firePropertyChange(NetworkSearchTaskFactory.SEARCH_REQUESTED_PROPERTY, null, null);
+                SearchPTHQueryComponent.this.firePropertyChange(NetworkSearchTaskFactory.SEARCH_REQUESTED_PROPERTY, null, null);
                 popup.setVisible(false);
             }
         });

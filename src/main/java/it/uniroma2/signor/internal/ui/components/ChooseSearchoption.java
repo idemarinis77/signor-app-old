@@ -71,8 +71,8 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
         else inclfirstnei.setEnabled(false);
     }
             
-    public HashMap<String, ?> getParameter(){
-        HashMap<String, ?> formvalues = new HashMap<>() {
+    public HashMap<String, Object> getParameter(){
+        HashMap<String, Object> formvalues = new HashMap<>() {
             {put ("SINGLESEARCH", singlebutton.isSelected());
              put ("ALLSEARCH", allbutton.isSelected());
              put ("CONNECTSEARCH", connbutton.isSelected());

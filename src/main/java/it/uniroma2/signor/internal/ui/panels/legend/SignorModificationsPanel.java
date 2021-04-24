@@ -104,7 +104,7 @@ public class SignorModificationsPanel extends JPanel {
     }
     
     public void recreateContent(){
-        if(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into)!=null){
+        if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
             modPanel.removeAll();
             createContent();
         }

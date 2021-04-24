@@ -21,9 +21,11 @@ import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveRes
 import it.uniroma2.signor.internal.managers.SignorManager;
 import java.awt.Window;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Iterator;
 import static java.util.stream.Collectors.toList;
 import org.cytoscape.work.TaskFactory;
 
@@ -41,8 +43,9 @@ public class SignorResultPanel extends JPanel {
     private Boolean includefirstneighbor;
     private Network network;
     private SignorManager manager;
+    private ArrayList<String> results;
     
-    public SignorResultPanel(Integer numberresutls, String species, String search, Boolean includefirstneighbor, String terms, Network network){ 
+    public SignorResultPanel(Integer numberresutls, ArrayList<String> results, String species, String search, Boolean includefirstneighbor, String terms, Network network){ 
         super(new GridBagLayout());
         this.layoutHelper.insets(10,10,10,10);
         
@@ -53,6 +56,7 @@ public class SignorResultPanel extends JPanel {
         this.includefirstneighbor = includefirstneighbor;
         this.terms= terms;
         this.manager = network.manager;
+        this.results = results;
         init(numberresutls, species);     
     }
     
@@ -69,13 +73,8 @@ public class SignorResultPanel extends JPanel {
         descriptionPanel.add(new CenteredLabel(numberresutls+" results found for organism "+species, 16, Color.BLACK), layoutHelper.down().expandHoriz());
         descriptionPanel.add(new CenteredLabel("Please select the element to query as seeds to build network.", 14, Color.BLACK), layoutHelper.down().expandHoriz());
         
-        add(descriptionPanel, layoutHelper.expandHoriz());
-        Object[][] data = new Object[][]{{"BRAF", "P15056", "protein"}, {"dabrafenib", "CHEBI:75045", "chemical"}};
-        String[] columnNames = new String[]{"Entity", "PRIMARY ID", "TYPE" };
-        JTable table = new JTable(data, columnNames);
-        setMinimumSize(new Dimension(600, 330));
-        /*this.add(new JScrollPane(table));
-        add(table, layoutHelper.down());*/
+        add(descriptionPanel, layoutHelper.expandHoriz());    
+        
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> close());        
         
@@ -84,33 +83,34 @@ public class SignorResultPanel extends JPanel {
         SignorLabelStyledBold primaryid = new SignorLabelStyledBold("Primary ID");
         SignorLabelStyledBold type = new SignorLabelStyledBold("Type");
         SignorLabelStyledBold goTo = new SignorLabelStyledBold("Link");
-                
-        SignorPanelRow listresults = new SignorPanelRow(1, 4, manager);
-        JLabel primaentity = new JLabel("BRAF");
-        JLabel primaid = new JLabel("PRIMARY ID");
-        JLabel primatype = new JLabel("TYPE");
-        SignorButton link= new SignorButton("Get relations");
-        link.addActionListener(e -> buildNetworkFromSelection());
-        
         add(header, layoutHelper.down());
         header.add(entity);
         header.add(primaryid);
         header.add(type);
         header.add(goTo);
-        
-        add(listresults, layoutHelper.down());
-        listresults.add(primaentity, layoutHelper.insets(2,2,2,2));
-        listresults.add(primaid);
-        listresults.add(primatype);
-        listresults.add(link);  
-        
+        //Iterator lines = results.listIterator();
+        for ( Iterator lines = results.listIterator(); lines.hasNext();){
+            String line = (String) lines.next();
+            String[] fields = line.split("\t");
+            SignorPanelRow listresults = new SignorPanelRow(1, 4, manager);
+            JLabel primaentity = new JLabel(fields[0]);
+            JLabel primaid = new JLabel(fields[1]);
+            JLabel primatype = new JLabel(fields[2]);
+            SignorButton link= new SignorButton("Get relations");
+            link.addActionListener(e -> buildNetworkFromSelection(fields[1]));
+            add(listresults, layoutHelper.down());
+            listresults.add(primaentity, layoutHelper.insets(2,2,2,2));
+            listresults.add(primaid);
+            listresults.add(primatype);
+            listresults.add(link);  
+        }
         add(cancelButton, layoutHelper.down().anchor("east"));
     }
     
-     private void buildNetworkFromSelection() {      
+     private void buildNetworkFromSelection(String primaryID) {      
         new Thread(() -> {
             //if (addAdditionalInteractors().isCanceled()) return;
-            TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, species, terms,network);
+            TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, species, primaryID ,network);
             manager.utils.execute(factory.createTaskIterator());
             close();
         }).start();

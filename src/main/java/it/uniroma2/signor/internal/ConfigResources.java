@@ -14,8 +14,10 @@ import java.util.function.Function;
  *
  * @author amministratore
  */
+
+/*Master file configuration for URL, DB, FILES, IMAGES*/
 public class ConfigResources {
-    
+    //API for Databases
     public enum DBLINK{
         SIGNOR("signor", "Signor", s -> "https://signor.uniroma2.it/relation_result.php?" + s),    
         UNIPROT("uniprot", "UniProt", s -> "https://www.uniprot.org/uniprot/" + s),        
@@ -47,23 +49,29 @@ public class ConfigResources {
         }
     }
     
+    //URL and SIGNOR WS
+    public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
+    public static String ENTITYINFO = "https://signor.uniroma2.it/getData.php?entityInfo=";
     
     public enum WSSearchoption{
        SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+       ALLQUERY("ALLSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?type=connect&proteins="+o+"&id=" +s),
        CONNECTQUERY("CONNECTSEARCH",(o, s) ->  "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s);
+       DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+       PATHWAYQUERY("PATHWAYSEARCH", (o, s) -> "https://signor.uniroma2.it/getPathwayData.php?pathway="+o+"&relations="+s);
+       public String name;
+       public BiFunction<String, String, String> queryFunction;
 
-        
-        public String name;
-        public BiFunction<String, String, String> queryFunction;
-
-        WSSearchoption(String name, BiFunction<String, String, String> queryFunction) {
-            this.name = name;
-            this.queryFunction = queryFunction;
-        }
+       WSSearchoption(String name, BiFunction<String, String, String> queryFunction) {
+           this.name = name;
+           this.queryFunction = queryFunction;
+       }
     }
+    
+    //Images and logos
     public static String icon_path = "/images/signor_logo.png";
+    public static String iconpth_path = "/images/button_path.png";
     public static String images_path = "/images/";
     public static final HashMap<String,String> DBLOGOS= new HashMap(){
         {           
@@ -80,9 +88,8 @@ public class ConfigResources {
         };
     };
     
-        
+    //Style
     public static String FILESTYLE = "/style/styles-signor_in_cytoscape_namespace.xml";
-    public static String SIGNOR_VER_STYLE="SIGNOR_NS_0.1";
-   
-    public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
+    public static String SIGNOR_VER_STYLE="SIGNOR_NS_0.1";   
+    
 }

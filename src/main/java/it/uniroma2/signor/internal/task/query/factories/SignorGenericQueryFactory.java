@@ -52,10 +52,11 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
 
     public TaskIterator createTaskIterator() {
         String terms = queryComponent.getQueryText();
-        HashMap<String, ?> parameters;
+        HashMap<String, Object> parameters;
   
         try { 
             parameters = chooseSearchoption.getParameter();
+            parameters.put("QUERY", terms);
             manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 
             return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), Config.SIGNOR_NAME, parameters, terms));
         }

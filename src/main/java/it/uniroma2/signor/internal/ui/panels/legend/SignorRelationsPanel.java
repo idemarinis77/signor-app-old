@@ -73,37 +73,36 @@ public class SignorRelationsPanel extends JPanel {
     
     public void createContent(){
         try {                   
-            //String[] columnNames = {"REGULATOR", "TARGET"};
-            
+            //String[] columnNames = {"REGULATOR", "TARGET"};            
             //String[][] data = new String[current_cynetwork_to_serch_into.getEdgeList().size()][2];
-            relPanel.setLayout(new GridLayout(current_cynetwork_to_serch_into.getEdgeList().size(), 2));
-           // SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 6, manager);
-            Integer it = 0;
-            for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {
-                CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getSource().getSUID());
-                CyRow cyrow_node_t = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
-                CyRow edge_row= current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
-                //listresults.add(new SignorLabelStyledBold("REGULATOR"), gbc.down());
-                //listresults.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());      
-                /*listresults.add(new SignorLabelStyledBold("MECHANISM"), gbc.down());
-                listresults.add(new JLabel(edge_row.get(Config.NAMESPACE, "MECHANISM", String.class)), gbc.right());*/
-                //listresults.add(new SignorLabelStyledBold("TARGET"), gbc.down());
-                //listresults.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
-                //data[it][0]=cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class);
-                relPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.position(0, it));
-                relPanel.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
-                //data[it][1] = edge_row.get(Config.NAMESPACE, "MECHANISM", String.class);
-                //data[it][1] = cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class);
-                it ++;
-                        /*= { { cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)}, 
-                         { edge_row.get(Config.NAMESPACE, "MECHANISM", String.class)},
-                         { cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)},};*/
-            }
             
+                relPanel.setLayout(new GridLayout(current_cynetwork_to_serch_into.getEdgeList().size(), 2));
+                // SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 6, manager);
+                Integer it = 0;
+                for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {
+                    CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getSource().getSUID());
+                    CyRow cyrow_node_t = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
+                    CyRow edge_row= current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
+                    //listresults.add(new SignorLabelStyledBold("REGULATOR"), gbc.down());
+                    //listresults.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());      
+                    /*listresults.add(new SignorLabelStyledBold("MECHANISM"), gbc.down());
+                    listresults.add(new JLabel(edge_row.get(Config.NAMESPACE, "MECHANISM", String.class)), gbc.right());*/
+                    //listresults.add(new SignorLabelStyledBold("TARGET"), gbc.down());
+                    //listresults.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
+                    //data[it][0]=cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class);
+                    relPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.position(0, it));
+                    relPanel.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
+                    //data[it][1] = edge_row.get(Config.NAMESPACE, "MECHANISM", String.class);
+                    //data[it][1] = cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class);
+                    it ++;
+                    /*= { { cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)}, 
+                    { edge_row.get(Config.NAMESPACE, "MECHANISM", String.class)},
+                    { cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)},};*/
+                }
+                //JTable table = new JTable(data, columnNames);            
+                //relPanel.add(listresults);
+                //relPanel.add(new JScrollPane(table));
             
-            //JTable table = new JTable(data, columnNames);            
-            //relPanel.add(listresults);
-            //relPanel.add(new JScrollPane(table));
         }
         catch (Exception e){
             manager.utils.error(e.toString());
@@ -111,7 +110,7 @@ public class SignorRelationsPanel extends JPanel {
     }
     
     public void recreateContent(){
-        if(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into)!=null){
+        if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
             relPanel.removeAll();
             createContent();
         }

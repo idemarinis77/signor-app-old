@@ -83,23 +83,20 @@ public class SignorSummaryPanel extends JPanel {
     }
     
     public void createContent(){
-        try {            
+        try {           
        
-            if(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into)!=null){
+            if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
                rootNode = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).rootNode;
                networkRootNode = new Node(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into), rootNode);
             }
-        
             summary = networkRootNode.Summary();
             //SignorPanelRow listresults = new SignorPanelRow(summary.size()+1, 2, manager);
             Integer relations = manager.lastNetwork.numberOfEdes();
             Iterator iter = summary.keySet().iterator();
             Iterator iterv = summary.values().iterator();
             Integer it =0;
-            summPanel.setLayout(new GridLayout(current_cynetwork_to_serch_into.getEdgeList().size()+1, 2));
+            summPanel.setLayout(new GridLayout(summary.size()+1, 2));
             while(iter.hasNext()){
-                //listresults.add(new SignorLabelStyledBold(iter.next().toString()), gbc.down());
-                //listresults.add(new JLabel(iterv.next().toString()), gbc.right());
                 summPanel.add(new SignorLabelStyledBold(iter.next().toString()), gbc.position(0, it));
                 summPanel.add(new JLabel(iterv.next().toString()), gbc.right());
                 it ++;
@@ -116,7 +113,7 @@ public class SignorSummaryPanel extends JPanel {
     }
     
     public void recreateContent(){
-        if(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into)!=null){
+        if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
             summPanel.removeAll();
             createContent();
         }

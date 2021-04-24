@@ -17,74 +17,159 @@ import java.util.*;
 import java.util.stream.Collectors;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
+import it.uniroma2.signor.internal.ConfigPathway;
+import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import java.io.BufferedReader;
 
 import it.uniroma2.signor.internal.utils.HttpUtils;
 import static java.util.stream.Collectors.toList;
 
-//public class Node extends Interactor implements Comparable<Interactor>, Element {
 public class Node implements Element {
 
-    //private final WeakReference<Network> network;
     private final Network network;
     public final CyNode cyNode;
     public final CyRow nodeRow;
-
+    public HashMap<String,String> summary= new HashMap<String,String>();
 
     public Node(final Network network, final CyNode cyNode) {
         this(network, cyNode, network.getCyNetwork().getRow(cyNode));
     }
 
     private Node(final Network network, final CyNode cyNode, CyRow nodeRow) {
-
-        //this.network = new WeakReference<>(network);
-
         this.network = network;
         this.cyNode = cyNode;
         this.nodeRow = nodeRow;
         //Lo lascio per esempio this.mutated = MUTATED.getValue(nodeRow);
-        
-       /*List<String> nodeFeatures = FEATURES.getValue(nodeRow);
-        if (nodeFeatures != null) {
-            featureAcs.addAll(nodeFeatures.stream().filter(s -> !s.isBlank()).collect(toList()));
-        }
-
-        List<String> nodeIdentifiers = IDENTIFIERS.getValue(nodeRow);
-        if (nodeIdentifiers != null) {
-            identifierAcs.addAll(nodeIdentifiers.stream().filter(s -> !s.isBlank()).collect(toList()));
-        }*/
+        Config.NODEFIELD.forEach((k, v) ->
+                    summary.put(k, nodeRow.get(Config.NAMESPACE, k, String.class)));  
     }
-    
-    public HashMap<String,String> Summary(){
-        HashMap<String,String> basic_summary = new HashMap<String,String>();
-        String NodeID = this.nodeRow.get(Config.NAMESPACE, "ID", String.class);
+   
+    //complex SIGNOR-C144
+    //chemical CHEBI:3441
+    //fusion protein SIGNOR-FP3
+    //proteinfamily	SIGNOR-PF16
+    //smallmolecule CHEBI:17650
+    //stimulus	SIGNOR-ST13
+    //phenotype	SIGNOR-PH92
+    // mirna	MI0000300
+    public HashMap<String,String> Summary(){        
+        /*HashMap<String,String> basic_summary = new HashMap<String,String>();        
         Config.NODEFIELD.forEach((basic_node_key, basic_node_value) ->{
-            basic_summary.put(basic_node_key , this.nodeRow.get(Config.NAMESPACE, basic_node_key, String.class)); });  
-        //Now I must withdraw information from pathway
+            basic_summary.put(basic_node_key , this.nodeRow.get(Config.NAMESPACE, basic_node_key, String.class)); });  */        
+        //Now I must retrieve information from pathway
+        
+        String NodeID = summary.get("ID");
         network.manager.utils.info("Searching pthw for "+NodeID);
-        Integer position_of_id_in_line = Arrays.asList(Config.HEADERPTH).indexOf("IDA");
-        Integer position_of_pthw_desc_in_line = Arrays.asList(Config.HEADERPTH).indexOf("PATHWAY_NAME");
+        Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHID);
+        Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHNAME);
         try {
+            Table.buildAdditionalInfoForSummary(network.manager);
             BufferedReader br =  HttpUtils.getHTTPSignor(ConfigResources.PATHALLRELATIONSQUERY, network.manager);
             ArrayList<String> relation_pathways = HttpUtils.parseWSNoheader(br);
             String pathway_found_for_node = "";
             for(Iterator it = relation_pathways.iterator(); it.hasNext();){                
-                String[] field = it.next().toString().split("\t");      
-                
+                String[] field = it.next().toString().split("\t");                      
                 if (field[position_of_id_in_line].equals(NodeID)){
                     if (!pathway_found_for_node.contains(field[position_of_pthw_desc_in_line])){
-                        pathway_found_for_node += " , "+field[position_of_pthw_desc_in_line];
-                        
+                        pathway_found_for_node += " , "+field[position_of_pthw_desc_in_line];                        
                         network.manager.utils.info("FOUND PTHW "+field[1]);
                     }
                 }
             }
-            basic_summary.put("PATHWAYLIST", pathway_found_for_node);            
+            summary.put(Config.PATHWAYLISTADDINFO, pathway_found_for_node);     
+            String typeOfNode = summary.get(Config.NODETYPE);
+            String id = summary.get(Config.NODEID);
+            //Node rootNodeNet = nodes.get(rootNode);            
+            
+            ArrayList<String> packed_results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(ConfigResources.ENTITYINFO+id, network.manager));
+            String[] results = packed_results.get(0).split("\t");
+
+            switch(typeOfNode){
+                case "complex":
+                //Formed By
+                //E.g. SIGNOR-C144: CDK5/CDK5R1	SIGNOR-C144		Q00535,Q15078	CPX-2201 
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);
+                        }
+                    }
+                break;        
+                case "chemical":
+                //Name, Synonyms, IUPAC, Formula
+                //E.g. CHEBI:3441: carvedilol	(+-)-1-(Carbazol-4-yloxy)-3-((2-(o-methoxyphenoxy)ethyl)amino)-2-propanol....	CHEBI:3441		C24H26N2O4	1-(9H-carbazol-4-yloxy)-3-{[2-(2-methoxyphenoxy)ethyl]amino}propan-2-ol
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL[i], results[i]);
+                        }
+                    }
+                break; 
+                case "smallmolecule":
+                //Name, Synonyms, IUPAC, Formula
+                //E.g. CHEBI:17650: cortisol	(11beta)-11,17,21-trihydroxypregn-4-ene-3,20-dione...	CHEBI:17650		C21H30O5	11beta,17,21-trihydroxypregn-4-ene-3,20-dione
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_CHEMICAL[i], results[i]);
+                        }
+                    }
+                break; 
+                case "fusion protein":
+                //Name, Formed by, Description, Sequence
+                //E. g. SIGNOR-FP3: CBFbeta-MYH11	SIGNOR-FP3	Inversion of chromosome 16,.....	MPRVVPDQRSKFENEEFFR.... P35749,Q13951
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN[i], results[i]);
+                        }
+                    }
+                break;   
+                case "proteinfamily":
+                //Name, Formed by
+                //E.g. SIGNOR-PF16: p38	SIGNOR-PF16		P53778,O15264,Q16539,Q15759
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY[i], results[i]);
+                        }
+                    }
+                case "stimulus":
+                //Description
+                //E.g SIGNOR-ST13: Cell-Cell_contact	SIGNOR-ST13	Cell-Cell contact
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i], results[i]);
+                        }
+                    }
+                break;
+                case "phenotype":
+                //Name, ID, Description
+                //E.g. SIGNOR-PH92: Degranulation	SIGNOR-PH92	The regulated exocytosis of secretory granules
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i], results[i]);
+                        }
+                    }
+                break;
+                case "mirna":
+                //Name, ID, Description
+                //E.g. MI0000300: hsa-mir-223	MI0000300	
+                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS.length; i++){
+                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i])){
+                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_STIMULUS[i], results[i]);
+                        }
+                    }
+                break;
+            }          
         }
         catch (Exception e){
             network.manager.utils.error("Found exception while loading Node Summary "+e.toString());
         }
-        return basic_summary;
+        return summary;
     }
     
     @Override
@@ -104,28 +189,10 @@ public class Node implements Element {
     public String toString() {
         return cyNode.toString();
     }
-
-    /*@Override
-    public int compareTo(Interactor o) {
-        if (name.isEmpty()) return Integer.MAX_VALUE;
-        else if (o.name.isEmpty()) return Integer.MIN_VALUE;
-        else return name.compareTo(o.name);
-    }*/
-
-
     @Override
     public boolean isSelected() {
         return nodeRow.get(CyNetwork.SELECTED, Boolean.class);
-    }
-
-    /*public void updateMutationStatus() {
-        mutated = getFeatures().stream().anyMatch(feature -> FeatureClassifier.mutation.contains(feature.type.id));
-        MUTATED.setValue(nodeRow, mutated);
-    }
-
-    public Network getNetwork() {
-        return Objects.requireNonNull(network.get());
-    }*/
+    } 
     public Network getNetwork() {
         return this.network;
     }

@@ -92,7 +92,8 @@ public class SignorLegendPanel extends JPanel implements
             @Override public void actionPerformed(ActionEvent e) { 
                 ptmviewON.setEnabled(true);
                 defviewON.setEnabled(false);
-                DataUtils.ShowDefaultView(manager); }
+                DataUtils.ShowDefaultView(manager);                 
+            }
                 //da implementare il ritorno al default
         };       
 
@@ -233,7 +234,7 @@ public class SignorLegendPanel extends JPanel implements
             }
         }
         catch(Exception err){
-            manager.utils.error(e.getNetwork().toString()+" "+err.toString());
+            manager.utils.error(e.getNetwork().toString()+" errore "+err.toString());
         }  
     }   
 }
