@@ -32,11 +32,11 @@ public class HttpUtils {
     public static BufferedReader getHTTPSignor(String url, SignorManager manager) {
         URL trueURL;
         try {
-                manager.utils.info("URL: " + url);
+                manager.utils.info("Method getHTTPSignor URL: " + url);
                 trueURL = new URL(url);
             
         } catch (MalformedURLException e) {
-            manager.utils.info("URL malformed in getHTTPSignor "+url);
+            manager.utils.error("Method getHTTPSignor URL malformed in getHTTPSignor "+url);
             return null;
         }
 
@@ -45,7 +45,7 @@ public class HttpUtils {
             DataFromURL = new BufferedReader(new InputStreamReader(trueURL.openStream()));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            manager.utils.error("Method getHTTPSignor "+e.toString());
         }
         return DataFromURL;
 

@@ -20,6 +20,7 @@ import java.util.Properties;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericQueryFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
+import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
 import it.uniroma2.signor.internal.Config;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
@@ -56,7 +57,11 @@ public class CyActivator extends AbstractCyActivator {
                 Properties propsSearch = new Properties();
                 registerService(bc, signorQuery, NetworkSearchTaskFactory.class, propsSearch);
             }
-
+            {
+                SignorPathwayQueryFactory signorPathwayQuery = new SignorPathwayQueryFactory(manager);
+                Properties propsSearch = new Properties();
+                registerService(bc, signorPathwayQuery, NetworkSearchTaskFactory.class, propsSearch);
+            }
             /*if (haveGUI) {
                 CyNetworkManager cyNetworkManagerServiceRef = getService(bc,CyNetworkManager.class);
                 CySwingApplication cytoscapeDesktopService = getService(bc,CySwingApplication.class);
@@ -85,6 +90,7 @@ public class CyActivator extends AbstractCyActivator {
                 manager.utils.error(e.toString());
               }
             }
+            manager.utils.info("Signor App initialized");
             
 //          Properties propsSettings = new Properties();
 //          propsSettings.setProperty(PREFERRED_MENU, "Apps.SIGNOR");

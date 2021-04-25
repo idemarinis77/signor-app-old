@@ -16,10 +16,13 @@ import it.uniroma2.signor.internal.ConfigPathway;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.IconUtils;
+import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.ui.components.SearchPTHQueryComponent;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.task.query.SignorGenericQueryTask;
-import it.uniroma2.signor.internal.ui.components.ChooseSearchoption;
+import it.uniroma2.signor.internal.task.query.SignorPathwayResultTask;
+import it.uniroma2.signor.internal.ui.components.ChoosePathwayoption;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -29,7 +32,7 @@ import java.util.HashMap;
 public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory {
 
     static URL SIGNOR_URL;
-    private static final Icon SIGNORPTH_ICON=IconUtils.createImageIcon(ConfigResources.iconpth_path);
+    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
     
     static {
         try {
@@ -39,27 +42,25 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
         }
     }
     SignorManager manager;
-    private SearchPTHQueryComponent queryComponent = null;
-    private ChooseSearchoption chooseSearchoption = new ChooseSearchoption(manager); 
+    private ChoosePathwayoption choosePathwayoption = new ChoosePathwayoption(manager);
+    private SearchPTHQueryComponent searchPTHQueryComponent = new SearchPTHQueryComponent(manager); 
     
     
     public SignorPathwayQueryFactory(SignorManager manager) {
-         super(Config.SIGNOR_ID, ConfigPathway.SIGNORPTH_NAME,ConfigPathway.SIGNORPTH_DESC, SIGNORPTH_ICON, SIGNOR_URL);
+         super(ConfigPathway.SIGNORPTH_ID, ConfigPathway.SIGNORPTH_NAME,ConfigPathway.SIGNORPTH_DESC, SIGNOR_ICON, SIGNOR_URL);
          this.manager = manager;
     }
     public boolean isReady() {
-        return queryComponent.getQueryText() != null && queryComponent.getQueryText().length() > 0;
+        return choosePathwayoption.isReady();        
     }
 
-    public TaskIterator createTaskIterator() {
-        String terms = queryComponent.getQueryText();
-        HashMap<String, Object> parameters;
-  
+    public TaskIterator createTaskIterator() {            
+        HashMap<String, String> parameters = choosePathwayoption.getParameter();  
         try { 
-            parameters = chooseSearchoption.getParameter();
-            parameters.put("QUERY", terms);
+            /*parameters = chooseSearchoption.getParameter();
+            parameters.put("QUERY", pathway);*/
             manager.utils.info("Performing SIGNOR PTH search for "+parameters.toString()); 
-            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), Config.SIGNOR_NAME, parameters, terms));
+            return new TaskIterator(new SignorPathwayResultTask(new Network(manager, parameters), parameters)); 
         }
         catch (Exception e){
             manager.utils.error("Problems in performing SIGNOR PTH search "+e.toString());
@@ -68,14 +69,12 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
     }
 
     public JComponent getQueryComponent() {
-        if (queryComponent == null)
-            queryComponent = new SearchPTHQueryComponent();
-        return queryComponent;
+        return searchPTHQueryComponent;
     }
 
     @Override
     public JComponent getOptionsComponent() {        
-        return null;
+        return choosePathwayoption;
     }
 
 }

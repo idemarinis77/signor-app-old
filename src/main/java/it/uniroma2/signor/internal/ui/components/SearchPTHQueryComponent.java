@@ -8,59 +8,39 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
-public class SearchPTHQueryComponent extends JPanel {
+import static javax.swing.GroupLayout.Alignment.CENTER;
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
+import org.cytoscape.util.swing.IconManager;
+import org.cytoscape.util.swing.TextIcon;
+import it.uniroma2.signor.internal.ConfigResources;
+import it.uniroma2.signor.internal.utils.IconUtils;
+import it.uniroma2.signor.internal.managers.SignorManager;
+
+public class SearchPTHQueryComponent extends JTextField {
     private static final long serialVersionUID = 1L;
-    private static final String DEF_SEARCH_TEXT = "Enter one term per line |    Options →";
+    private String DEF_SEARCH_TEXT = "Select pathway from list →";    
     final int vgap = 1;
-    final int hgap = 5;
-    final String tooltip;
-    Color msgColor;
-    private JComboBox organism = new JComboBox(CONFIG.SPECIES.keySet().toArray());
-    private JScrollPane queryScroll = null;
-    private JPopupMenu popup = null;
+    final int hgap = 5;    
+    Color msgColor;       
+    private SignorManager manager;
 
-    public SearchPTHQueryComponent() {
+    public SearchPTHQueryComponent(SignorManager manager) {
         super();
-        init();
-        tooltip = "Press " + (LookAndFeelUtil.isMac() ? "Command" : "Ctrl") + "+ENTER to run the search";
+        this.manager = manager;
+        init();    
     }
 
-    void init() {
+    void init() {        
         msgColor = UIManager.getColor("Label.disabledForeground");
-        queryTextArea.setEditable(false);
+        setEditable(false);
         setMinimumSize(getPreferredSize());
         setBorder(BorderFactory.createEmptyBorder(vgap, hgap, vgap, hgap));
-        setFont(getFont().deriveFont(LookAndFeelUtil.getSmallFontSize()));
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                showQueryPopup();
-            }
-        });
-
-        // Since we provide our own search component, it should let Cytoscape know
-        // when it has been updated by the user, so Cytoscape can give a better
-        // feedback to the user of whether or not the whole search component is ready
-        // (e.g. Cytoscape may enable or disable the search button)
-        queryTextArea.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                fireQueryChanged();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                fireQueryChanged();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                // Nothing to do here...
-            }
-        });
-        setToolTipText(tooltip);
+        setFont(getFont().deriveFont(LookAndFeelUtil.getSmallFontSize()));        
+ 
+        //setToolTipText(tooltip);
         requestFocusInWindow();
     }
 
@@ -68,7 +48,7 @@ public class SearchPTHQueryComponent extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        if (queryTextArea.getText() == null || queryTextArea.getText().trim().isEmpty()) {
+        if (getText() == null || getText().trim().isEmpty()) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHints(
                     new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON));
@@ -85,76 +65,4 @@ public class SearchPTHQueryComponent extends JPanel {
             g2.dispose();
         }
     }
-
-    public String getQueryText() {
-        if (queryTextArea == null) return "";
-        return queryTextArea.getText();
-    }
-
-    private void showQueryPopup() {
-        popup = new JPopupMenu();
-        if (queryScroll == null) {
-            createQueryScroll();
-        }
-        popup.setBackground(getBackground());
-        popup.setLayout(new BorderLayout());
-        popup.add(queryScroll, BorderLayout.CENTER);
-
-        popup.addPropertyChangeListener("visible", evt -> {
-            if (evt.getNewValue() == Boolean.FALSE)
-                updateQueryTextField();
-        });
-
-        queryScroll.setPreferredSize(new Dimension(getSize().width, 200));
-        popup.setPreferredSize(queryScroll.getPreferredSize());
-
-        popup.show(this, 0, 0);
-        popup.requestFocus();
-        queryTextArea.requestFocusInWindow();
-        queryTextArea.setToolTipText(tooltip);
-
-    }
-
-    private void updateQueryTextField() {
-        // String text = query.stream().collect(Collectors.joining(" "));
-        // TODO: truncate the text -- no need for this to be the entire string
-        String text = queryTextArea.getText();
-        if (text.length() > 30)
-            text = text.substring(0, 30) + "...";
-        queryTextArea.setText(text);
-    }
-
-    private void fireQueryChanged() {
-        firePropertyChange(NetworkSearchTaskFactory.QUERY_PROPERTY, null, null);
-    }
-
-    private void createQueryScroll() {
-        queryTextArea = new JTextArea();
-        LookAndFeelUtil.makeSmall(queryTextArea);
-
-        // When Ctrl+ENTER (command+ENTER on macOS) is pressed, ask Cytoscape to perform the query
-        String ENTER_ACTION_KEY = "ENTER_ACTION_KEY";
-        KeyStroke enterKey = KeyStroke.getKeyStroke(
-                KeyEvent.VK_ENTER,
-                LookAndFeelUtil.isMac() ? InputEvent.META_DOWN_MASK : InputEvent.CTRL_DOWN_MASK,
-                false);
-        InputMap inputMap = queryTextArea.getInputMap(JComponent.WHEN_FOCUSED);
-        inputMap.put(enterKey, ENTER_ACTION_KEY);
-
-        queryTextArea.getActionMap().put(ENTER_ACTION_KEY, new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // System.out.println("\n\nENTER");
-                SearchPTHQueryComponent.this.firePropertyChange(NetworkSearchTaskFactory.SEARCH_REQUESTED_PROPERTY, null, null);
-                popup.setVisible(false);
-            }
-        });
-
-        queryScroll = new JScrollPane(queryTextArea);
-        queryScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        queryScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        LookAndFeelUtil.makeSmall(queryScroll);
-
-    }
-
-}
+  }

@@ -93,7 +93,7 @@ public class SignorManager {
         this.lastNetwork = network;
     }
    
-    public CyNetwork createElementsFromLine(ArrayList<String> results){
+    public CyNetwork createNetworkFromLine(ArrayList<String> results){
         CyNetwork signornet = this.lastCyNetwork;
         HashMap<String, CyNode> entity_read = new HashMap <String, CyNode>();
         for (int i = 0; i < results.size(); i++) {            

@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
 import static org.cytoscape.model.CyTableFactory.InitialTableSize.SMALL;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigPathway;
+
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyEdge;
@@ -54,7 +56,14 @@ public class Table {
                     manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
     }
     
-    
+    public void buildPTHTable(SignorManager manager) {
+         
+        Config.NODEFIELD.forEach((k, v) ->
+                    manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
+
+        ConfigPathway.EDGEFIELDPTH.forEach((k, v) ->
+                    manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));              
+    }
     
     public void buildPTMTable(SignorManager manager, String title) {
         var PTMtableFactory = manager.utils.getService(CyTableFactory.class);                  

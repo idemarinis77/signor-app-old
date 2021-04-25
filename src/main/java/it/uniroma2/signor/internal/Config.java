@@ -76,7 +76,8 @@ public class Config {
         }
     }    
 
-    public static final String SIGNOR_ID="it.uniroma2.signor";
+    
+    public static final String SIGNOR_ID = "SIGNOR_ID_SEARCH_FACTORY";
     public static final String SIGNOR_NAME = "Signor single/bridge query";
     public static final String SIGNOR_DESC = "Query SIGNOR Database to create your casual network";
     public static final String SIGNOR_URL="https://signor.uniroma2.it";
@@ -123,6 +124,8 @@ public class Config {
            put("INCFIRSTNEISEARCH", Boolean.class);
            put("SPECIES", String.class);
            put("PTM LOADED", Boolean.class);
+           put("ISPATHWAY", Boolean.class);
+           put("ISDISEASE", Boolean.class);
         }
     };
     

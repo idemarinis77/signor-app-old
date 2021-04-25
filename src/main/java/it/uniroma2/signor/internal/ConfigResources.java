@@ -51,6 +51,7 @@ public class ConfigResources {
     
     //URL and SIGNOR WS
     public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
+    public static String PATHALLDESCRIPTIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?description";
     public static String ENTITYINFO = "https://signor.uniroma2.it/getData.php?entityInfo=";
     
     public enum WSSearchoption{
