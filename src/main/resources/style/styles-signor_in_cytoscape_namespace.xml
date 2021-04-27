@@ -142,7 +142,7 @@
             <visualProperty default="#FFFF00" name="EDGE_SOURCE_ARROW_SELECTED_PAINT"/>
             <visualProperty default="200.0" name="EDGE_LABEL_WIDTH"/>
             <visualProperty default="#404040" name="EDGE_STROKE_UNSELECTED_PAINT"/>
-            <visualProperty default="1.0" name="EDGE_WIDTH"/>
+            <visualProperty default="2.0" name="EDGE_WIDTH"/>
             <visualProperty default="6.0" name="EDGE_TARGET_ARROW_SIZE"/>
             <visualProperty default="255" name="EDGE_TRANSPARENCY"/>
             <visualProperty default="#000000" name="EDGE_SOURCE_ARROW_UNSELECTED_PAINT"/>

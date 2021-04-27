@@ -72,31 +72,21 @@ public class SignorModificationsPanel extends JPanel {
     public void createContent(){
         try {                   
             //SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 2, manager);
-            modPanel.setLayout(new GridLayout(current_cynetwork_to_serch_into.getEdgeList().size(), 5));
+            modPanel.setLayout(new GridLayout(0, 5));
             Integer it =0;
             for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {
                 
                 CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
                 CyRow cyrow_edge = current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
-                modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "RESIDUE", String.class)), gbc.position(0, it));
-                modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "SEQUENCE", String.class)), gbc.right());
-                modPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
-                modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "Interaction", String.class).split(" ")[0]), gbc.right());
-                modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "MODIFICATION", String.class)), gbc.right());
-                it++;
-                /*listresults.add(new SignorLabelStyledBold("RESIDUE"), gbc.down());
-                listresults.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "RESIDUE", String.class)), gbc.right());      
-                listresults.add(new SignorLabelStyledBold("SEQUENCE"), gbc.down());
-                listresults.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "SEQUENCE", String.class)), gbc.right());
-                listresults.add(new SignorLabelStyledBold("TARGET"), gbc.down());
-                listresults.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
-                listresults.add(new SignorLabelStyledBold("EFFECT"), gbc.down());
-                listresults.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "Interaction", String.class).split(" ")[0]), gbc.right());
-                listresults.add(new SignorLabelStyledBold("MECHANISM"), gbc.down());
-                listresults.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "MODIFICATION", String.class)), gbc.right());*/
-            }      
-            
-            //modPanel.add(listresults);
+                if (!cyrow_edge.get(Config.NAMESPACE, "RESIDUE", String.class).isEmpty()){
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "RESIDUE", String.class)), gbc.down());
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "SEQUENCE", String.class)), gbc.right());
+                    modPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "Interaction", String.class).split(" ")[0]), gbc.right());
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "MECHANISM", String.class)), gbc.right());
+                }
+                it++;                
+            }                  
         }
         catch (Exception e){
             manager.utils.error(e.toString());

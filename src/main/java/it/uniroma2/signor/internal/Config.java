@@ -86,11 +86,11 @@ public class Config {
     public static final String NAMESPACEPTM = "SIGNOR - PTM";
     public static final String NTWPREFIX ="SIGNOR NTW - ";
     
-    public static final String SINGLESCOPE = "single";
-    public static final String ALLSCOPE = "all";
-    public static final String CONNECTSCOPE = "connect";
-    public static final String SHORTESTPATHSCOPE = "shortest path";
-    public static final String INCFIRSTNEISCOPE = "include first neighbor";
+//    public static final String SINGLESCOPE = "single";
+//    public static final String ALLSCOPE = "all";
+//    public static final String CONNECTSCOPE = "connect";
+//    public static final String SHORTESTPATHSCOPE = "shortest path";
+//    public static final String INCFIRSTNEISCOPE = "include first neighbor";
     public static final String[] HEADERSINGLESEARCH = {"ENTITYA", "TYPEA", "IDA", "DATABASEA", "ENTITYB", "TYPEB", "IDB",
                                                     "DATABASEB", "EFFECT", "MECHANISM", "RESIDUE", "SEQUENCE", "TAX_ID", 
                                                     "CELL_DATA", "TISSUE_DATA", "MODULATOR_COMPLEX", "TARGET_COMPLEX", 
@@ -123,9 +123,10 @@ public class Config {
            put("SHORTESTPATHSEARCH", Boolean.class);
            put("INCFIRSTNEISEARCH", Boolean.class);
            put("SPECIES", String.class);
-           put("PTM LOADED", Boolean.class);
+           put("PTMLOADED", Boolean.class);
            put("ISPATHWAY", Boolean.class);
            put("ISDISEASE", Boolean.class);
+           put("PATHWAYID", String.class);
         }
     };
     
@@ -229,18 +230,24 @@ public class Config {
     public static String FILESTYLE = "/style/styles-signor_in_cytoscape_namespace.xml";
     public static String SIGNOR_VER_STYLE="SIGNOR_NS_0.1";
     
+    public static final String SINGLESEARCH = "SINGLESEARCH";
+    public static final String ALLSEARCH = "ALLSEARCH";
+    public static final String CONNECTSEARCH = "CONNECTSEARCH";
+    public static final String SHORTESTPATHSEARCH = "SHORTESTPATHSEARCH";
+    public static final String INCFIRSTNEISEARCH = "INCFIRSTNEISEARCH";
+    public static final String SPECIES = "SPECIES";
     //Label in Option search
-    public static final HashMap<String,String> SEARCHOPTION = new HashMap<>(){
-        {put("SINGLESEARCH", "single");
-         put("ALLSEARCH", "all");
-         put("CONNECTSEARCH", "connect");
-         put("SHORTESTPATHSEARCH", "shortest path");
-         put("INCFIRSTNEISEARCH", "include first neighbor");
-      }
-    };
+//    public static final HashMap<String,String> SEARCHOPTION = new HashMap<>(){
+//        {put(SINGLESEARCH, "single");
+//         put(ALLSEARCH, "all");
+//         put(CONNECTSEARCH, "connect");
+//         put(SHORTESTPATHSEARCH, "shortest path");
+//         put(INCFIRSTNEISEARCH, "include first neighbor");
+//      }
+//    };
 
-    public static final String INCFIRSTNEITOOLTIP = "Choose this option to";
-    public static final HashMap<String,String> SPECIES = new HashMap<>(){
+    //public static final String INCFIRSTNEITOOLTIP = "Choose this option to";
+    public static final HashMap<String,String> SPECIESLIST = new HashMap<>(){
         {put ("Homo Sapiens", "9606");
          put ("Mus musculus", "10090");
          put ("Rattus norvegicus", "10116");

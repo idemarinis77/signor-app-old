@@ -4,14 +4,14 @@ import org.cytoscape.event.AbstractCyEvent;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 
-public class SignorNetworkCreatedEvent extends AbstractCyEvent<SignorManager> {
-    private final Network newNetwork;
+public class SignorNetworkPathToCreateEvent extends AbstractCyEvent<SignorManager> {
+    private final String pathwaytocreate;
 
-    public SignorNetworkCreatedEvent(SignorManager source, Network newNetwork) {
-        super(source, SignorNetworkCreatedListener.class);
-        this.newNetwork = newNetwork;
+    public SignorNetworkPathToCreateEvent(SignorManager source, String pathwaytocreate) {
+        super(source, SignorNetworkPathCreatedListener.class);
+        this.pathwaytocreate = pathwaytocreate;
     }
-    public Network getNewNetwork() {
-        return newNetwork;
+    public String getNewNetwork() {
+        return pathwaytocreate;
     }
 }

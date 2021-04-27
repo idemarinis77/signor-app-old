@@ -52,6 +52,7 @@ public class ConfigResources {
     //URL and SIGNOR WS
     public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
     public static String PATHALLDESCRIPTIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?description";
+    public static String PATHSINGLEDESCRIPTIONSQUERY= "https://signor.uniroma2.it/getPathwayData.php?pathway=";
     public static String ENTITYINFO = "https://signor.uniroma2.it/getData.php?entityInfo=";
     
     public enum WSSearchoption{
@@ -60,7 +61,7 @@ public class ConfigResources {
        CONNECTQUERY("CONNECTSEARCH",(o, s) ->  "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       PATHWAYQUERY("PATHWAYSEARCH", (o, s) -> "https://signor.uniroma2.it/getPathwayData.php?pathway="+o+"&relations="+s);
+       PATHWAYQUERY("PATHWAYSEARCH", (p, s) -> "https://signor.uniroma2.it/getPathwayData.php?pathway="+p+"&relations="+s);
        public String name;
        public BiFunction<String, String, String> queryFunction;
 
@@ -69,7 +70,13 @@ public class ConfigResources {
            this.queryFunction = queryFunction;
        }
     }
+    public static final Map<String, WSSearchoption> WSSearchoptionMAP = new HashMap();
     
+    static {
+        for (WSSearchoption ws: WSSearchoption.values()) {
+            WSSearchoptionMAP.put(ws.name, ws);
+        }
+    }   
     //Images and logos
     public static String icon_path = "/images/signor_logo.png";
     public static String iconpth_path = "/images/button_path.png";

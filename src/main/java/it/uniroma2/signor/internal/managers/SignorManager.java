@@ -10,6 +10,7 @@ import org.cytoscape.session.events.SessionLoadedListener;
 
 import java.util.HashMap;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigPathway;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Map;
@@ -158,6 +159,99 @@ public class SignorManager {
                 }
                 catch (Exception e){
                     this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[a]+" "+e.toString());
+                }
+            }  
+        }
+        utils.flushEvents();
+        return signornet;
+    }
+    
+    public CyNetwork createPathwayFromLine(ArrayList<String> results, CyNetwork signornet){        
+        HashMap<String, CyNode> entity_read = new HashMap <String, CyNode>();
+        
+        int node_source_positions[] = {2,4,5,6};
+        int node_target_positions[]= {7,9,10,11};
+        int edge_positions[] = {0,1,3,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
+        for (int i = 0; i < results.size(); i++) {   
+            if(results.get(i).startsWith("pathway_id")) continue;
+            String[] attributes = results.get(i).split("\t");
+            
+            CyNode nodeSource;
+            CyNode nodeTarget;       
+            //entitya position 3
+            if (!entity_read.containsKey(attributes[2])){
+                nodeSource = signornet.addNode();
+                entity_read.put(attributes[2], nodeSource);
+            }
+            else {
+                nodeSource = entity_read.get(attributes[2]);
+            }
+            for (int a = 0; a < node_source_positions.length; a++){
+                  String attribute = ConfigPathway.HEADERPTH[node_source_positions[a]];
+                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
+                  try {
+                        signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[node_source_positions[a]]);
+                  }
+                  catch (Exception e){
+                      this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[node_source_positions[a]]+" "+e.toString());
+                  }
+            } 
+            //entityb position 8
+            if (!entity_read.containsKey(attributes[7])){
+                nodeTarget = signornet.addNode();
+                entity_read.put(attributes[7], nodeTarget);
+            }
+            else {
+                nodeTarget = entity_read.get(attributes[7]);
+            }
+            for (int a = 0; a < node_target_positions.length; a++){
+                  String attribute = ConfigPathway.HEADERPTH[node_target_positions[a]];
+                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
+                  try {
+                        signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[node_target_positions[a]]);
+                  }
+                  catch (Exception e){
+                      this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[node_target_positions[a]]+" "+e.toString());
+                  }
+            } 
+            CyEdge edge = signornet.addEdge(nodeSource, nodeTarget, false);
+            int limit = edge_positions.length;
+            //Score may miss so attributes are 31 and not 32
+            if( attributes.length == 31 ) limit = edge_positions.length - 1;
+            for (int a = 0; a < limit; a++){                
+                String attribute = ConfigPathway.HEADERPTH[edge_positions[a]];
+                String map_attribute = ConfigPathway.EDGEFIELDPTHMAP.get(attribute);
+                try {
+                    if(attributes[edge_positions[a]].startsWith("0.")){
+                    //if((a == limit -1) && attributes[edge_positions[a]].startsWith("0.")){
+                        //I'm reading the last field (Score) 
+                        //Some lines could have no score, so I double check also the "0." at the beginning of the field
+                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Double.parseDouble(attributes[edge_positions[a]]));
+                        continue;
+                    }
+                    if ((a == 16)){
+                        //I'm reading MODBSEQ
+                        if(attributes[edge_positions[a]].isBlank())
+                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, "");
+                        //I'm reading MODBSEQ and it's of String type
+                        else 
+                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, (String) (attributes[edge_positions[a]]));
+                        continue;
+                    }
+                    if ((a == 8)){
+                        //I'm reading TAX_ID blank or  
+                        if(attributes[edge_positions[a]].isBlank())
+                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, 0);
+                        //I'm reading TAX_ID and it's of Integer type
+                        else 
+                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Integer.parseInt(attributes[edge_positions[a]]));
+                        continue;
+                    }
+                    signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[edge_positions[a]]);
+                    
+                }
+                catch (Exception e){
+                    this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[edge_positions[a]]+" "+e.toString()+" POSITION "+a);
                 }
             }  
         }

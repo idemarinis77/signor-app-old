@@ -39,7 +39,7 @@ public class Node implements Element {
         this.network = network;
         this.cyNode = cyNode;
         this.nodeRow = nodeRow;
-        //Lo lascio per esempio this.mutated = MUTATED.getValue(nodeRow);
+
         Config.NODEFIELD.forEach((k, v) ->
                     summary.put(k, nodeRow.get(Config.NAMESPACE, k, String.class)));  
     }
@@ -58,9 +58,9 @@ public class Node implements Element {
             basic_summary.put(basic_node_key , this.nodeRow.get(Config.NAMESPACE, basic_node_key, String.class)); });  */        
         //Now I must retrieve information from pathway
         
-        String NodeID = summary.get("ID");
+        String NodeID = summary.get(Config.NODEID);
         network.manager.utils.info("Searching pthw for "+NodeID);
-        Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHID);
+        Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHIDA);
         Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHNAME);
         try {
             Table.buildAdditionalInfoForSummary(network.manager);

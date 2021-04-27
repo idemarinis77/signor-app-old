@@ -23,16 +23,16 @@ import java.util.ArrayList;
  */
 public class ChooseSearchoption extends JPanel implements ChangeListener{
     private SignorManager manager;
-    private Config CONFIG= new Config();
+
     private EasyGBC egb=new EasyGBC();
     private ButtonGroup btn = new ButtonGroup();
     //private JLabel specie = new JLabel("Choose specie");
-    private JComboBox organism = new JComboBox(CONFIG.SPECIES.keySet().toArray());
-    private JRadioButton singlebutton = new JRadioButton(CONFIG.SEARCHOPTION.get("SINGLESEARCH"), true);
-    private JRadioButton allbutton = new JRadioButton(CONFIG.SEARCHOPTION.get("ALLSEARCH"), true);
-    private JRadioButton connbutton= new JRadioButton(CONFIG.SEARCHOPTION.get("CONNECTSEARCH"), false);
-    private JRadioButton shortpath= new JRadioButton(CONFIG.SEARCHOPTION.get("SHORTESTPATHSEARCH"), false);
-    private JRadioButton inclfirstnei = new JRadioButton(CONFIG.SEARCHOPTION.get("INCFIRSTNEISEARCH"), false);
+    private JComboBox organism = new JComboBox(Config.SPECIESLIST.keySet().toArray());
+    private JRadioButton singlebutton = new JRadioButton("single", true);
+    private JRadioButton allbutton = new JRadioButton("all", true);
+    private JRadioButton connbutton= new JRadioButton("connect", false);
+    private JRadioButton shortpath= new JRadioButton("shortest path", false);
+    private JRadioButton inclfirstnei = new JRadioButton("include first neighbor", false);
     
     public ChooseSearchoption(SignorManager manager){
         super(new GridBagLayout());
@@ -73,12 +73,12 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
             
     public HashMap<String, Object> getParameter(){
         HashMap<String, Object> formvalues = new HashMap<>() {
-            {put ("SINGLESEARCH", singlebutton.isSelected());
-             put ("ALLSEARCH", allbutton.isSelected());
-             put ("CONNECTSEARCH", connbutton.isSelected());
-             put ("SHORTESTPATHSEARCH", shortpath.isSelected());
-             put ("INCFIRSTNEISEARCH", inclfirstnei.isSelected() && inclfirstnei.isEnabled());
-             put ("SPECIES", organism.getSelectedItem());
+            {put (Config.SINGLESEARCH, singlebutton.isSelected());
+             put (Config.ALLSEARCH, allbutton.isSelected());
+             put (Config.CONNECTSEARCH, connbutton.isSelected());
+             put (Config.SHORTESTPATHSEARCH, shortpath.isSelected());
+             put (Config.INCFIRSTNEISEARCH, inclfirstnei.isSelected() && inclfirstnei.isEnabled());
+             put (Config.SPECIES, organism.getSelectedItem());
             }
         };
         return formvalues;

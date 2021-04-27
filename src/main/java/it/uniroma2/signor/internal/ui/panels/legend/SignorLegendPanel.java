@@ -68,8 +68,10 @@ public class SignorLegendPanel extends JPanel implements
     private SignorSummaryPanel ssp;
     private SignorRelationsPanel srp;
     private SignorModificationsPanel smp;
+    private SignorDescriptionsPanel sdp;
     private SignorManager manager;
     private boolean tabSingleSearchAdded = false;
+    private boolean tabPathwayAdded = false;
     JRadioButton ptmviewON= new JRadioButton("PTM View");
     JRadioButton defviewON = new JRadioButton("Default View");
 
@@ -81,7 +83,7 @@ public class SignorLegendPanel extends JPanel implements
         ssp = new SignorSummaryPanel(manager);
 	srp = new SignorRelationsPanel(manager);
       	smp = new SignorModificationsPanel(manager);
-        
+        sdp = new SignorDescriptionsPanel(manager);
         ActionListener listenerPTM = new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
@@ -188,17 +190,39 @@ public class SignorLegendPanel extends JPanel implements
     public void handleEvent(SignorNetworkCreatedEvent event){
         try {
             //if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
-            if (this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
-                && !tabSingleSearchAdded){                   
-                tabs.add("SUMMARY", ssp);
-                tabs.add("RELATIONS", srp);
-                tabs.add("MODIFICATIONS", smp);
-                tabSingleSearchAdded = true;    
-                tabs.setSelectedComponent(ssp);                           
+            if (event.getNewNetwork().parameters.containsKey("SINGLESEARCH")){
+                if(event.getNewNetwork().parameters.get("SINGLESEARCH").equals(true)
+                && !tabSingleSearchAdded){  
+                    tabs.removeAll();
+                    tabs.add("Nodes", snp); 
+                    tabs.add("Edges", sep);                    
+                    tabs.add("SUMMARY", ssp);
+                    tabs.add("RELATIONS", srp);
+                    tabs.add("MODIFICATIONS", smp);
+                    tabSingleSearchAdded = true;    
+                    tabs.setSelectedComponent(ssp);                           
+                }
             }
-            ssp.recreateContent();
-            srp.recreateContent();
-            smp.recreateContent();
+            if (event.getNewNetwork().parameters.containsKey("SINGLESEARCH")){
+                if(event.getNewNetwork().parameters.get("SINGLESEARCH").equals(true)){
+                    ssp.recreateContent();
+                    srp.recreateContent();
+                    smp.recreateContent();
+                }
+            }
+            if (event.getNewNetwork().isPathwayNetwork && !tabPathwayAdded){
+                
+                tabs.removeAll();
+                tabs.add("Nodes", snp); 
+                tabs.add("Edges", sep);
+                tabs.add("DESCRIPTIONS", sdp);
+//                tabs.remove(smp);
+//                tabs.remove(ssp);
+//                tabs.remove(srp);                
+                tabPathwayAdded = true;
+                sdp.recreateContent();
+                tabs.setSelectedComponent(sdp); 
+            }
             ptmviewON.setSelected(false);
             ptmviewON.setEnabled(true);
             defviewON.setSelected(true);
@@ -221,15 +245,24 @@ public class SignorLegendPanel extends JPanel implements
             else{
                 showCytoPanel();
                 manager.utils.info("New current network "+e.getNetwork().toString());                  
-                if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
-                   snp.current_cynetwork_to_serch_into = newcynet;
-                   sep.current_cynetwork_to_serch_into = newcynet; 
-                   ssp.current_cynetwork_to_serch_into = newcynet;  
-                   srp.current_cynetwork_to_serch_into = newcynet;
-                   smp.current_cynetwork_to_serch_into = newcynet;
-                   ssp.recreateContent();
-                   srp.recreateContent();
-                   smp.recreateContent();
+                if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){                
+                   
+                   if (manager.presentationManager.signorNetMap.containsKey(newcynet)){
+                      if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork){
+                           sdp.current_cynetwork_to_serch_into = newcynet;
+                           sdp.recreateContent();
+                      }
+                   }
+                   else{
+                       snp.current_cynetwork_to_serch_into = newcynet;
+                       sep.current_cynetwork_to_serch_into = newcynet; 
+                       ssp.current_cynetwork_to_serch_into = newcynet;  
+                       srp.current_cynetwork_to_serch_into = newcynet;
+                       smp.current_cynetwork_to_serch_into = newcynet;
+                       ssp.recreateContent();
+                       srp.recreateContent();
+                       smp.recreateContent();
+                   }
                 }
             }
         }

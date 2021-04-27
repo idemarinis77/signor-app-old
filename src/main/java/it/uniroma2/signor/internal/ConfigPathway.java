@@ -33,8 +33,97 @@ public class ConfigPathway {
                                                     "SENTENCE", "SIGNOR_ID","SCORE"};
         
         //These attributes are used to search for list of pathway to show in summary sheet
-        public static final String PTHID = "IDA";
+        public static final String PTHIDA = "IDA";
         public static final String PTHNAME = "PATHWAY_NAME";
+        
+        public static final HashMap<String,String> PathwayDiseaseList = new HashMap() {
+      
+            {
+                     put("", "Select Disease below");
+                     put("SIGNOR-AD", "Alzheimer");
+                     put("SIGNOR-FSGS", "Focal segmental glomerulosclerosis");
+                     put("SIGNOR-MSP", "Multiple sclerosis");
+                     put("SIGNOR-NS", "Noonan sundrome");
+                     put("SIGNOR-PD", "Parkinson");
+            }
+        };
+        
+        public static final HashMap<String,String> PathwayTumorList = new HashMap() {
+                   {
+                     put("", "Select Tumor below");
+                     put("SIGNOR-AML-MiniPathway", "Acute Myeloid Leukemia");
+                     put("SIGNOR-CRC", "Colorectal Carcinoma");
+                     put("SIGNOR-GBM", "Glioblastoma Multiforme");
+                     put("SIGNOR-HT", "Hepatocellular Tumor");
+                     put("SIGNOR-LBC", "Luminal Breast Cancer");
+                     put("SIGNOR-MM", "Malignant");
+                     put("SIGNOR-PDAP", "Pancreatic");
+                     put("SIGNOR-PC", "Prostate");
+                     put("SIGNOR-RMS", "Rhabdomyosarcoma");
+                     put("SIGNOR-TC", "Thyroid cancer");
+                   }
+        };
+        
+        public static final HashMap<String,String> PathwayList = new HashMap() {
+                    {
+                     put("", "Select Pathway Below");
+                     put("SIGNOR-AC", "Adipogenesis");
+                     put("SIGNOR-AMPK", "AMPK");
+                     put("SIGNOR-Autophagy", "Autophagy");
+                     put("SIGNOR-CM", "Catecholamine");
+                     put("SIGNOR-G1-S_trans", "Cell cycle: G1/S phase transition");
+                     put("SIGNOR-G2-M_trans", "Cell cycle: G2/M phase transitio");
+                     put("SIGNOR-CS", "Complementing signal");
+                     put("SIGNOR-DR", "Death receptor signaling");
+                     put("SIGNOR-EGF", "EGFR signaling");
+                     put("SIGNOR-Fibrosis", "Fibrosis");
+                     put("SIGNOR-GCR", "Glucocorticoid receptor Signaling");
+                     put("SIGNOR-HPP", "Hippo Signaling");
+                     put("SIGNOR-IL1R", "IL1 Signaling");
+                     put("SIGNOR-IL6", "IL6 Signaling");
+                     put("SIGNOR-Inflammosome", "Inflammosome Activation");
+                     put("SIGNOR-IOA", "Inhibition of Apoptosis");
+                     put("IGNOR-Inflammosome", "Inflammosome Activation");
+                     put("SIGNOR-IIS", "Innate Immune Response");
+                     put("SIGNOR-INSR", "Insulin Signaling");
+                     put("SIGNOR-IS", "Integrin Signaling");
+                     put("SIGNOR-LR", "Leptin Signaling");
+                     put("SIGNOR-M1M2", "Macrophage polarization");
+                     put("SIGNOR-MCAPO", "Mitochondrial control of Apoptosis");
+                     put("SIGNOR-MS", "MTOR Signaling");
+                     put("SIGNOR-NFKBC", "NF-KB Canonical");
+                     put("SIGNOR-NFKBNC", "NF-KB non canonical");
+                     put("SIGNOR-NOTCH", "NOTCH Signaling");
+                     put("SIGNOR-P38", "P38 Signaling");
+                     put("SIGNOR-PI3K-AKT", "PI3K/AKT Signaling");
+                     put("SIGNOR-SAPK-JNK", "SAPK/JNK Signaling");
+                     put("SIGNOR-Hedgehog", "Sonic  HedgeHog");
+                     put("SIGNOR-TCA", "T Cell Activation");
+                     put("SIGNOR-TGFb", "TGF-beta Signaling");
+                     put("SIGNOR-TA", "TNF-alpha");
+                     put("SIGNOR-TLR", "Toll like receptor");
+                     put("SIGNOR-VEGF", "VEGF Signaling");
+                     put("SIGNOR-WNT", "WNT Signaling");
+                    }
+        };
+                     
+    
+/*SIGNOR-CCN COVID-19
+SIGNOR-Myogenesis IGF
+SIGNOR-NOTCH_Myogenesis NOTCH
+SIGNOR-NSCLCN Non-small-cell
+SIGNOR-P38_Myogenesis P38
+SIGNOR-SARS-COV-APOPTOSIS SARS-COV
+SIGNOR-SARS-CoV-MAPK-Pathway SARS-CoV
+SIGNOR-SCAAE SARS-CoV
+SIGNOR-SCCS SARS-CoV
+SIGNOR-SCFI SARS-CoV
+SIGNOR-SCIR SARS-CoV
+SIGNOR-SCISOVG SARS-CoV
+SIGNOR-SCSG SARS-CoV
+SIGNOR-SCUP SARS-CoV
+SIGNOR-WNT_Myogenesis WNT*/
+
         
         public static final HashMap<String,String> FIELDPTHWORDER= new HashMap(){
             {
@@ -75,12 +164,12 @@ public class ConfigPathway {
             {
                put("PATHWAY_ID", String.class);
                put("PATHWAY_NAME", String.class);
-               put("EFFECT", String.class);
+               put("Interaction", String.class);
                put("TARGET_LOCATION", String.class);
                put("MECHANISM", String.class);
                put("RESIDUE", String.class);
                put("SEQUENCE", String.class);
-               put("TAX_ID", String.class);
+               put("TAX_ID", Integer.class);
                put("CELL_DATA", String.class);
                put("PMID", String.class);
                put("DIRECT", String.class);

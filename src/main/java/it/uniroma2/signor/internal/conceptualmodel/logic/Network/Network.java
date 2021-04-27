@@ -35,11 +35,16 @@ public class Network {
     public CyTable PTMedgeTable;  
 
     private final Map<CyNode, Node> nodes = new HashMap<>();
+    private final Map<CyEdge, Edge> edges = new HashMap<>();
+
     private final Map<NodeCouple, List<CyEdge>> coupleToDefaultEdges = new HashMap<>();
-    private final Map<CyEdge, Edge> signorEdges = new HashMap<>();
+    
+    public  Map<CyNode, Long> PTMnodes = new HashMap<>();
+    public  Map<CyEdge, Long> PTMedges = new HashMap<>();
+    public  Map<CyEdge, Long> ParentEdges = new HashMap<>();
    
-    private Boolean isPathwayNetwork = false;
-    private Boolean isDeasesNetwork = false;
+    public Boolean isPathwayNetwork = false;
+    public Boolean isDeasesNetwork = false;
     public Boolean ptm_already_loaded = false;
     public CyNode rootNode;
 
@@ -71,7 +76,7 @@ public class Network {
         return cyNetwork;
     }
     public Integer numberOfEdes(){
-        return signorEdges.size();
+        return edges.size();
     }
     public void SetPTMNodeTable (CyTable cytable){
         this.PTMnodeTable = cytable;
@@ -210,10 +215,10 @@ public class Network {
         
         for (CyEdge signorEdge : cyNetwork.getEdgeList()) {
             
-            signorEdges.put(signorEdge, (Edge) Edge.createEdge(this, signorEdge));
+            edges.put(signorEdge, (Edge) Edge.createEdge(this, signorEdge));
         }
         try {
-        NodeCouple.putEdgesToCouples(signorEdges.keySet(), coupleToDefaultEdges);
+        NodeCouple.putEdgesToCouples(edges.keySet(), coupleToDefaultEdges);
         }
         catch (Exception e){
             manager.utils.error(e.toString());

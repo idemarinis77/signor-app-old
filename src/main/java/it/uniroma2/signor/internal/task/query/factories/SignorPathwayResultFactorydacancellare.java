@@ -28,19 +28,19 @@ import org.cytoscape.work.AbstractTaskFactory;
  *
  * @author amministratore
  */
-public class SignorPathwayResultFactory extends AbstractTaskFactory {
+public class SignorPathwayResultFactorydacancellare extends AbstractTaskFactory {
         private final SignorManager manager;
         
         private final HashMap<String, String> parameters;  
     
-        public SignorPathwayResultFactory(SignorManager manager, HashMap<String, String> parameters) {            
+        public SignorPathwayResultFactorydacancellare(SignorManager manager, HashMap<String, String> parameters) {            
              this.manager = manager;
              this.parameters = parameters;
         }
    
         public TaskIterator createTaskIterator() {                           
                 manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 
-                return new TaskIterator(new SignorPathwayResultTask(new Network(manager, parameters), parameters));              
+                return new TaskIterator(new SignorPathwayResultTask(new Network(manager, parameters), "prova"));              
         }
 }
 
