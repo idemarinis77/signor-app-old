@@ -9,8 +9,11 @@ import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigPathway;
+import it.uniroma2.signor.internal.ui.components.SignorButton;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
+import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
 /**
  *
  * @author amministratore
@@ -95,10 +98,33 @@ public class SignorSummaryPanel extends JPanel {
             Iterator iter = summary.keySet().iterator();
             Iterator iterv = summary.values().iterator();
             Integer it =0;
-            summPanel.setLayout(new GridLayout(summary.size()+1, 2));
+            summPanel.setLayout(new GridLayout(0, 2));
             while(iter.hasNext()){
-                summPanel.add(new SignorLabelStyledBold(iter.next().toString()), gbc.position(0, it));
-                summPanel.add(new JLabel(iterv.next().toString()), gbc.right());
+                String key = iter.next().toString();
+                String value = iterv.next().toString();
+                if(key.equals(Config.PATHWAYLISTADDINFO)){
+                    JPanel listpath = new JPanel();
+                    listpath.setLayout(new GridLayout(0,1));
+                    String[] pathlist = value.split(" , ");                    
+                    for (Integer i=0; i<pathlist.length; i++){
+                       if(ConfigPathway.MapPathwayDescID.containsKey(pathlist[i])){
+                          manager.utils.info("SignorSummary createcontent() "+Config.PATHWAYLISTADDINFO+" "+i);
+                          if (!ConfigPathway.MapPathwayDescID.get(pathlist[i]).isEmpty()){
+                            SignorButton pathwayID =  new SignorButton(pathlist[i]);                         
+                            listpath.add(pathwayID, gbc.down());
+                            final String path_code = pathlist[i];
+                            manager.utils.info("SignorSummary createcontent() passing pathid "+path_code);
+                            pathwayID.addActionListener(e-> buildPathWay(path_code));
+                          }
+                       }
+                    }
+                    summPanel.add(new SignorLabelStyledBold(key), gbc.position(0, it).anchor("north"));
+                    summPanel.add(listpath, gbc.right());
+                }
+                else {
+                    summPanel.add(new SignorLabelStyledBold(key), gbc.position(0, it).anchor("north"));
+                    summPanel.add(new JLabel(value), gbc.right());
+                }
                 it ++;
             } 
             summPanel.add(new SignorLabelStyledBold("Relations "), gbc.down());
@@ -108,10 +134,18 @@ public class SignorSummaryPanel extends JPanel {
             summPanel.add(listresults);*/
         }
         catch (Exception e){
-            manager.utils.error(e.toString());
+            manager.utils.error("SignorSummaryPanel createContent() "+e.toString());
         }       
     }
-    
+    private void buildPathWay(String pathid){
+            SignorPathwayQueryFactory spq = new SignorPathwayQueryFactory(this.manager);
+            HashMap<String, String> formvalues = new HashMap<>() {
+                {put ("PATHWAYID", pathid);}                 
+            };
+            spq.parameters_shift = formvalues;
+            spq.param_shift = true;
+            manager.utils.execute(spq.createTaskIterator());
+    }   
     public void recreateContent(){
         if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
             summPanel.removeAll();

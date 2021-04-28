@@ -31,6 +31,7 @@ import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CyAction;
 import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
 import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendAction;
+import it.uniroma2.signor.internal.utils.DataUtils;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 
@@ -80,14 +81,15 @@ public class CyActivator extends AbstractCyActivator {
               manager.utils.setShowDetailPanelTaskFactory(showResults);
 
               //CyNetwork current = manager.data.getCurrentCyNetwork();
-              CyNetwork cynet = manager.utils.getService(CyApplicationManager.class).getCurrentNetwork();
+              
               try {
-                if (cynet.getRow(cynet).get(CyNetwork.NAME, String.class).startsWith(Config.NTWPREFIX)){
+                CyNetwork cynet = manager.utils.getService(CyApplicationManager.class).getCurrentNetwork();
+                if (DataUtils.isSignorNetwork(cynet)){
                     manager.utils.execute(showResults.createTaskIterator(), true);
                 }
               }
               catch(Exception e){
-                manager.utils.error(e.toString());
+                manager.utils.error("CyActivator haveGUI() "+e.toString());
               }
             }
             manager.utils.info("Signor App initialized");

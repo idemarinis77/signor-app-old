@@ -10,6 +10,8 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
+import it.uniroma2.signor.internal.ConfigPathway;
+import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import it.uniroma2.signor.internal.utils.HttpUtils;
@@ -79,9 +81,9 @@ public class SignorDescriptionsPanel extends JPanel {
             ArrayList<String> pathInfo = HttpUtils.parseWSNoheader(
                     HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+
                             manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get("PATHWAYID"), manager));
-                 
+            manager.utils.info("DescriptionPanel createContent() "+manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.toString());
             for (int i = 0; i < pathInfo.size(); i++) {   
-                if(pathInfo.get(i).startsWith("sig_id")) continue;
+                if(pathInfo.get(i).startsWith(ConfigPathway.SIGNORPTH_SIG_ID)) continue;
                 String[] path_info_packed=pathInfo.get(i).split("\t");
                 descPanel.add(new JLabel("PATH ID"), gbc.position(0, 0));
                 descPanel.add(new JLabel(path_info_packed[0]), gbc.right());
@@ -102,9 +104,9 @@ public class SignorDescriptionsPanel extends JPanel {
     
     public void recreateContent(){
         if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
-            manager.utils.info(current_cynetwork_to_serch_into.toString()+" sono in description panel");
             descPanel.removeAll();
             createContent();
         }
     }
+
 }

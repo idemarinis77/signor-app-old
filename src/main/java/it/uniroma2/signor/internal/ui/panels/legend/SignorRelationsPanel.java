@@ -73,9 +73,7 @@ public class SignorRelationsPanel extends JPanel {
     
     public void createContent(){
         try {                             
-            
-                relPanel.setLayout(new GridLayout(current_cynetwork_to_serch_into.getEdgeList().size(), 2));
-                manager.utils.info("SignorRelationsPanel createContent(), dimension "+relPanel.getParent().getSize().toString());
+                relPanel.setLayout(new GridLayout(0, 2));
                 Dimension parentSize = relPanel.getParent().getSize();
                 relPanel.setPreferredSize(new Dimension(parentSize.width-250, parentSize.height));
                 Integer it = 0;
@@ -94,7 +92,7 @@ public class SignorRelationsPanel extends JPanel {
             
         }
         catch (Exception e){
-            manager.utils.error(e.toString());
+            manager.utils.error("SignorRelationsPanel createContent() "+e.toString());
         }       
     }
     

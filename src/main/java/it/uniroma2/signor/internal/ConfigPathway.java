@@ -83,7 +83,7 @@ public class ConfigPathway {
                      put("SIGNOR-IL6", "IL6 Signaling");
                      put("SIGNOR-Inflammosome", "Inflammosome Activation");
                      put("SIGNOR-IOA", "Inhibition of Apoptosis");
-                     put("IGNOR-Inflammosome", "Inflammosome Activation");
+                     put("SIGNOR-Inflammosome", "Inflammosome Activation");
                      put("SIGNOR-IIS", "Innate Immune Response");
                      put("SIGNOR-INSR", "Insulin Signaling");
                      put("SIGNOR-IS", "Integrin Signaling");
@@ -104,6 +104,64 @@ public class ConfigPathway {
                      put("SIGNOR-TLR", "Toll like receptor");
                      put("SIGNOR-VEGF", "VEGF Signaling");
                      put("SIGNOR-WNT", "WNT Signaling");
+                    }
+        };
+                     
+        public static final HashMap<String,String> MapPathwayDescID = new HashMap() {
+      
+            {                     
+                     put("Alzheimer", "SIGNOR-AD");
+                     put("Focal segmental glomerulosclerosis", "SIGNOR-FSGS");
+                     put("Multiple sclerosis", "SIGNOR-MSP");
+                     put("Noonan sundrome", "SIGNOR-NS");
+                     put("Parkinson", "SIGNOR-PD");            
+                     put("Acute Myeloid Leukemia", "SIGNOR-AML-MiniPathway");
+                     put("Colorectal Carcinoma", "SIGNOR-CRC");
+                     put("Glioblastoma Multiforme", "SIGNOR-GBM");
+                     put("Hepatocellular Tumor", "SIGNOR-HT");
+                     put("Luminal Breast Cancer", "SIGNOR-LBC");
+                     put("Malignant", "SIGNOR-MM");
+                     put("Pancreatic", "SIGNOR-PDAP");
+                     put("Prostate", "SIGNOR-PC");
+                     put("Rhabdomyosarcoma", "SIGNOR-RMS");
+                     put("Thyroid cancer", "SIGNOR-TC");                   
+                     put("Adipogenesis", "SIGNOR-AC");
+                     put("AMPK", "SIGNOR-AMPK");
+                     put("Autophagy", "SIGNOR-Autophagy");
+                     put("Catecholamine", "SIGNOR-CM");
+                     put("Cell cycle: G1/S phase transition", "SIGNOR-G1-S_trans");
+                     put("Cell cycle: G2/M phase transitio", "SIGNOR-G2-M_trans");
+                     put("Complementing signal", "SIGNOR-CS");
+                     put("Death receptor signaling", "SIGNOR-DR");
+                     put("EGFR signaling", "SIGNOR-EGF");
+                     put("Fibrosis", "SIGNOR-Fibrosis");
+                     put("Glucocorticoid receptor Signaling", "SIGNOR-GCR");
+                     put("Hippo Signaling", "SIGNOR-HPP");
+                     put("IL1 Signaling", "SIGNOR-IL1R");
+                     put("IL6 Signaling", "SIGNOR-IL6");
+                     put("Inflammosome Activation", "SIGNOR-Inflammosome");
+                     put("Inhibition of Apoptosis", "SIGNOR-IOA");
+                     put("Inflammosome Activation", "SIGNOR-Inflammosome");
+                     put("Innate Immune Response", "SIGNOR-IIS");
+                     put("Insulin Signaling", "SIGNOR-INSR");
+                     put("Integrin Signaling", "SIGNOR-IS");
+                     put("Leptin Signaling", "SIGNOR-LR");
+                     put("Macrophage polarization", "SIGNOR-M1M2");
+                     put("Mitochondrial control of Apoptosis", "SIGNOR-MCAPO");
+                     put("MTOR Signaling", "SIGNOR-MS");
+                     put("NF-KB Canonical", "SIGNOR-NFKBC");
+                     put("NF-KB non canonical", "SIGNOR-NFKBNC");
+                     put("NOTCH Signaling", "SIGNOR-NOTCH");
+                     put("P38 Signaling", "SIGNOR-P38");
+                     put("PI3K/AKT Signaling", "SIGNOR-PI3K-AKT");
+                     put("SAPK/JNK Signaling", "SIGNOR-SAPK-JNK");
+                     put("Sonic  HedgeHog", "SIGNOR-Hedgehog");
+                     put("T Cell Activation", "SIGNOR-TCA");
+                     put("TGF-beta Signaling", "SIGNOR-TGFb");
+                     put("TNF-alpha", "SIGNOR-TA");
+                     put("Toll like receptor", "SIGNOR-TLR");
+                     put("VEGF Signaling", "SIGNOR-VEGF");
+                     put("WNT Signaling", "SIGNOR-WNT");
                     }
         };
                      

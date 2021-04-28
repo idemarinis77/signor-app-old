@@ -52,13 +52,12 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
     }
     public void run(TaskMonitor monitor) {
         SignorManager manager = network.manager;
-        Config CONFIG = new Config();     
         try {
             monitor.setTitle("Querying Signor Network");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
             CyNetwork cynet = manager.createNetwork(netname);
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
-            ArrayList<String> results = HttpUtils.parseWS(br, CONFIG.HEADERSINGLESEARCH);
+            ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH);
             
             //Create tables
             Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
@@ -91,8 +90,9 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             
             /*manager.presentationManager.parameters = network.parameters;
             manager.presentationManager.searched_query = terms;*/
-            network.writeSearchNetwork();
+            network.writeSearchNetwork();            
             network.setCyNodeRoot(terms);
+               
             
             CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
             CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");

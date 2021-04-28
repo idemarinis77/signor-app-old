@@ -128,9 +128,9 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             
             AlgorithmFactory algfactory = new AlgorithmFactory(ntwView, manager);            
             manager.utils.execute(algfactory.createTaskIterator());
-                                  
+            manager.utils.showResultsPanel();                
             manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));  
-            manager.utils.showResultsPanel(); 
+            
         }
         catch(Exception e){
             manager.utils.error("SignorPathwaResultTask run() "+e.toString());

@@ -19,7 +19,6 @@ public class Table {
     public final boolean isPublic;
     public final boolean isMutable;
     public final CyTableFactory.InitialTableSize initialSize;
-    private Config CONFIG = new Config();
 
     public Table(String primaryKey, boolean isPublic, boolean isMutable, CyTableFactory.InitialTableSize initialSize) {        
         this.primaryKey = primaryKey;
@@ -29,9 +28,8 @@ public class Table {
     }
 
     public void buildDefaultTable(SignorManager manager, String title) {
-        var tableFactory = manager.utils.getService(CyTableFactory.class);   
-        CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
-        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
+        //CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
+        //CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
 
         switch(title){
             case "Node":
@@ -48,21 +46,25 @@ public class Table {
             break;
         }       
     }
+    
     public static void buildAdditionalInfoForSummary(SignorManager manager) {
-        var tableFactory = manager.utils.getService(CyTableFactory.class);   
-        CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
-        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
-        Config.NODEFIELDADDITIONAL.forEach((k, v) ->
+        CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
+        if (!tableManager.getTable(manager.lastCyNetwork.getDefaultNodeTable().getSUID()).
+                          getColumns(Config.NAMESPACE).containsAll(Config.NODEFIELDADDITIONAL.keySet())) {
+                Config.NODEFIELDADDITIONAL.forEach((k, v) ->
                     manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
+        }
+        
     }
     
     public void buildPTHTable(SignorManager manager) {
-         
+        
         Config.NODEFIELD.forEach((k, v) ->
                     manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
 
         ConfigPathway.EDGEFIELDPTH.forEach((k, v) ->
                     manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));              
+        
     }
     
     public void buildPTMTable(SignorManager manager, String title) {
@@ -93,7 +95,8 @@ public class Table {
                 }
             break;
         }  
-    }
+    } 
+
 
 }
 

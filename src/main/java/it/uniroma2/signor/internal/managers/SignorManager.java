@@ -258,4 +258,8 @@ public class SignorManager {
         utils.flushEvents();
         return signornet;
     }
+    
+    public CyNetwork getCurrentCyNetwork() {
+        return utils.getService(CyApplicationManager.class).getCurrentNetwork();
+    }
  }

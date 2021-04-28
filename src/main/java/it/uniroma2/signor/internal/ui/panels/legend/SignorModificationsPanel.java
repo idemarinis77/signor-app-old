@@ -89,7 +89,7 @@ public class SignorModificationsPanel extends JPanel {
             }                  
         }
         catch (Exception e){
-            manager.utils.error(e.toString());
+            manager.utils.error("SignorModificationsPanel createContent() "+e.toString());
         }       
     }
     

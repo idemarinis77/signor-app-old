@@ -65,6 +65,7 @@ public class SignorGenericQueryTask extends AbstractTask {
             //Retrieve number of result
             BufferedReader br = HttpUtils.getHTTPSignor(ConfigResources.ENTITYINFO+terms, manager);
             ArrayList<String> results= HttpUtils.parseWSNoheader(br);
+            results.remove(0);
             if(results.size() >1 ){
                 SwingUtilities.invokeLater(() -> {
                         JDialog d = new JDialog();
