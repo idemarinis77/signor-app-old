@@ -53,7 +53,7 @@ public class ConfigResources {
     public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
     public static String PATHALLDESCRIPTIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?description";
     public static String PATHSINGLEDESCRIPTIONSQUERY= "https://signor.uniroma2.it/getPathwayData.php?pathway=";
-    public static String ENTITYINFO = "https://signor.uniroma2.it/getData.php?entityInfo=";
+    //public static String ENTITYINFO = "https://signor.uniroma2.it/getData.php?entityInfo=";
     
     public enum WSSearchoption{
        SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
@@ -61,7 +61,8 @@ public class ConfigResources {
        CONNECTQUERY("CONNECTSEARCH",(o, s) ->  "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       PATHWAYQUERY("PATHWAYSEARCH", (p, s) -> "https://signor.uniroma2.it/getPathwayData.php?pathway="+p+"&relations="+s);
+       PATHWAYQUERY("PATHWAYSEARCH", (p, s) -> "https://signor.uniroma2.it/getPathwayData.php?pathway="+p+"&relations="+s),
+       ENTITYINFOSEARCH("ENTITYINFOSEARCH", (s, o) -> "https://signor.uniroma2.it/getData.php?entityInfo="+s+"&organism="+o);
        public String name;
        public BiFunction<String, String, String> queryFunction;
 

@@ -15,6 +15,7 @@ import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactor
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import it.uniroma2.signor.internal.utils.HttpUtils;
+import it.uniroma2.signor.internal.ui.components.HelpButton;
 /**
  *
  * @author amministratore
@@ -90,7 +91,8 @@ public class SignorDescriptionsPanel extends JPanel {
                 descPanel.add(new JLabel("PATH NAME"), gbc.position(0, 1));
                 descPanel.add(new JLabel(path_info_packed[1]), gbc.right());
                 descPanel.add(new JLabel("COALESCE"), gbc.position(0, 2));
-                descPanel.add(new JLabel(path_info_packed[2]), gbc.right());
+                descPanel.add(new HelpButton(manager, path_info_packed[2]), gbc.right());
+                //descPanel.add(new JLabel(path_info_packed[2]), gbc.right());
                 descPanel.add(new JLabel("CURATOR"), gbc.position(0, 3));
                 descPanel.add(new JLabel(path_info_packed[3]), gbc.right());
             }      

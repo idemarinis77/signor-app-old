@@ -20,6 +20,8 @@ import java.io.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import org.cytoscape.view.layout.CyLayoutAlgorithm;
 import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
 import org.cytoscape.view.model.CyNetworkView;
@@ -55,59 +57,67 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
         try {
             monitor.setTitle("Querying Signor Network");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
-            CyNetwork cynet = manager.createNetwork(netname);
+            
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH);
-            
-            //Create tables
-            Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            NodeTable.buildDefaultTable(manager, "Node");
-            Table EdgeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            EdgeTable.buildDefaultTable(manager, "Edge");
-                    
-            //Populate tables and create MyNetwork
-            CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
-            cynet = manager.createNetworkFromLine(results);
-            
-            netMan.addNetwork(cynet);            
-            CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
-            CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
-            //Apply style
-            manager.signorStyleManager.applyStyle(ntwView);
-            manager.signorStyleManager.installView(ntwView);            
-            
-            network.setNetwork(cynet);
-            manager.setCurrentNetwork(network);
-            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
-            
-            Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            PTMTableNode.buildPTMTable(manager, "PTMNode");
-                
-            Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            PTMTableEdge.buildPTMTable(manager, "PTMEdge");
-            Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            NetworkTable.buildDefaultTable(manager, "Network");           
-            
-            /*manager.presentationManager.parameters = network.parameters;
-            manager.presentationManager.searched_query = terms;*/
-            network.writeSearchNetwork();            
-            network.setCyNodeRoot(terms);
-               
-            
-            CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
-            CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
-            if (alg == null) alg = layoutManager.getLayout("force-directed");
-            Object context = alg.getDefaultLayoutContext();
-            TunableSetter setter = manager.utils.getService(TunableSetter.class);
-            Map<String, Object> layoutArgs = new HashMap<>();
-            layoutArgs.put("defaultNodeMass", 10.0);
-            setter.applyTunables(context, layoutArgs);
-            Set<View<CyNode>> nodeViews = new HashSet<>(ntwView.getNodeViews());
-            TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
-            insertTasksAfterCurrentTask(taskIterator);            
+            if (results.get(0).equals("No result found.")) {
+                //https://signor.uniroma2.it/getData.php?organism=9606&id=Q96Q05
+                //after having choosen with multiple results of RAF
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+terms,
+                    "No results", JOptionPane.ERROR_MESSAGE));
+            }
+            else {
+                CyNetwork cynet = manager.createNetwork(netname);
+                //Create tables
+                Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                NodeTable.buildDefaultTable(manager, "Node");
+                Table EdgeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                EdgeTable.buildDefaultTable(manager, "Edge");
 
-            manager.utils.showResultsPanel();            
-            manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));        
+                //Populate tables and create MyNetwork
+                CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
+                cynet = manager.createNetworkFromLine(results);
+
+                netMan.addNetwork(cynet);            
+                CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
+                CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
+                //Apply style
+                manager.signorStyleManager.applyStyle(ntwView);
+                manager.signorStyleManager.installView(ntwView);            
+
+                network.setNetwork(cynet);
+                manager.setCurrentNetwork(network);
+                manager.presentationManager.updateSignorNetworkCreated(cynet, network);
+
+                Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                PTMTableNode.buildPTMTable(manager, "PTMNode");
+
+                Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                PTMTableEdge.buildPTMTable(manager, "PTMEdge");
+                Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                NetworkTable.buildDefaultTable(manager, "Network");           
+
+                /*manager.presentationManager.parameters = network.parameters;
+                manager.presentationManager.searched_query = terms;*/
+                network.writeSearchNetwork();            
+                network.setCyNodeRoot(terms);
+
+
+                CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
+                CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
+                if (alg == null) alg = layoutManager.getLayout("force-directed");
+                Object context = alg.getDefaultLayoutContext();
+                TunableSetter setter = manager.utils.getService(TunableSetter.class);
+                Map<String, Object> layoutArgs = new HashMap<>();
+                layoutArgs.put("defaultNodeMass", 10.0);
+                setter.applyTunables(context, layoutArgs);
+                Set<View<CyNode>> nodeViews = new HashSet<>(ntwView.getNodeViews());
+                TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
+                insertTasksAfterCurrentTask(taskIterator);            
+
+                manager.utils.showResultsPanel();            
+                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));        
+            }
         }
         catch (Exception e){
             manager.utils.error(e.toString()+"Problem fectching data from "+URL);

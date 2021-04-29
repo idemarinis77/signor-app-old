@@ -9,7 +9,7 @@ import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
 import static org.cytoscape.model.CyTableFactory.InitialTableSize.SMALL;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigPathway;
-
+import it.uniroma2.signor.internal.utils.TableUtil;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyEdge;
@@ -48,22 +48,25 @@ public class Table {
     }
     
     public static void buildAdditionalInfoForSummary(SignorManager manager) {
-        CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
+        /*CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
         if (!tableManager.getTable(manager.lastCyNetwork.getDefaultNodeTable().getSUID()).
-                          getColumns(Config.NAMESPACE).containsAll(Config.NODEFIELDADDITIONAL.keySet())) {
+                          getColumns(Config.NAMESPACE).containsAll(Config.NODEFIELDADDITIONAL.keySet())) {*/
                 Config.NODEFIELDADDITIONAL.forEach((k, v) ->
-                    manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
-        }
+                  TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
+                    /*manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
+        }*/
         
     }
     
     public void buildPTHTable(SignorManager manager) {
-        
+        //CyTable table, Class<?> clazz, String columnName, String namespace
         Config.NODEFIELD.forEach((k, v) ->
-                    manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
+                   TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
+                    //manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
 
         ConfigPathway.EDGEFIELDPTH.forEach((k, v) ->
-                    manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));              
+                    //manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));     
+                    TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultEdgeTable(), v, k, Config.NAMESPACE));
         
     }
     

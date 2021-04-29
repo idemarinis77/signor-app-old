@@ -116,22 +116,12 @@ public class DataUtils {
                        networksignor.PTMedges.put(cyEdge2, cyEdge2.getSUID());
                        //manager.utils.flushEvents();
                    }                   
-               }
-               
-               //manager.PTMtableTocreate = false;               
-               /*CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
-               cyNetworktableManager.setTable(manager.cyNetwork, CyNode.class , CONFIG.NAMESPACEPTM, manager.currentNetwork.PTMnodeTable);*/
-               //
+               }       
                HideEdgeParentPTM(manager);
                AlgorithmFactory algfactory = new AlgorithmFactory(networkView, manager);            
                manager.utils.execute(algfactory.createTaskIterator());
                writeNetworkPTMInfo(manager, networksignor);
-            }          
-            /*else if (tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
-                tableManager.getAllTables(true).contains(networksignor.PTMedgeTable) && ptm_already_loaded){
-                UnHidePTM(manager);
-            }*/
-            
+            }                   
         }
         catch (Exception e) {
             //manager.utils.info(manager.lastCyNetwork.getSUID().toString());

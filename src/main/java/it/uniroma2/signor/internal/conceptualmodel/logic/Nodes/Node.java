@@ -41,7 +41,7 @@ public class Node implements Element {
         this.nodeRow = nodeRow;
 
         Config.NODEFIELD.forEach((k, v) ->
-                    summary.put(k, nodeRow.get(Config.NAMESPACE, k, String.class)));  
+                    this.summary.put(k, nodeRow.get(Config.NAMESPACE, k, String.class)));  
     }
    
     //complex SIGNOR-C144
@@ -57,8 +57,9 @@ public class Node implements Element {
         Config.NODEFIELD.forEach((basic_node_key, basic_node_value) ->{
             basic_summary.put(basic_node_key , this.nodeRow.get(Config.NAMESPACE, basic_node_key, String.class)); });  */        
         //Now I must retrieve information from pathway
-        
-        String NodeID = summary.get(Config.NODEID);
+        //I need species to retrieve information from ws entityInfo
+        String species = network.parameters.get("SPECIES").toString();
+        String NodeID = this.summary.get(Config.NODEID);
         network.manager.utils.info("Searching pthw for "+NodeID);
         Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHIDA);
         Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHNAME);
@@ -76,13 +77,16 @@ public class Node implements Element {
                     }
                 }
             }
-            summary.put(Config.PATHWAYLISTADDINFO, pathway_found_for_node);     
-            String typeOfNode = summary.get(Config.NODETYPE);
-            String id = summary.get(Config.NODEID);
+            this.summary.put(Config.PATHWAYLISTADDINFO, pathway_found_for_node);     
+            String typeOfNode = this.summary.get(Config.NODETYPE);
+            String id = this.summary.get(Config.NODEID);
             //Node rootNodeNet = nodes.get(rootNode);            
-            
-            ArrayList<String> packed_results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(ConfigResources.ENTITYINFO+id, network.manager));
-            String[] results = packed_results.get(0).split("\t");
+            br =  HttpUtils.getHTTPSignor(ConfigResources.WSSearchoptionMAP.
+                                              get("ENTITYINFOSEARCH").queryFunction.apply(id, Config.SPECIESLIST.get(species)), network.manager);
+            //ArrayList<String> packed_results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(ConfigResources.ENTITYINFO+id, network.manager));
+            ArrayList<String> packed_results = HttpUtils.parseWSNoheader(br);
+            //I have the header maybe something like this: "name	gene_name	entity_db_id	function	entity_alias"
+            String[] results = packed_results.get(1).split("\t");
 
             switch(typeOfNode){
                 case "complex":
@@ -169,7 +173,7 @@ public class Node implements Element {
         catch (Exception e){
             network.manager.utils.error("Found exception while loading Node Summary "+e.toString());
         }
-        return summary;
+        return this.summary;
     }
     
     @Override

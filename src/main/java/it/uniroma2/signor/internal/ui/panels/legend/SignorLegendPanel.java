@@ -296,6 +296,7 @@ public class SignorLegendPanel extends JPanel implements
                            tabs.add("SUMMARY", ssp);
                            tabs.add("RELATIONS", srp);
                            tabs.add("MODIFICATIONS", smp);
+                           tabs.setSelectedComponent(ssp);
                            ssp.recreateContent();
                            srp.recreateContent();
                            smp.recreateContent();

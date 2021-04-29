@@ -34,9 +34,11 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableUtil;
 
+
 public class SignorSummaryPanel extends JPanel {
     private SignorManager manager;
     private JPanel summPanel;
+    private static Font iconFont;
 
     private EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
@@ -70,7 +72,7 @@ public class SignorSummaryPanel extends JPanel {
             summPanel = new JPanel();
             summPanel.setBackground(Color.WHITE);
             SummaryInfo.add(summPanel, gbc1.down().anchor("north").expandHoriz());
-            SummaryInfo.add(Box.createVerticalGlue(), gbc1.down().down().expandVert());
+            SummaryInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
             //summPanel.setLayout(new GridBagLayout());
             //SummaryInfo.add(summPanel, BorderLayout.NORTH);
             //NodeInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
@@ -98,13 +100,15 @@ public class SignorSummaryPanel extends JPanel {
             Iterator iter = summary.keySet().iterator();
             Iterator iterv = summary.values().iterator();
             Integer it =0;
-            summPanel.setLayout(new GridLayout(0, 2));
+            summPanel.setLayout(new GridBagLayout());
+            JPanel summary_info_but_path = new JPanel();
+            summary_info_but_path.setLayout(new GridLayout(0, 2));
             while(iter.hasNext()){
                 String key = iter.next().toString();
                 String value = iterv.next().toString();
                 if(key.equals(Config.PATHWAYLISTADDINFO)){
                     JPanel listpath = new JPanel();
-                    listpath.setLayout(new GridLayout(0,1));
+                    listpath.setLayout(new GridBagLayout());
                     String[] pathlist = value.split(" , ");                    
                     for (Integer i=0; i<pathlist.length; i++){
                        if(ConfigPathway.MapPathwayDescID.containsKey(pathlist[i])){
@@ -118,17 +122,20 @@ public class SignorSummaryPanel extends JPanel {
                           }
                        }
                     }
-                    summPanel.add(new SignorLabelStyledBold(key), gbc.position(0, it).anchor("north"));
-                    summPanel.add(listpath, gbc.right());
+                    CollapsablePanel collapsablePTH = new CollapsablePanel(iconFont, "Show pathway", listpath, false );
+                    //summPanel.add(new SignorLabelStyledBold(key), gbc.position(0, it).anchor("north"));
+                    summPanel.add(collapsablePTH, gbc.down().anchor("north"));
                 }
                 else {
-                    summPanel.add(new SignorLabelStyledBold(key), gbc.position(0, it).anchor("north"));
-                    summPanel.add(new JLabel(value), gbc.right());
+                    summary_info_but_path.add(new SignorLabelStyledBold(key), gbc.position(0, it));                                    
+                    summary_info_but_path.add(new JLabel(value), gbc.right());
+                    it++;
                 }
-                it ++;
-            } 
-            summPanel.add(new SignorLabelStyledBold("Relations "), gbc.down());
-            summPanel.add(new JLabel(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).numberOfEdes().toString()), gbc.right());
+            }            
+            summary_info_but_path.add(new SignorLabelStyledBold("Relations "), gbc.down());
+            summary_info_but_path.add(new JLabel(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).numberOfEdes().toString()), gbc.right());
+            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Summary INFO", summary_info_but_path, false );
+            summPanel.add(collapsableINFO, gbc.down().anchor("west"));    
             /*listresults.add(new SignorLabelStyledBold("Relations "), gbc.down());
             listresults.add(new JLabel(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).numberOfEdes().toString()));
             summPanel.add(listresults);*/

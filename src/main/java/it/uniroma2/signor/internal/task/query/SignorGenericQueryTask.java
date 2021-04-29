@@ -59,39 +59,50 @@ public class SignorGenericQueryTask extends AbstractTask {
         
         /*TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, organism, terms,network);
         manager.utils.execute(factory.createTaskIterator());*/
-        if (search == "SINGLESEARCH"){
-            final Boolean fneighcopy = includefirstneighbor;
-            final String finalsearch = search;
-            //Retrieve number of result
-            BufferedReader br = HttpUtils.getHTTPSignor(ConfigResources.ENTITYINFO+terms, manager);
-            ArrayList<String> results= HttpUtils.parseWSNoheader(br);
-            results.remove(0);
-            if(results.size() >1 ){
-                SwingUtilities.invokeLater(() -> {
-                        JDialog d = new JDialog();
-                        d.setTitle(panelTitle);
-                        d.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-                        d.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                        SignorResultPanel SRP=new SignorResultPanel(results.size(),results, parameters.get("SPECIES").toString(), finalsearch, fneighcopy, terms, network);
-                        d.setContentPane(SRP);
-                        d.pack();
-                        d.setVisible(true);
-                    }); 
+        try{
+            if (search == "SINGLESEARCH"){
+                final Boolean fneighcopy = includefirstneighbor;
+                final String finalsearch = search;
+                String species = parameters.get("SPECIES").toString();
+                //Retrieve number of result
+                //Config.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms);
+                manager.utils.info(ConfigResources.WSSearchoptionMAP.
+                                               get("ENTITYINFOSEARCH").queryFunction.apply(terms, Config.SPECIESLIST.get(species)));
+                BufferedReader br = HttpUtils.getHTTPSignor(ConfigResources.WSSearchoptionMAP.
+                                              get("ENTITYINFOSEARCH").queryFunction.apply(terms,Config.SPECIESLIST.get(species)), manager);
+
+                ArrayList<String> results= HttpUtils.parseWSNoheader(br);
+                results.remove(0);
+                if(results.size() >1 ){
+                    SwingUtilities.invokeLater(() -> {
+                            JDialog d = new JDialog();
+                            d.setTitle(panelTitle);
+                            d.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+                            d.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                            SignorResultPanel SRP=new SignorResultPanel(results.size(),results, parameters.get("SPECIES").toString(), finalsearch, fneighcopy, terms, network);
+                            d.setContentPane(SRP);
+                            d.pack();
+                            d.setVisible(true);
+                        }); 
+                }
+                else if (results.size() == 1){
+                    //I take primaryId from first line, in this case is in the third field
+                    String primaryID = results.get(0).split("\t")[2];
+                    manager.utils.info(primaryID+" cerco un solo risultato");
+                    TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), primaryID ,network);
+                    manager.utils.execute(factory.createTaskIterator());
+                }
+                else if (results.size() == 0){             
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+terms,
+                        "No results", JOptionPane.ERROR_MESSAGE));
+                    //No results
+                    //monitor.setTitle("Results for Signor Network"); 
+                    //monitor.showMessage(TaskMonitor.Level.ERROR, "No results for "+terms);                
+                }
             }
-            else if (results.size() == 1){
-                //I take primaryId from first line, in this case is in the third field
-                String primaryID = results.get(0).split("\t")[2];
-                manager.utils.info(primaryID+" cerco un solo risultato");
-                TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), primaryID ,network);
-                manager.utils.execute(factory.createTaskIterator());
-            }
-            else if (results.size() == 0){             
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+terms,
-                    "No results", JOptionPane.ERROR_MESSAGE));
-                //No results
-                //monitor.setTitle("Results for Signor Network"); 
-                //monitor.showMessage(TaskMonitor.Level.ERROR, "No results for "+terms);                
-            }
+        }
+        catch (Exception e){
+            manager.utils.error("SignorGenericQueryTask run() "+e.toString()+parameters.toString());
         }
     }   
     

@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Iterator;
 import static java.util.stream.Collectors.toList;
 import org.cytoscape.work.TaskFactory;
+import it.uniroma2.signor.internal.Config;
 
 /**
  *
@@ -69,6 +70,9 @@ public class SignorResultPanel extends JPanel {
     }
     
     private void init(Integer numberresutls, String species) {
+        
+        
+        
         descriptionPanel = new VerticalPanel();
         descriptionPanel.add(new CenteredLabel(numberresutls+" results found for organism "+species, 16, Color.BLACK), layoutHelper.down().expandHoriz());
         descriptionPanel.add(new CenteredLabel("Please select the element to query as seeds to build network.", 14, Color.BLACK), layoutHelper.down().expandHoriz());
@@ -89,6 +93,7 @@ public class SignorResultPanel extends JPanel {
         header.add(type);
         header.add(goTo);
         //Iterator lines = results.listIterator();
+        JPanel table_of_result_to_scroll = new JPanel(new GridBagLayout());
         for ( Iterator lines = results.listIterator(); lines.hasNext();){
             String line = (String) lines.next();
             String[] fields = line.split("\t");
@@ -97,14 +102,30 @@ public class SignorResultPanel extends JPanel {
             JLabel primaid = new JLabel(fields[1]);
             JLabel primatype = new JLabel(fields[2]);
             SignorButton link= new SignorButton("Get relations");
-            link.addActionListener(e -> buildNetworkFromSelection(fields[1]));
-            add(listresults, layoutHelper.down());
+            //****************************************
+            //*******************************************
+            //ATTENTION TO VERIFY THE RESULTS WITH THE NEW HEADER
+            if(Config.SPECIESLIST.get(species)=="9606")
+               link.addActionListener(e -> buildNetworkFromSelection(fields[1]));
+            else 
+               link.addActionListener(e -> buildNetworkFromSelection(fields[2]));
+            //add(listresults, layoutHelper.down());
+            
             listresults.add(primaentity, layoutHelper.insets(2,2,2,2));
             listresults.add(primaid);
             listresults.add(primatype);
             listresults.add(link);  
+            table_of_result_to_scroll.add(listresults, layoutHelper.down());
         }
-        add(cancelButton, layoutHelper.down().anchor("east"));
+        table_of_result_to_scroll.add(cancelButton, layoutHelper.down().anchor("east"));
+        JScrollPane scrollPane = new JScrollPane(table_of_result_to_scroll, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        scrollPane.getVerticalScrollBar().setBlockIncrement(10);
+        add(scrollPane, layoutHelper.down().anchor("east").expandBoth());
+        
+        
+        //add(cancelButton, layoutHelper.down().anchor("east"));
     }
     
      private void buildNetworkFromSelection(String primaryID) {      
