@@ -71,8 +71,13 @@ public class SignorGenericQueryTask extends AbstractTask {
                                               get("ENTITYINFOSEARCH").queryFunction.apply(terms,Config.SPECIESLIST.get(species)), manager);
 
                 ArrayList<String> results= HttpUtils.parseWSNoheader(br);
-                if(Config.SPECIESLIST.get(species) != "9060")
-                   results.remove(0);
+//                if(Config.SPECIESLIST.get(species) != "9606")
+//                    results.remove(0);
+//                
+                if(results.get(0).startsWith("name")){
+                    //I'm reading the header, could be 1 entry for H.S. and many for the other species
+                    results.remove(0);
+                }
                 if(results.size() >1 ){
                     SwingUtilities.invokeLater(() -> {
                             JDialog d = new JDialog();
@@ -108,7 +113,7 @@ public class SignorGenericQueryTask extends AbstractTask {
         }
         catch (Exception e){
             manager.utils.error("SignorGenericQueryTask run() "+e.toString()+
-                                  search+", "+includefirstneighbor+", "+parameters.get("SPECIES").toString()+", "+network.toString());
+                                  search+", "+includefirstneighbor+", "+parameters.get("SPECIES").toString()+", "+network.toString()+" ,"+Config.SPECIESLIST.get(species));
         }
     }   
     

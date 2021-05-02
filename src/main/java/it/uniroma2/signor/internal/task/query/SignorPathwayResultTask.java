@@ -67,34 +67,14 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
     public void run(TaskMonitor monitor) {
         monitor.setTitle("Creating Pathway Network"); 
         try {
-            //Parameter is like {"TUMORPATH"}; {pathname}
-            /*String pathway= parameters.entrySet().iterator().next().getValue();
-            String pathwayid = "";
-            
-            if(ConfigPathway.PathwayDiseaseList.containsValue(pathway))
-                pathwayid = ConfigPathway.PathwayDiseaseList.entrySet().stream()
-                            .filter(entry -> entry.getValue().equals(pathway))
-                            .map(entry-> entry.getKey())
-                            .collect(Collectors.joining());
-            
-            else if (ConfigPathway.PathwayList.containsValue(pathway))
-                pathwayid = ConfigPathway.PathwayList.entrySet().stream()
-                            .filter(entry -> entry.getValue().equals(pathway))
-                            .map(entry-> entry.getKey())
-                            .collect(Collectors.joining());
-            
-            else if (ConfigPathway.PathwayTumorList.containsValue(pathway))
-                pathwayid = ConfigPathway.PathwayTumorList.entrySet().stream()
-                            .filter(entry -> entry.getValue().equals(pathway))
-                            .map(entry-> entry.getKey())
-                            .collect(Collectors.joining());*/
-            
+                      
             manager.utils.info("SignorPathwayResultTask run(): il pathway ID e "+pathwayid);
             String URL = ConfigResources.WSSearchoptionMAP.get("PATHWAYSEARCH").queryFunction.apply(pathwayid, "only"); 
             monitor.setTitle("Querying Signor Network");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);           
             CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathwayid);
-
+            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
+            network.isPathwayNetwork = true;
             ArrayList<String> results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(URL, manager));
             
             Table PthTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
@@ -104,6 +84,10 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
             cynet = manager.createPathwayFromLine(results, cynet);
             
+            //Populate my logic netowrk
+            network.setNetwork(cynet);
+             
+            
             netMan.addNetwork(cynet);   
             CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
             CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
@@ -111,10 +95,10 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             manager.signorStyleManager.applyStyle(ntwView);
             manager.signorStyleManager.installView(ntwView);            
             
-            network.setNetwork(cynet);
-            manager.setCurrentNetwork(network);
-            network.isPathwayNetwork = true; 
-            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
+//            network.setNetwork(cynet);
+//            manager.setCurrentNetwork(network);
+//            network.isPathwayNetwork = true; 
+//            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
             
             Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             PTMTableNode.buildPTMTable(manager, "PTMNode");                
@@ -128,6 +112,8 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             
             AlgorithmFactory algfactory = new AlgorithmFactory(ntwView, manager);            
             manager.utils.execute(algfactory.createTaskIterator());
+            
+            
             manager.utils.showResultsPanel();                
             manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));  
             

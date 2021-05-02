@@ -78,9 +78,14 @@ public class SignorBridgePanel extends JPanel {
             if(networkCurrent.parameters.get(Config.INCFIRSTNEISEARCH).equals(false)){
                SignorButton ifn = new SignorButton("Include first neighbor");
                ifn.addActionListener(e-> buildIfn(networkCurrent));
-               bridgePanel.add(ifn, gbc.anchor("north"));
+               JPanel buttonPanel = new JPanel();
+               buttonPanel.setLayout(new GridBagLayout());
+               buttonPanel.add(ifn, gbc.anchor("west").expandHoriz());
+               bridgePanel.add(buttonPanel, gbc.anchor("north").expandHoriz().insets(2, 0,2,0));
+//               bridgePanel.add(ifn, gbc.anchor("north").expandHoriz());
             }         
-                        
+            JPanel entity_info=new JPanel();
+            entity_info.setLayout(new GridBagLayout());
             Map<CyNode, Node> signorNodes = networkCurrent.getNodes();
             for (Map.Entry<CyNode, Node> entry : signorNodes.entrySet()) {              
                 HashMap<String,String> summary = entry.getValue().getSummary();
@@ -89,13 +94,14 @@ public class SignorBridgePanel extends JPanel {
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
-                    bridgePanel.add(new JLabel(key), gbc.down());
-                    bridgePanel.add(new JLabel(value), gbc.right());
+                    entity_info.add(new JLabel(key), gbc.down());
+                    entity_info.add(new JLabel(value), gbc.right());
 
                 }
 //                connectPanel.add(new JLabel(entry.getValue().summary.get("")cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.position(0, it));
 //                connectPanel.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
-            }                          
+            }  
+            bridgePanel.add(entity_info, gbc.anchor("north").down());
         }
         catch (Exception e){
             manager.utils.error("SignorBridgePanel createContent() "+e.toString());
@@ -119,13 +125,13 @@ public class SignorBridgePanel extends JPanel {
         Iterator iterv = network.parameters.values().iterator();              
         while(iter.hasNext()){
             String key = iter.next().toString();
-            String value = iterv.next().toString();
-            if(key.equals(Config.INCFIRSTNEISEARCH))
-                new_parameters.put(Config.INCFIRSTNEISEARCH, true);
+            Object value = iterv.next();            
             if(key.equals("QUERY")){
-                String packed_query = value.replace(" ", "%2C");
+                String packed_query = value.toString().replace(" ", "%2C");
                 new_parameters.put(key, packed_query);
             }
+            else if(key == Config.INCFIRSTNEISEARCH)
+                 new_parameters.put(Config.INCFIRSTNEISEARCH, true);                 
             else new_parameters.put(key, value);                
         }
         Network newnetwork = new Network(manager, new_parameters);

@@ -201,29 +201,7 @@ public class SignorLegendPanel extends JPanel implements
                     break;
                 }
             }
-            //if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
-            if (event.getNewNetwork().parameters.containsKey(Config.SINGLESEARCH)){
-                if(event.getNewNetwork().parameters.get(Config.SINGLESEARCH).equals(true)){  
-                    ssp.current_cynetwork_to_serch_into = newcynet;
-                    srp.current_cynetwork_to_serch_into = newcynet;
-                    smp.current_cynetwork_to_serch_into = newcynet;
-                    snp.current_cynetwork_to_serch_into = newcynet;
-                    sep.current_cynetwork_to_serch_into = newcynet;
-                    tabs.removeAll();
-                    tabs.add("Nodes", snp); 
-                    tabs.add("Edges", sep);                    
-                    tabs.add("SUMMARY", ssp);
-                    tabs.add("RELATIONS", srp);
-                    tabs.add("MODIFICATIONS", smp);
-                    ssp.recreateContent();
-                    srp.recreateContent();
-                    smp.recreateContent(); 
-                    tabs.setSelectedComponent(ssp);       
-                    manager.utils.info("New SIGNOR network SINGLE SEARCH"+newcynet);                    
-                }
-            }
-            
-            else if (event.getNewNetwork().isPathwayNetwork){
+            if (event.getNewNetwork().isPathwayNetwork.equals(true)){
                 //sdp.current_cynetwork_to_serch_into=manager.presentationManager.event.getNewNetwork();
                 snp.current_cynetwork_to_serch_into = newcynet;
                 sep.current_cynetwork_to_serch_into = newcynet;
@@ -239,8 +217,33 @@ public class SignorLegendPanel extends JPanel implements
                 sdp.recreateContent();
                 tabs.setSelectedComponent(sdp); 
                 manager.utils.info("New SIGNOR network PATHWAY "+newcynet); 
+                return;
             }
-            else {                    
+            
+            //if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
+//            if (event.getNewNetwork().parameters.containsKey(Config.SINGLESEARCH)){
+            if(event.getNewNetwork().parameters.get(Config.SINGLESEARCH).equals(true)){  
+                ssp.current_cynetwork_to_serch_into = newcynet;
+                srp.current_cynetwork_to_serch_into = newcynet;
+                smp.current_cynetwork_to_serch_into = newcynet;
+                snp.current_cynetwork_to_serch_into = newcynet;
+                sep.current_cynetwork_to_serch_into = newcynet;
+                tabs.removeAll();
+                tabs.add("Nodes", snp); 
+                tabs.add("Edges", sep);                    
+                tabs.add("SUMMARY", ssp);
+                tabs.add("RELATIONS", srp);
+                tabs.add("MODIFICATIONS", smp);
+                ssp.recreateContent();
+                srp.recreateContent();
+                smp.recreateContent(); 
+                tabs.setSelectedComponent(ssp);       
+                manager.utils.info("New SIGNOR network SINGLE SEARCH"+newcynet);                    
+//                }
+            }
+            
+            if(event.getNewNetwork().parameters.get(Config.ALLSEARCH).equals(true) || 
+               event.getNewNetwork().parameters.get(Config.CONNECTSEARCH).equals(true)){                       
                 tabs.removeAll();
                 sbp.current_cynetwork_to_serch_into = newcynet; 
                 sep.current_cynetwork_to_serch_into = newcynet;
@@ -251,6 +254,7 @@ public class SignorLegendPanel extends JPanel implements
                 sbp.recreateContent();
                 tabs.setSelectedComponent(sbp);
                 manager.utils.info("New SIGNOR the rest of search"+newcynet); 
+               
             }
             ptmviewON.setSelected(false);
             ptmviewON.setEnabled(true);
@@ -281,8 +285,7 @@ public class SignorLegendPanel extends JPanel implements
                 manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkEvent) "+e.getNetwork().toString());                  
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){                               
                    if (manager.presentationManager.signorNetMap.containsKey(newcynet)){
-                       if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork){
-
+                       if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
                            snp.current_cynetwork_to_serch_into = newcynet;
                            sep.current_cynetwork_to_serch_into = newcynet; 
                            sdp.current_cynetwork_to_serch_into = newcynet;
@@ -292,10 +295,10 @@ public class SignorLegendPanel extends JPanel implements
                            tabs.add("DESCRIPTIONS", sdp);
                            sdp.recreateContent();
                            tabs.setSelectedComponent(sdp);
-                      
+                           return;
                       }
-                   
-                       else if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.SINGLESEARCH).equals(true)){
+                       if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.SINGLESEARCH).equals(true)) {
+                      
                                tabs.removeAll();
                                ssp.current_cynetwork_to_serch_into = newcynet;  
                                srp.current_cynetwork_to_serch_into = newcynet;
@@ -308,7 +311,8 @@ public class SignorLegendPanel extends JPanel implements
                                smp.recreateContent();
                                tabs.setSelectedComponent(ssp);
                         }   
-                        else {
+                        if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.ALLSEARCH).equals(true) ||
+                            manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.CONNECTSEARCH).equals(true)){
                                tabs.removeAll();                               
                                sbp.current_cynetwork_to_serch_into = newcynet;   
                                sep.current_cynetwork_to_serch_into = newcynet;
@@ -318,9 +322,8 @@ public class SignorLegendPanel extends JPanel implements
                                tabs.add("Searched Entities", sbp);
                                sbp.recreateContent();
                                tabs.setSelectedComponent(sbp);
-                        }                           
-     
-                   }
+                        }                               
+                    }
                 }
             }
         }

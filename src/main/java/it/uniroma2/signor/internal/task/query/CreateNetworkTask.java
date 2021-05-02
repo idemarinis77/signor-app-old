@@ -24,7 +24,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.cytoscape.view.layout.CyLayoutAlgorithm;
 import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
-
+import it.uniroma2.signor.internal.task.view.factories.ZoomNetworkViewTaskFactory;
+import it.uniroma2.signor.internal.task.view.ZoomNetworkViewTask;
+import static org.cytoscape.view.presentation.property.BasicVisualLexicon.NETWORK_SCALE_FACTOR;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.model.CyNetworkViewManager;
@@ -35,6 +37,7 @@ import org.cytoscape.work.ProvidesTitle;
 import org.cytoscape.work.TaskIterator;
 import org.cytoscape.work.TaskObserver;
 import org.cytoscape.work.TunableSetter;
+import org.cytoscape.view.model.*;
 
 /**
  *
@@ -120,8 +123,8 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 network.writeSearchNetwork();     
                 
 //                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
-//                    network.setCyNodeRoot(terms);
-
+//                    network.setCyNodeRoot(terms);                
+                
                 CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
                 CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
                 if (alg == null) alg = layoutManager.getLayout("force-directed");
@@ -133,11 +136,16 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 Set<View<CyNode>> nodeViews = new HashSet<>(ntwView.getNodeViews());
                 TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
                 insertTasksAfterCurrentTask(taskIterator);   
-                
+
+//                double scale = 0.5;
 //                double newScale = ntwView.getVisualProperty(NETWORK_SCALE_FACTOR).doubleValue() * scale;
 //                ntwView.setVisualProperty(NETWORK_SCALE_FACTOR, newScale);
-//                ntwView.updateView();
-
+//                manager.signorStyleManager.installView(ntwView);
+//                ZoomNetworkViewTaskFactory zvtf = new ZoomNetworkViewTaskFactory(0.5, manager);
+//                manager.utils.execute(zvtf.createTaskIterator(ntwView));
+//                
+                
+                
                 manager.utils.showResultsPanel();            
                 manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));        
             }
