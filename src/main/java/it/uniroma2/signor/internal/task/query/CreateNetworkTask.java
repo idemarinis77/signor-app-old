@@ -60,6 +60,10 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH);
+            if(results.isEmpty()){
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+terms,
+                    "No results", JOptionPane.ERROR_MESSAGE));
+            }
             if (results.get(0).equals("No result found.")) {
                 //https://signor.uniroma2.it/getData.php?organism=9606&id=Q96Q05
                 //after having choosen with multiple results of RAF
@@ -67,7 +71,10 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                     "No results", JOptionPane.ERROR_MESSAGE));
             }
             else {
+                
+                
                 CyNetwork cynet = manager.createNetwork(netname);
+                manager.presentationManager.updateSignorNetworkCreated(cynet, network);
                 //Create tables
                 Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 NodeTable.buildDefaultTable(manager, "Node");
@@ -81,13 +88,14 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 netMan.addNetwork(cynet);            
                 CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
                 CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
+//                manager.presentationManager.updateSignorViewCreated(ntwView, network);
                 //Apply style
                 manager.signorStyleManager.applyStyle(ntwView);
                 manager.signorStyleManager.installView(ntwView);            
 
                 network.setNetwork(cynet);
                 manager.setCurrentNetwork(network);
-                manager.presentationManager.updateSignorNetworkCreated(cynet, network);
+                //manager.presentationManager.updateSignorNetworkCreated(cynet, network);
 
                 Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableNode.buildPTMTable(manager, "PTMNode");
@@ -99,9 +107,10 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
 
                 /*manager.presentationManager.parameters = network.parameters;
                 manager.presentationManager.searched_query = terms;*/
-                network.writeSearchNetwork();            
-                network.setCyNodeRoot(terms);
-
+                network.writeSearchNetwork();     
+                
+                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
+                    network.setCyNodeRoot(terms);
 
                 CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
                 CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
@@ -150,4 +159,19 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
 
     public boolean isReady() { return true; }
     
+    private void destroyNetwork(SignorManager manager, Network network) {
+        CyNetwork cyNetwork = network.getCyNetwork();
+
+        CyNetworkManager networkManager = manager.utils.getService(CyNetworkManager.class);
+        CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
+
+        if (cyNetwork != null && networkManager.networkExists(cyNetwork.getSUID()))
+            networkManager.destroyNetwork(cyNetwork);
+
+        tableManager.deleteTable(network.PTMedgeTable.getSUID());
+        tableManager.deleteTable(network.PTMnodeTable.getSUID());
+
+        
+        manager.presentationManager.removeNetwork(network);
+    }
 }

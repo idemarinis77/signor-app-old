@@ -57,12 +57,13 @@ public class ConfigResources {
     
     public enum WSSearchoption{
        SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       ALLQUERY("ALLSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?type=connect&proteins="+o+"&id=" +s),
-       CONNECTQUERY("CONNECTSEARCH",(o, s) ->  "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+       ALLQUERY("ALLSEARCH", (p, l) -> "https://signor.uniroma2.it/getData.php?type=all&proteins="+p+"&level="+l),
+       CONNECTQUERY("CONNECTSEARCH", (p, l) -> "https://signor.uniroma2.it/getData.php?type=connect&proteins="+p+"&level="+l),
        SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        PATHWAYQUERY("PATHWAYSEARCH", (p, s) -> "https://signor.uniroma2.it/getPathwayData.php?pathway="+p+"&relations="+s),
        ENTITYINFOSEARCH("ENTITYINFOSEARCH", (s, o) -> "https://signor.uniroma2.it/getData.php?entityInfo="+s+"&organism="+o);
+       
        public String name;
        public BiFunction<String, String, String> queryFunction;
 

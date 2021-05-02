@@ -9,6 +9,7 @@ import java.util.HashMap;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.event.*;
 import org.cytoscape.model.CyNetwork;
+import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.model.events.NetworkAddedEvent;
 import org.cytoscape.model.events.NetworkAddedListener;
 import org.cytoscape.session.events.SessionLoadedEvent;
@@ -28,6 +29,7 @@ public class PresentationManager implements
         SignorNetworkCreatedListener {
     
     public HashMap<CyNetwork, Network> signorNetMap;
+    public HashMap<CyNetworkView, Network> signorViewMap;
     SignorManager manager;
     public HashMap<String, ?> parameters;
     public String searched_query;
@@ -50,6 +52,30 @@ public class PresentationManager implements
         }
         manager.lastCyNetwork = cynet;
         manager.lastNetwork = netw;
+    }
+    
+    public void updateSignorViewCreated(CyNetworkView cyview, Network netw){
+        if(signorNetMap != null){
+           signorViewMap.put(cyview, netw);
+           manager.utils.info("Ho aggiunto la rete alla netViewMap "+signorViewMap.toString());
+        }
+        else {
+           signorViewMap = new HashMap(){
+               { put(cyview, netw); }
+           };  
+           manager.utils.info("Ho aggiunto la rete alla netViewMap "+signorViewMap.toString());
+        }
+//        manager.lastCyNetwork = cynet;
+//        manager.lastNetwork = netw;
+    }
+    
+    
+    
+    public void removeNetwork(Network network) {
+        if (network == null) return;
+        CyNetwork cyNetwork = network.getCyNetwork();
+        if (cyNetwork == null) return;
+        signorNetMap.remove(cyNetwork);        
     }
     public void handleEvent (SignorNetworkCreatedEvent e){
         manager.utils.info(e.getNewNetwork().toString());

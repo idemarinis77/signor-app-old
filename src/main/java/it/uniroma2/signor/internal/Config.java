@@ -154,13 +154,16 @@ public class Config {
         }
     };
     
-    public static final String[] HEADER_ROOT_NODE_ADDINFO_COMPLEX = {"FORMED BY", "ID", "FORMED BY ENTITY", "LINK"};
-    public static final String[] HEADER_ROOT_NODE_ADDINFO_CHEMICAL = {"NAME", "SYNONYMS", "ID", "FORMULA", "IUPAC"};
-    public static final String[] HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN = {"NAME", "ID", "DESCRIPTION", "SEQUENCE", "FORMED BY"};
-    public static final String[] HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY = {"NAME", "ID", "FORMED BY"};
-    public static final String[] HEADER_ROOT_NODE_ADDINFO_STIMULUS = {"NAME", "ID", "DESCRIPTION"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_COMPLEX = {"NAME", "SIG_ID", "DESCRIPTION", "FORMEDBY", "COMPLEXPORTAL_ID"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_CHEMICAL = {"NAME", "ENTITY_ALIAS", "ENTITY_DB_ID", "ALT_ID", "FORMULA", "IUPAC"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN = {"NAME", "SIG_ID", "FP_DESCRIPTION", "FP_SEQUENCE", "IDS"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY = {"NAME", "SIG_ID", "PF_DESCRIPTION", "FORMEDBY"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_STIMULUS = {"NAME", "SIG_ID", "STIM_DESCRIPTION"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_PHENOTYPE = {"NAME", "SIG_ID", "PHE_DESCRIPTION"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_MIRNA = {"NAME", "MIRNA_DB_ID", "RNA_CENTRAL"};
+    public static final String[] HEADER_ROOT_NODE_ADDINFO_PROTEIN = {"NAME", "GENE_NAME", "ENTITY_DB_ID", "FUNCTION", "ENTITY_ALIAS"};
     
-    public static final String[] ROOT_NODE_COMMONS_ADDINFO = {"NAME", "FORMED BY", "DESCRIPTION"};
+    public static final String[] ROOT_NODE_COMMONS_ADDINFO = {"NAME", "FORMEDBY", "DESCRIPTION"};
     public static final String PATHWAYLISTADDINFO = "PATHWAYLIST";
     
     public static final HashMap<String,Class<?>> NODEFIELDADDITIONAL= new HashMap(){
@@ -168,11 +171,23 @@ public class Config {
            put(ROOT_NODE_COMMONS_ADDINFO[0], String.class);
            put(ROOT_NODE_COMMONS_ADDINFO[1], String.class);
            put(ROOT_NODE_COMMONS_ADDINFO[2], String.class);
-           put(HEADER_ROOT_NODE_ADDINFO_COMPLEX[2], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_COMPLEX[1], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_COMPLEX[4], String.class);
            put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[1], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[2], String.class);
            put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[3], String.class);
            put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[4], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_CHEMICAL[5], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN[2], String.class);
            put(HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN[3], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN[4], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY[2], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_STIMULUS[2], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_PHENOTYPE[2], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_MIRNA[1], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_MIRNA[2], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_PROTEIN[1], String.class);
+           put(HEADER_ROOT_NODE_ADDINFO_PROTEIN[3], String.class);
            put(PATHWAYLISTADDINFO, String.class);
         }
     };

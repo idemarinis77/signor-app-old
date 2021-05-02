@@ -14,6 +14,7 @@ import it.uniroma2.signor.internal.ui.components.SignorButton;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
+import it.uniroma2.signor.internal.ui.components.HelpButton;
 /**
  *
  * @author amministratore
@@ -88,53 +89,56 @@ public class SignorSummaryPanel extends JPanel {
     }
     
     public void createContent(){
-        try {           
-       
+        try {
             if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
                rootNode = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).rootNode;
-               networkRootNode = new Node(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into), rootNode);
+               networkRootNode = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).getNetworkRootNode();
             }
-            summary = networkRootNode.Summary();
+            //summary = networkRootNode.Summary();
+            summary = networkRootNode.getSummary();
             //SignorPanelRow listresults = new SignorPanelRow(summary.size()+1, 2, manager);
             Integer relations = manager.lastNetwork.numberOfEdes();
             Iterator iter = summary.keySet().iterator();
             Iterator iterv = summary.values().iterator();
             Integer it =0;
             summPanel.setLayout(new GridBagLayout());
-            JPanel summary_info_but_path = new JPanel();
+            JPanel listpath = new JPanel();
+            JPanel summary_info_but_path = new JPanel();            
             summary_info_but_path.setLayout(new GridLayout(0, 2));
             while(iter.hasNext()){
                 String key = iter.next().toString();
                 String value = iterv.next().toString();
                 if(key.equals(Config.PATHWAYLISTADDINFO)){
-                    JPanel listpath = new JPanel();
+//                    JPanel listpath = new JPanel();
                     listpath.setLayout(new GridBagLayout());
                     String[] pathlist = value.split(" , ");                    
                     for (Integer i=0; i<pathlist.length; i++){
                        if(ConfigPathway.MapPathwayDescID.containsKey(pathlist[i])){
-                          manager.utils.info("SignorSummary createcontent() "+Config.PATHWAYLISTADDINFO+" "+i);
                           if (!ConfigPathway.MapPathwayDescID.get(pathlist[i]).isEmpty()){
                             SignorButton pathwayID =  new SignorButton(pathlist[i]);                         
                             listpath.add(pathwayID, gbc.down());
                             final String path_code = pathlist[i];
-                            manager.utils.info("SignorSummary createcontent() passing pathid "+path_code);
                             pathwayID.addActionListener(e-> buildPathWay(path_code));
                           }
                        }
                     }
-                    CollapsablePanel collapsablePTH = new CollapsablePanel(iconFont, "Show pathway", listpath, false );
+                    
                     //summPanel.add(new SignorLabelStyledBold(key), gbc.position(0, it).anchor("north"));
-                    summPanel.add(collapsablePTH, gbc.down().anchor("north"));
+//                    summPanel.add(collapsablePTH, gbc.down().anchor("north"));
                 }
                 else {
-                    summary_info_but_path.add(new SignorLabelStyledBold(key), gbc.position(0, it));                                    
-                    summary_info_but_path.add(new JLabel(value), gbc.right());
+                    summary_info_but_path.add(new SignorLabelStyledBold(key), gbc.position(0, it));     
+                    if ( value.length() > 20 ) 
+                        summary_info_but_path.add(new HelpButton(manager, value), gbc.right());
+                    else summary_info_but_path.add(new JLabel(value), gbc.right());
                     it++;
                 }
             }            
             summary_info_but_path.add(new SignorLabelStyledBold("Relations "), gbc.down());
             summary_info_but_path.add(new JLabel(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).numberOfEdes().toString()), gbc.right());
             CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Summary INFO", summary_info_but_path, false );
+            CollapsablePanel collapsablePTH = new CollapsablePanel(iconFont, "Show pathway", listpath, false );
+            summPanel.add(collapsablePTH, gbc.down().anchor("north"));
             summPanel.add(collapsableINFO, gbc.down().anchor("west"));    
             /*listresults.add(new SignorLabelStyledBold("Relations "), gbc.down());
             listresults.add(new JLabel(manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).numberOfEdes().toString()));

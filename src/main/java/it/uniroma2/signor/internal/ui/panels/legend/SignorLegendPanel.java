@@ -60,7 +60,8 @@ public class SignorLegendPanel extends JPanel implements
         CytoPanelComponent2,
         SelectedNodesAndEdgesListener,
         SignorNetworkCreatedListener,         
-        SetCurrentNetworkListener {       
+        SetCurrentNetworkListener,
+        SetCurrentNetworkViewListener {       
 
     private final JTabbedPane tabs = new JTabbedPane(JTabbedPane.BOTTOM);
     private static final Icon icon = IconUtils.createImageIcon(ConfigResources.icon_path);
@@ -70,6 +71,7 @@ public class SignorLegendPanel extends JPanel implements
     private SignorRelationsPanel srp;
     private SignorModificationsPanel smp;
     private SignorDescriptionsPanel sdp;
+    private SignorBridgePanel sbp;
     private SignorManager manager;
 //    private boolean tabSingleSearchAdded = false;
 //    private boolean tabPathwayAdded = false;
@@ -85,6 +87,7 @@ public class SignorLegendPanel extends JPanel implements
 	srp = new SignorRelationsPanel(manager);
       	smp = new SignorModificationsPanel(manager);
         sdp = new SignorDescriptionsPanel(manager);
+        sbp = new SignorBridgePanel(manager);
         ActionListener listenerPTM = new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
@@ -216,11 +219,12 @@ public class SignorLegendPanel extends JPanel implements
                     ssp.recreateContent();
                     srp.recreateContent();
                     smp.recreateContent(); 
-                    tabs.setSelectedComponent(ssp);                           
+                    tabs.setSelectedComponent(ssp);       
+                    manager.utils.info("New SIGNOR network SINGLE SEARCH"+newcynet);                    
                 }
             }
             
-            if (event.getNewNetwork().isPathwayNetwork){
+            else if (event.getNewNetwork().isPathwayNetwork){
                 //sdp.current_cynetwork_to_serch_into=manager.presentationManager.event.getNewNetwork();
                 snp.current_cynetwork_to_serch_into = newcynet;
                 sep.current_cynetwork_to_serch_into = newcynet;
@@ -235,6 +239,19 @@ public class SignorLegendPanel extends JPanel implements
 
                 sdp.recreateContent();
                 tabs.setSelectedComponent(sdp); 
+                manager.utils.info("New SIGNOR network PATHWAY "+newcynet); 
+            }
+            else {                    
+                tabs.removeAll();
+                sbp.current_cynetwork_to_serch_into = newcynet; 
+                sep.current_cynetwork_to_serch_into = newcynet;
+                snp.current_cynetwork_to_serch_into = newcynet;   
+                tabs.add("Nodes", snp); 
+                tabs.add("Edges", sep); 
+                tabs.add("Searched Entities", sbp);
+                sbp.recreateContent();
+                tabs.setSelectedComponent(sbp);
+                manager.utils.info("New SIGNOR the rest of search"+newcynet); 
             }
             ptmviewON.setSelected(false);
             ptmviewON.setEnabled(true);
@@ -246,7 +263,13 @@ public class SignorLegendPanel extends JPanel implements
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");
         }        
     }
-    
+    @Override
+    public void handleEvent(SetCurrentNetworkViewEvent e) {
+        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString());
+//        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString()+
+//                " "+manager.presentationManager.signorViewMap.get(e.getNetworkView()));
+        
+    }
     @Override
     public void handleEvent(SetCurrentNetworkEvent e) {
         CyNetwork newcynet = e.getNetwork();
@@ -273,6 +296,7 @@ public class SignorLegendPanel extends JPanel implements
                            tabs.add("Edges", sep);
                            tabs.add("DESCRIPTIONS", sdp);
                            sdp.recreateContent();
+                           tabs.setSelectedComponent(sdp);
                            /*if(tabSingleSearchAdded){
                                tabs.remove(smp);
                                tabs.remove(ssp);
@@ -281,26 +305,31 @@ public class SignorLegendPanel extends JPanel implements
                            }*/                           
                       }
                    
-                       else {
-                           //if (manager.presentationManager.signorNetMap.get(newcynet).isSingleSearch()){
-                           //if (!tabSingleSearchAdded) {                           
-                           
-                           snp.current_cynetwork_to_serch_into = newcynet;
-                           sep.current_cynetwork_to_serch_into = newcynet; 
-                           ssp.current_cynetwork_to_serch_into = newcynet;  
-                           srp.current_cynetwork_to_serch_into = newcynet;
-                           smp.current_cynetwork_to_serch_into = newcynet;
-                           tabs.removeAll();
-                           tabs.add("Nodes", snp); 
-                           tabs.add("Edges", sep);
-                           tabs.add("SUMMARY", ssp);
-                           tabs.add("RELATIONS", srp);
-                           tabs.add("MODIFICATIONS", smp);
-                           tabs.setSelectedComponent(ssp);
-                           ssp.recreateContent();
-                           srp.recreateContent();
-                           smp.recreateContent();
-                       }
+                       else if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.SINGLESEARCH).equals(true)){
+                               tabs.removeAll();
+                               ssp.current_cynetwork_to_serch_into = newcynet;  
+                               srp.current_cynetwork_to_serch_into = newcynet;
+                               smp.current_cynetwork_to_serch_into = newcynet;                               
+                               tabs.add("SUMMARY", ssp);
+                               tabs.add("RELATIONS", srp);
+                               tabs.add("MODIFICATIONS", smp);
+                               ssp.recreateContent();
+                               srp.recreateContent();
+                               smp.recreateContent();
+                               tabs.setSelectedComponent(ssp);
+                        }   
+                        else {
+                               tabs.removeAll();                               
+                               sbp.current_cynetwork_to_serch_into = newcynet;   
+                               sep.current_cynetwork_to_serch_into = newcynet;
+                               snp.current_cynetwork_to_serch_into = newcynet;   
+                               tabs.add("Nodes", snp); 
+                               tabs.add("Edges", sep); 
+                               tabs.add("Searched Entities", sbp);
+                               sbp.recreateContent();
+                               tabs.setSelectedComponent(sbp);
+                        }                           
+     
                    }
                 }
             }

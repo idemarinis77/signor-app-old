@@ -84,7 +84,7 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
                             .map(entry-> entry.getKey())
                             .collect(Collectors.joining());
         parameters.clear();
-        parameters.put("PATHWAYID", pathwayid);
+        parameters.put(ConfigPathway.PATHWAYID, pathwayid);
         try { 
             /*parameters = chooseSearchoption.getParameter();
             parameters.put("QUERY", pathway);*/

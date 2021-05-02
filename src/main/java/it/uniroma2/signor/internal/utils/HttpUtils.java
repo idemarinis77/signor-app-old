@@ -32,7 +32,6 @@ public class HttpUtils {
     public static BufferedReader getHTTPSignor(String url, SignorManager manager) {
         URL trueURL;
         try {
-                manager.utils.info("Method getHTTPSignor URL: " + url);
                 trueURL = new URL(url);
             
         } catch (MalformedURLException e) {

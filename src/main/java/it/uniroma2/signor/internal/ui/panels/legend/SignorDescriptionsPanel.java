@@ -42,7 +42,7 @@ public class SignorDescriptionsPanel extends JPanel {
     private JPanel descPanel;
 
     private EasyGBC gbc=new EasyGBC();
-    public Boolean selectionRunning= false;
+    //public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
 
      
@@ -83,24 +83,21 @@ public class SignorDescriptionsPanel extends JPanel {
                     HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+
                             manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get("PATHWAYID"), manager));
             manager.utils.info("DescriptionPanel createContent() "+manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.toString());
-            for (int i = 0; i < pathInfo.size(); i++) {   
-                if(pathInfo.get(i).startsWith(ConfigPathway.SIGNORPTH_SIG_ID)) continue;
-                String[] path_info_packed=pathInfo.get(i).split("\t");
-                descPanel.add(new JLabel("PATH ID"), gbc.position(0, 0));
-                descPanel.add(new JLabel(path_info_packed[0]), gbc.right());
-                descPanel.add(new JLabel("PATH NAME"), gbc.position(0, 1));
-                descPanel.add(new JLabel(path_info_packed[1]), gbc.right());
-                descPanel.add(new JLabel("COALESCE"), gbc.position(0, 2));
-                descPanel.add(new HelpButton(manager, path_info_packed[2]), gbc.right());
-                //descPanel.add(new JLabel(path_info_packed[2]), gbc.right());
-                descPanel.add(new JLabel("CURATOR"), gbc.position(0, 3));
-                descPanel.add(new JLabel(path_info_packed[3]), gbc.right());
+            String[] header_pth = pathInfo.get(0).split("\t");
+            String[] path_info_packed=pathInfo.get(1).split("\t");
+            for (int i = 0; i < header_pth.length; i++) {             
+                
+                descPanel.add(new JLabel(header_pth[i]), gbc.down());                
+                if ( path_info_packed[i].length() > 20) 
+                    descPanel.add(new HelpButton(manager, path_info_packed[i]), gbc.right());
+                else 
+                    descPanel.add(new JLabel(path_info_packed[i]), gbc.right());              
+
             }      
-            
-            //modPanel.add(listresults);
+
         }
         catch (Exception e){
-            manager.utils.error(e.toString());
+            manager.utils.error("SignorDescriptionPanel CreateContent()"+e.toString());
         }       
     }
     

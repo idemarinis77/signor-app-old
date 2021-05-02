@@ -29,7 +29,7 @@ public class Node implements Element {
     private final Network network;
     public final CyNode cyNode;
     public final CyRow nodeRow;
-    public HashMap<String,String> summary= new HashMap<String,String>();
+    private HashMap<String,String> summary= new HashMap<String,String>();
 
     public Node(final Network network, final CyNode cyNode) {
         this(network, cyNode, network.getCyNetwork().getRow(cyNode));
@@ -42,8 +42,7 @@ public class Node implements Element {
 
         Config.NODEFIELD.forEach((k, v) ->
                     this.summary.put(k, nodeRow.get(Config.NAMESPACE, k, String.class)));  
-    }
-   
+    }   
     //complex SIGNOR-C144
     //chemical CHEBI:3441
     //fusion protein SIGNOR-FP3
@@ -52,7 +51,8 @@ public class Node implements Element {
     //stimulus	SIGNOR-ST13
     //phenotype	SIGNOR-PH92
     // mirna	MI0000300
-    public HashMap<String,String> Summary(){        
+    //public HashMap<String,String> Summary(){  
+    public void Summary(){  
         /*HashMap<String,String> basic_summary = new HashMap<String,String>();        
         Config.NODEFIELD.forEach((basic_node_key, basic_node_value) ->{
             basic_summary.put(basic_node_key , this.nodeRow.get(Config.NAMESPACE, basic_node_key, String.class)); });  */        
@@ -62,7 +62,7 @@ public class Node implements Element {
         String NodeID = this.summary.get(Config.NODEID);
         network.manager.utils.info("Searching pthw for "+NodeID);
         Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHIDA);
-        Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHNAME);
+        Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PATHWAYNAME);
         try {
             Table.buildAdditionalInfoForSummary(network.manager);
             BufferedReader br =  HttpUtils.getHTTPSignor(ConfigResources.PATHALLRELATIONSQUERY, network.manager);
@@ -86,18 +86,29 @@ public class Node implements Element {
             //ArrayList<String> packed_results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(ConfigResources.ENTITYINFO+id, network.manager));
             ArrayList<String> packed_results = HttpUtils.parseWSNoheader(br);
             //I have the header maybe something like this: "name	gene_name	entity_db_id	function	entity_alias"
+            String[] header = packed_results.get(0).split("\t");
             String[] results = packed_results.get(1).split("\t");
-
-            switch(typeOfNode){
-                case "complex":
+            for (Integer i =0; i< results.length; i++){
+                //if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i])){
+                this.summary.put(header[i], results[i]);
+                nodeRow.set(Config.NAMESPACE, header[i], results[i]);
+                /* summary.put(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);
+                nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);*/
+            }
+            
+        //    switch(typeOfNode){
+        //        case "complex":
                 //Formed By
                 //E.g. SIGNOR-C144: CDK5/CDK5R1	SIGNOR-C144		Q00535,Q15078	CPX-2201 
-                    for (Integer i =0; i< Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX.length; i++){
-                        if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i])){
-                            summary.put(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);
-                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);
+                // name, sig_id, description, formedby, complexportal_id
+                    for (Integer i =0; i< results.length; i++){
+                        //if(Config.NODEFIELDADDITIONAL.containsKey(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i])){
+                            summary.put(header[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, header[i].toUpperCase(), results[i]);
+                           /* summary.put(Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);
+                            nodeRow.set(Config.NAMESPACE, Config.HEADER_ROOT_NODE_ADDINFO_COMPLEX[i], results[i]);*/
                         }
-                    }
+        /*           }
                 break;        
                 case "chemical":
                 //Name, Synonyms, IUPAC, Formula
@@ -168,11 +179,15 @@ public class Node implements Element {
                         }
                     }
                 break;
-            }          
+            }    */      
         }
         catch (Exception e){
             network.manager.utils.error("Found exception while loading Node Summary "+e.toString());
         }
+        //return this.summary;
+    }
+    
+    public HashMap<String,String> getSummary(){
         return this.summary;
     }
     

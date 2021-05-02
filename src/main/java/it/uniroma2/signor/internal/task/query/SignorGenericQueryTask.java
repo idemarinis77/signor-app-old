@@ -31,7 +31,6 @@ public class SignorGenericQueryTask extends AbstractTask {
         private final HashMap<String, ?> parameters;      
         private final String panelTitle;
         private final String terms;
-        private Config CONFIG = new Config();
            
     
     public SignorGenericQueryTask(Network network,String panelTitle, HashMap<String, ?> parameters, String terms){
@@ -51,19 +50,19 @@ public class SignorGenericQueryTask extends AbstractTask {
         manager.utils.info(organism.toString());
         manager.utils.info(parameters.toString());*/
         //Parsing data
-        if (parameters.get("SINGLESEARCH").equals(true)) {search = "SINGLESEARCH"; }
-        if (parameters.get("ALLSEARCH").equals(true)) {search = "ALLSEARCH"; }
-        if (parameters.get("CONNECTSEARCH").equals(true)) {search = "CONNECTSEARCH"; }
-        if (parameters.get("SHORTESTPATHSEARCH").equals(true)) {search = "SHORTESTPATHSEARCH"; }
-        if (parameters.get("INCFIRSTNEISEARCH").equals(true)) {includefirstneighbor = true; }            
-        
+        if (parameters.get(Config.SINGLESEARCH).equals(true)) {search = Config.SINGLESEARCH; }
+        if (parameters.get(Config.ALLSEARCH).equals(true)) {search = Config.ALLSEARCH; }
+        if (parameters.get(Config.CONNECTSEARCH).equals(true)) {search = Config.CONNECTSEARCH; }
+        if (parameters.get(Config.SHORTESTPATHSEARCH).equals(true)) {search = Config.SHORTESTPATHSEARCH; }
+        if (parameters.get(Config.INCFIRSTNEISEARCH).equals(true)) {includefirstneighbor = true; }            
+        String species = parameters.get(Config.SPECIES).toString();
         /*TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, organism, terms,network);
         manager.utils.execute(factory.createTaskIterator());*/
         try{
-            if (search == "SINGLESEARCH"){
+            if (search == Config.SINGLESEARCH){
                 final Boolean fneighcopy = includefirstneighbor;
                 final String finalsearch = search;
-                String species = parameters.get("SPECIES").toString();
+                
                 //Retrieve number of result
                 //Config.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms);
                 manager.utils.info(ConfigResources.WSSearchoptionMAP.
@@ -72,7 +71,8 @@ public class SignorGenericQueryTask extends AbstractTask {
                                               get("ENTITYINFOSEARCH").queryFunction.apply(terms,Config.SPECIESLIST.get(species)), manager);
 
                 ArrayList<String> results= HttpUtils.parseWSNoheader(br);
-                results.remove(0);
+                if(Config.SPECIESLIST.get(species) != "9060")
+                   results.remove(0);
                 if(results.size() >1 ){
                     SwingUtilities.invokeLater(() -> {
                             JDialog d = new JDialog();
@@ -87,8 +87,7 @@ public class SignorGenericQueryTask extends AbstractTask {
                 }
                 else if (results.size() == 1){
                     //I take primaryId from first line, in this case is in the third field
-                    String primaryID = results.get(0).split("\t")[2];
-                    manager.utils.info(primaryID+" cerco un solo risultato");
+                    String primaryID = results.get(0).split("\t")[2];                    
                     TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), primaryID ,network);
                     manager.utils.execute(factory.createTaskIterator());
                 }
@@ -100,9 +99,16 @@ public class SignorGenericQueryTask extends AbstractTask {
                     //monitor.showMessage(TaskMonitor.Level.ERROR, "No results for "+terms);                
                 }
             }
+            if (search == Config.CONNECTSEARCH || search == Config.ALLSEARCH){                
+                String terms_for_all = terms.replace(" ", "%2C");
+                manager.utils.info(terms_for_all+" "+search);
+                TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), terms_for_all, network);
+                manager.utils.execute(factory.createTaskIterator());                
+            }
         }
         catch (Exception e){
-            manager.utils.error("SignorGenericQueryTask run() "+e.toString()+parameters.toString());
+            manager.utils.error("SignorGenericQueryTask run() "+e.toString()+
+                                  search+", "+includefirstneighbor+", "+parameters.get("SPECIES").toString()+", "+network.toString());
         }
     }   
     

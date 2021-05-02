@@ -18,7 +18,7 @@ import javax.swing.ImageIcon;
 public class SignorButton extends JButton{
     public SignorButton(String label){
         super(label);
-        this.setBackground(new Color(153, 204, 102));
+        this.setBackground(new Color(82, 166, 119));
         this.setBounds(1, 1, 1, 1);
         this.setName(label);
     }

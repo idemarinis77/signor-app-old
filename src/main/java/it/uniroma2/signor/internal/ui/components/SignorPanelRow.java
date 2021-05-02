@@ -40,7 +40,7 @@ public class SignorPanelRow extends JPanel{
     public SignorPanelRow (Integer row, Integer columns, SignorManager manager){
         super(new GridLayout(row, columns));
         this.setBackground(Color.white);
-        this.setBorder(BorderFactory.createBevelBorder(0, Color.white, Color.white, new Color(0, 204, 0), Color.white));
+        this.setBorder(BorderFactory.createBevelBorder(0, Color.white, Color.white, new Color(82,166,119), Color.white));
         this.manager = manager;
     }   
     

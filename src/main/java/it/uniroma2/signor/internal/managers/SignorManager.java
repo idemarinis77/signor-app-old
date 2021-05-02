@@ -100,7 +100,7 @@ public class SignorManager {
         for (int i = 0; i < results.size(); i++) {            
             String[] attributes = results.get(i).split("\t");
             CyNode nodeSource;
-            CyNode nodeTarget;            
+            CyNode nodeTarget;         
             if (!entity_read.containsKey(attributes[0])){
                 nodeSource = signornet.addNode();
                 entity_read.put(attributes[0], nodeSource);

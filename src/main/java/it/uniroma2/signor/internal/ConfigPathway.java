@@ -34,7 +34,8 @@ public class ConfigPathway {
         
         //These attributes are used to search for list of pathway to show in summary sheet
         public static final String PTHIDA = "IDA";
-        public static final String PTHNAME = "PATHWAY_NAME";
+        public static final String PATHWAYNAME = "PATHWAY_NAME";
+        public static final String PATHWAYID = "PATHWAYID";
         
         public static final HashMap<String,String> PathwayDiseaseList = new HashMap() {
       
