@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.cytoscape.view.layout.CyLayoutAlgorithm;
 import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
+
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.model.CyNetworkViewManager;
@@ -44,6 +45,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
     String terms;
     String URL;
     String netname;
+    SignorManager manager;
     
     public CreateNetworkTask(Network network, String terms, String URL, String netname, HashMap<String, ?> parameters){
         super();
@@ -53,7 +55,8 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
         this.netname=netname;
     }
     public void run(TaskMonitor monitor) {
-        SignorManager manager = network.manager;
+        //SignorManager manager = network.manager;
+        manager = network.manager;
         try {
             monitor.setTitle("Querying Signor Network");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
@@ -75,6 +78,8 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 
                 CyNetwork cynet = manager.createNetwork(netname);
                 manager.presentationManager.updateSignorNetworkCreated(cynet, network);
+                
+
                 //Create tables
                 Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 NodeTable.buildDefaultTable(manager, "Node");
@@ -84,7 +89,12 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 //Populate tables and create MyNetwork
                 CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
                 cynet = manager.createNetworkFromLine(results);
-
+                
+                //Populate my logic netowrk
+                network.setNetwork(cynet);
+                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
+                    network.setCyNodeRoot(terms);
+                
                 netMan.addNetwork(cynet);            
                 CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
                 CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
@@ -93,7 +103,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 manager.signorStyleManager.applyStyle(ntwView);
                 manager.signorStyleManager.installView(ntwView);            
 
-                network.setNetwork(cynet);
+//                network.setNetwork(cynet);
                 manager.setCurrentNetwork(network);
                 //manager.presentationManager.updateSignorNetworkCreated(cynet, network);
 
@@ -109,8 +119,8 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 manager.presentationManager.searched_query = terms;*/
                 network.writeSearchNetwork();     
                 
-                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
-                    network.setCyNodeRoot(terms);
+//                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
+//                    network.setCyNodeRoot(terms);
 
                 CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
                 CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
@@ -122,7 +132,11 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 setter.applyTunables(context, layoutArgs);
                 Set<View<CyNode>> nodeViews = new HashSet<>(ntwView.getNodeViews());
                 TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
-                insertTasksAfterCurrentTask(taskIterator);            
+                insertTasksAfterCurrentTask(taskIterator);   
+                
+//                double newScale = ntwView.getVisualProperty(NETWORK_SCALE_FACTOR).doubleValue() * scale;
+//                ntwView.setVisualProperty(NETWORK_SCALE_FACTOR, newScale);
+//                ntwView.updateView();
 
                 manager.utils.showResultsPanel();            
                 manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));        
@@ -144,6 +158,8 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
      */
     @Override
     public void taskFinished(ObservableTask task) {
+//        manager.utils.showResultsPanel();            
+//        manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));        
 
     }
 

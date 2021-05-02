@@ -88,6 +88,7 @@ public class Network {
     
     public void writeSearchNetwork(){
         for (String key: parameters.keySet()){
+            manager.utils.info("writeSearchNetwork "+key+"*"+parameters.get(key)+"*"+parameters.get(key).getClass());
             this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).set(Config.NAMESPACE, key, parameters.get(key));
             //this.cyNetwork.getDefaultNetworkTable().getRowCount()
          }

@@ -6,6 +6,8 @@
 package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.utils.EasyGBC;
+import it.uniroma2.signor.internal.ui.components.SignorButton;
+import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
 
 /**
  *
@@ -37,7 +39,7 @@ import org.cytoscape.model.CyTableUtil;
 
 public class SignorBridgePanel extends JPanel {
     private SignorManager manager;
-    private JPanel connectPanel;
+    private JPanel bridgePanel;
 
     private EasyGBC gbc=new EasyGBC();
     public CyNetwork current_cynetwork_to_serch_into;
@@ -51,10 +53,10 @@ public class SignorBridgePanel extends JPanel {
         ConnectInfo.setBackground(Color.WHITE);
         {
             EasyGBC gbc1=new EasyGBC();
-            connectPanel = new JPanel();
-            connectPanel.setBackground(Color.WHITE);
-            connectPanel.setLayout(new GridBagLayout());
-            ConnectInfo.add(connectPanel, BorderLayout.NORTH);
+            bridgePanel = new JPanel();
+            bridgePanel.setBackground(Color.WHITE);
+            bridgePanel.setLayout(new GridBagLayout());
+            ConnectInfo.add(bridgePanel, BorderLayout.NORTH);
             //NodeInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
         }
         JScrollPane scrollPane = new JScrollPane(ConnectInfo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
@@ -72,22 +74,23 @@ public class SignorBridgePanel extends JPanel {
             /*connectPanel.setLayout(new GridLayout(0, 2));
             Dimension parentSize = connectPanel.getParent().getSize();
             connectPanel.setPreferredSize(new Dimension(parentSize.width-250, parentSize.height));*/
-
+            bridgePanel.setLayout(new GridBagLayout());
+            if(networkCurrent.parameters.get(Config.INCFIRSTNEISEARCH).equals(false)){
+               SignorButton ifn = new SignorButton("Include first neighbor");
+               ifn.addActionListener(e-> buildIfn(networkCurrent));
+               bridgePanel.add(ifn, gbc.anchor("north"));
+            }         
+                        
             Map<CyNode, Node> signorNodes = networkCurrent.getNodes();
-            manager.utils.info("SignorBridgePanel createcontent() "+signorNodes.toString());
             for (Map.Entry<CyNode, Node> entry : signorNodes.entrySet()) {              
                 HashMap<String,String> summary = entry.getValue().getSummary();
                 Iterator iter = summary.keySet().iterator();
-                Iterator iterv = summary.values().iterator();
-                manager.utils.info("SignorBridgePanel createcontent() "+summary.toString());
-                manager.utils.info("SignorBridgePanel createcontent() "+summary.keySet());
-                manager.utils.info("SignorBridgePanel createcontent() "+summary.values());
-                
+                Iterator iterv = summary.values().iterator();              
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
-                    connectPanel.add(new JLabel(key), gbc.down());
-                    connectPanel.add(new JLabel(value), gbc.right());
+                    bridgePanel.add(new JLabel(key), gbc.down());
+                    bridgePanel.add(new JLabel(value), gbc.right());
 
                 }
 //                connectPanel.add(new JLabel(entry.getValue().summary.get("")cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.position(0, it));
@@ -102,8 +105,35 @@ public class SignorBridgePanel extends JPanel {
     
     public void recreateContent(){
         if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
-            connectPanel.removeAll();
+            bridgePanel.removeAll();
             createContent();
         }
+    }
+    
+    private void buildIfn(Network network){
+        //SignorGenericRetrieveResultFactory(String search, Boolean includefirstneighbor, String species, 
+            //String terms, Network network){
+        HashMap<String, Object> new_parameters = new HashMap();
+        
+        Iterator iter = network.parameters.keySet().iterator();
+        Iterator iterv = network.parameters.values().iterator();              
+        while(iter.hasNext()){
+            String key = iter.next().toString();
+            String value = iterv.next().toString();
+            if(key.equals(Config.INCFIRSTNEISEARCH))
+                new_parameters.put(Config.INCFIRSTNEISEARCH, true);
+            if(key.equals("QUERY")){
+                String packed_query = value.replace(" ", "%2C");
+                new_parameters.put(key, packed_query);
+            }
+            else new_parameters.put(key, value);                
+        }
+        Network newnetwork = new Network(manager, new_parameters);
+        manager.utils.info("BridgePanel buildIfn first parameters "+network.parameters.toString());
+        manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString());
+        
+        SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(Config.CONNECTSEARCH, true, Config.SPECIES,
+                                                  (String) new_parameters.get("QUERY"), newnetwork);
+        manager.utils.execute(sgrf.createTaskIterator());
     }
 }

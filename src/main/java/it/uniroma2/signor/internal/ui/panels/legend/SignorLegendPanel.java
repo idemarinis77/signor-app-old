@@ -60,8 +60,7 @@ public class SignorLegendPanel extends JPanel implements
         CytoPanelComponent2,
         SelectedNodesAndEdgesListener,
         SignorNetworkCreatedListener,         
-        SetCurrentNetworkListener,
-        SetCurrentNetworkViewListener {       
+        SetCurrentNetworkListener {       
 
     private final JTabbedPane tabs = new JTabbedPane(JTabbedPane.BOTTOM);
     private static final Icon icon = IconUtils.createImageIcon(ConfigResources.icon_path);
@@ -263,18 +262,17 @@ public class SignorLegendPanel extends JPanel implements
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");
         }        
     }
+//    @Override
+//    public void handleEvent(SetCurrentNetworkViewEvent e) {
+//        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString());
+////        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString()+
+////                " "+manager.presentationManager.signorViewMap.get(e.getNetworkView()));
+//        
+//    }
     @Override
-    public void handleEvent(SetCurrentNetworkViewEvent e) {
-        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString());
-//        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString()+
-//                " "+manager.presentationManager.signorViewMap.get(e.getNetworkView()));
-        
-    }
-    @Override
-    public void handleEvent(SetCurrentNetworkEvent e) {
-        CyNetwork newcynet = e.getNetwork();
-
+    public void handleEvent(SetCurrentNetworkEvent e) {       
         try {
+            CyNetwork newcynet = e.getNetwork();
             if (newcynet != null && !DataUtils.isSignorNetwork(e.getNetwork())){
                 hideCytoPanel();
             }                    
@@ -284,10 +282,7 @@ public class SignorLegendPanel extends JPanel implements
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){                               
                    if (manager.presentationManager.signorNetMap.containsKey(newcynet)){
                        if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork){
-                           //if(!tabPathwayAdded){
-                               
-//                               tabPathwayAdded = true;
-//                           }
+
                            snp.current_cynetwork_to_serch_into = newcynet;
                            sep.current_cynetwork_to_serch_into = newcynet; 
                            sdp.current_cynetwork_to_serch_into = newcynet;
@@ -297,12 +292,7 @@ public class SignorLegendPanel extends JPanel implements
                            tabs.add("DESCRIPTIONS", sdp);
                            sdp.recreateContent();
                            tabs.setSelectedComponent(sdp);
-                           /*if(tabSingleSearchAdded){
-                               tabs.remove(smp);
-                               tabs.remove(ssp);
-                               tabs.remove(srp);
-                               tabSingleSearchAdded = false;
-                           }*/                           
+                      
                       }
                    
                        else if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.SINGLESEARCH).equals(true)){
