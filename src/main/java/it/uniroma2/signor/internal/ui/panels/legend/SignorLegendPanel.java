@@ -282,49 +282,48 @@ public class SignorLegendPanel extends JPanel implements
             }                    
             else{
                 showCytoPanel();
-                manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkEvent) "+e.getNetwork().toString());                  
-                if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){                               
-                   if (manager.presentationManager.signorNetMap.containsKey(newcynet)){
-                       if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
-                           snp.current_cynetwork_to_serch_into = newcynet;
-                           sep.current_cynetwork_to_serch_into = newcynet; 
-                           sdp.current_cynetwork_to_serch_into = newcynet;
-                           tabs.removeAll();
-                           tabs.add("Nodes", snp); 
-                           tabs.add("Edges", sep);
-                           tabs.add("DESCRIPTIONS", sdp);
-                           sdp.recreateContent();
-                           tabs.setSelectedComponent(sdp);
-                           return;
-                      }
-                       if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.SINGLESEARCH).equals(true)) {
-                      
-                               tabs.removeAll();
-                               ssp.current_cynetwork_to_serch_into = newcynet;  
-                               srp.current_cynetwork_to_serch_into = newcynet;
-                               smp.current_cynetwork_to_serch_into = newcynet;                               
-                               tabs.add("SUMMARY", ssp);
-                               tabs.add("RELATIONS", srp);
-                               tabs.add("MODIFICATIONS", smp);
-                               ssp.recreateContent();
-                               srp.recreateContent();
-                               smp.recreateContent();
-                               tabs.setSelectedComponent(ssp);
-                        }   
-                        if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.ALLSEARCH).equals(true) ||
-                            manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.CONNECTSEARCH).equals(true)){
-                               tabs.removeAll();                               
-                               sbp.current_cynetwork_to_serch_into = newcynet;   
-                               sep.current_cynetwork_to_serch_into = newcynet;
-                               snp.current_cynetwork_to_serch_into = newcynet;   
-                               tabs.add("Nodes", snp); 
-                               tabs.add("Edges", sep); 
-                               tabs.add("Searched Entities", sbp);
-                               sbp.recreateContent();
-                               tabs.setSelectedComponent(sbp);
-                        }                               
+                if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
+                       if (manager.presentationManager.signorNetMap.containsKey(newcynet)){
+                            if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
+                                snp.current_cynetwork_to_serch_into = newcynet;
+                                sep.current_cynetwork_to_serch_into = newcynet; 
+                                sdp.current_cynetwork_to_serch_into = newcynet;
+                                tabs.removeAll();
+                                tabs.add("Nodes", snp); 
+                                tabs.add("Edges", sep);
+                                tabs.add("DESCRIPTIONS", sdp);
+                                sdp.recreateContent();
+                                tabs.setSelectedComponent(sdp);
+                                return;
+                            }
+                            if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.SINGLESEARCH).equals(true)) {
+
+                                   tabs.removeAll();
+                                   ssp.current_cynetwork_to_serch_into = newcynet;  
+                                   srp.current_cynetwork_to_serch_into = newcynet;
+                                   smp.current_cynetwork_to_serch_into = newcynet;                               
+                                   tabs.add("SUMMARY", ssp);
+                                   tabs.add("RELATIONS", srp);
+                                   tabs.add("MODIFICATIONS", smp);
+                                   ssp.recreateContent();
+                                   srp.recreateContent();
+                                   smp.recreateContent();
+                                   tabs.setSelectedComponent(ssp);
+                            }   
+                            if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.ALLSEARCH).equals(true) ||
+                                manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.CONNECTSEARCH).equals(true)){
+                                   tabs.removeAll();                               
+                                   sbp.current_cynetwork_to_serch_into = newcynet;   
+                                   sep.current_cynetwork_to_serch_into = newcynet;
+                                   snp.current_cynetwork_to_serch_into = newcynet;   
+                                   tabs.add("Nodes", snp); 
+                                   tabs.add("Edges", sep); 
+                                   tabs.add("Searched Entities", sbp);
+                                   sbp.recreateContent();
+                                   tabs.setSelectedComponent(sbp);
+                            }   
+                        }                            
                     }
-                }
             }
         }
         catch(Exception err){

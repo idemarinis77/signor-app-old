@@ -83,7 +83,17 @@ public class SignorBridgePanel extends JPanel {
                buttonPanel.add(ifn, gbc.anchor("west").expandHoriz());
                bridgePanel.add(buttonPanel, gbc.anchor("north").expandHoriz().insets(2, 0,2,0));
 //               bridgePanel.add(ifn, gbc.anchor("north").expandHoriz());
-            }         
+            }      
+            
+            JPanel add_entity=new JPanel();
+            add_entity.setLayout(new GridBagLayout());
+            JTextArea new_entity = new JTextArea("Add entry");
+            SignorButton new_entity_btn = new SignorButton("search");
+            new_entity_btn.addActionListener(e-> addEntity(networkCurrent, new_entity.getText()));
+            add_entity.add(new_entity, gbc.down());
+            add_entity.add(new_entity_btn, gbc.right().expandHoriz());
+            bridgePanel.add(add_entity, gbc.down().expandHoriz().insets(2, 0,2,0));
+            
             JPanel entity_info=new JPanel();
             entity_info.setLayout(new GridBagLayout());
             Map<CyNode, Node> signorNodes = networkCurrent.getNodes();
@@ -139,6 +149,37 @@ public class SignorBridgePanel extends JPanel {
         manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString());
         
         SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(Config.CONNECTSEARCH, true, Config.SPECIES,
+                                                  (String) new_parameters.get("QUERY"), newnetwork);
+        manager.utils.execute(sgrf.createTaskIterator());
+    }
+    private void addEntity(Network network, String new_entity){
+        //SignorGenericRetrieveResultFactory(String search, Boolean includefirstneighbor, String species, 
+            //String terms, Network network){
+        String default_search = Config.CONNECTSEARCH;
+        if(network.parameters.get(Config.ALLSEARCH).equals(true)) default_search = Config.ALLSEARCH;
+        if(network.parameters.get(Config.SHORTESTPATHSEARCH).equals(true)) default_search = Config.SHORTESTPATHSEARCH;
+        
+        HashMap<String, Object> new_parameters = new HashMap();
+        
+        Iterator iter = network.parameters.keySet().iterator();
+        Iterator iterv = network.parameters.values().iterator();              
+        while(iter.hasNext()){
+            String key = iter.next().toString();
+            Object value = iterv.next();            
+            if(key.equals("QUERY")){
+                String packed_query = value.toString().replace(" ", "%2C");
+                packed_query = packed_query+"%2C"+new_entity;
+                new_parameters.put(key, packed_query);
+            }    
+            else new_parameters.put(key, value);               
+
+        }
+        Network newnetwork = new Network(manager, new_parameters);
+        manager.utils.info("BridgePanel buildIfn first parameters "+network.parameters.toString());
+        manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString()+"Default search "+default_search);
+        
+        SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(default_search, 
+                (boolean) new_parameters.get(Config.INCFIRSTNEISEARCH), Config.SPECIES,
                                                   (String) new_parameters.get("QUERY"), newnetwork);
         manager.utils.execute(sgrf.createTaskIterator());
     }

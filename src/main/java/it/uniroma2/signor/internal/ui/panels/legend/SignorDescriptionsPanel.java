@@ -79,9 +79,11 @@ public class SignorDescriptionsPanel extends JPanel {
             //SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 2, manager);
             //sig_id	path_name	coalesce	path_curator
             descPanel.setLayout(new GridLayout(4, 2));
-            ArrayList<String> pathInfo = HttpUtils.parseWSNoheader(
-                    HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+
-                            manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get("PATHWAYID"), manager));
+//            ArrayList<String> pathInfo = HttpUtils.parseWSNoheader(
+//                    HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+
+//                            manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get("PATHWAYID"), manager));
+            
+            ArrayList<String> pathInfo = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).getPathwayInfo();
             manager.utils.info("DescriptionPanel createContent() "+manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.toString());
             String[] header_pth = pathInfo.get(0).split("\t");
             String[] path_info_packed=pathInfo.get(1).split("\t");
