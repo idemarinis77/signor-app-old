@@ -48,7 +48,7 @@ public class Network {
     public Boolean ptm_already_loaded = false;
     public CyNode rootNode;
     private Node networkRootNode;
-
+    private ArrayList<String> pathway_info = new ArrayList<String>();
     public final HashMap<String, ?> parameters;
     
     public Network(SignorManager manager, HashMap<String, ?> parameters) {
@@ -85,7 +85,9 @@ public class Network {
     public void SetPTMEdgeTable (CyTable cytable){
         this.PTMedgeTable = cytable;
     }
-    
+     public void SetPathwayInfo (ArrayList<String> pathway_info){
+        this.pathway_info = pathway_info;
+    }
     public void writeSearchNetwork(){
         for (String key: parameters.keySet()){
             this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).set(Config.NAMESPACE, key, parameters.get(key));
@@ -119,7 +121,9 @@ public class Network {
     public Map<CyNode, Node> getNodes(){
         return nodes;
     }
-
+    public ArrayList<String> getPathwayInfo(){
+        return this.pathway_info;
+    }
     public void setNetwork(CyNetwork cyNetwork) {
         this.cyNetwork = cyNetwork;
         
