@@ -60,25 +60,29 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
     public void run(TaskMonitor monitor) {
         //SignorManager manager = network.manager;
         manager = network.manager;
+        
         try {
             monitor.setTitle("Querying Signor Network");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
-            
+            if (cancelled) return;
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH);
+            String newterms = terms.replace("%2C", " ");
             if(results.isEmpty()){
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+terms,
+                
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
+                return;
             }
             if (results.get(0).equals("No result found.")) {
                 //https://signor.uniroma2.it/getData.php?organism=9606&id=Q96Q05
                 //after having choosen with multiple results of RAF
-                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+terms,
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
             }
             else {
                 
-                
+                if (cancelled) return;
                 CyNetwork cynet = manager.createNetwork(netname);
                 manager.presentationManager.updateSignorNetworkCreated(cynet, network);
                 
@@ -121,7 +125,14 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 /*manager.presentationManager.parameters = network.parameters;
                 manager.presentationManager.searched_query = terms;*/
                 network.writeSearchNetwork();     
-                
+                if (cancelled) {
+                    manager.utils.getService(CyNetworkManager.class).destroyNetwork(cynet);
+                }
+
+                if (cancelled) {
+                    destroyNetwork(manager, network);
+                    return;
+                }
 //                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
 //                    network.setCyNodeRoot(terms);                
                 

@@ -76,14 +76,17 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             manager.presentationManager.updateSignorNetworkCreated(cynet, network);
             network.isPathwayNetwork = true;
             ArrayList<String> results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(URL, manager));
-            
+            if (cancelled) return;
+            ArrayList<String> pathway_info = HttpUtils.parseWSNoheader(
+                    HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+network.parameters.get("PATHWAYID"), manager));
+            network.SetPathwayInfo(pathway_info);
             Table PthTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             PthTable.buildPTHTable(manager);
             
             //Populate tables and create MyNetwork
             CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
             cynet = manager.createPathwayFromLine(results, cynet);
-            
+           
             //Populate my logic netowrk
             network.setNetwork(cynet);
              
@@ -109,7 +112,14 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             NetworkTable.buildDefaultTable(manager, "Network");           
 
             network.writeSearchNetwork();
-            
+            if (cancelled) {
+                    manager.utils.getService(CyNetworkManager.class).destroyNetwork(cynet);
+                }
+
+                if (cancelled) {
+                    destroyNetwork(manager, network);
+                    return;
+                }
             AlgorithmFactory algfactory = new AlgorithmFactory(ntwView, manager);            
             manager.utils.execute(algfactory.createTaskIterator());
             
@@ -137,7 +147,21 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
     public void taskFinished(ObservableTask task) {
 
     }
+    private void destroyNetwork(SignorManager manager, Network network) {
+        CyNetwork cyNetwork = network.getCyNetwork();
 
+        CyNetworkManager networkManager = manager.utils.getService(CyNetworkManager.class);
+        CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
+
+        if (cyNetwork != null && networkManager.networkExists(cyNetwork.getSUID()))
+            networkManager.destroyNetwork(cyNetwork);
+
+        tableManager.deleteTable(network.PTMedgeTable.getSUID());
+        tableManager.deleteTable(network.PTMnodeTable.getSUID());
+
+        
+        manager.presentationManager.removeNetwork(network);
+    }
     /**
      * Called by a <code>TaskManager</code> to tell us that the task iterator has completed.
      *
