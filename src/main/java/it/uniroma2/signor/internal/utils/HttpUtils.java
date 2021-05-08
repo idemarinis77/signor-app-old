@@ -71,10 +71,10 @@ public class HttpUtils {
         String newheader = String.join("\t", header);
         String strCurrentLine;
         ArrayList<String> results = new ArrayList<String>();
-        // Create a map to save the nodes
-        Map<String, CyNode> nodeMap = new HashMap<>();
-        // Create a map to save the node names        
-        Map<String, String> nodeNameMap = new HashMap<>();
+//        // Create a map to save the nodes
+//        Map<String, CyNode> nodeMap = new HashMap<>();
+//        // Create a map to save the node names        
+//        Map<String, String> nodeNameMap = new HashMap<>();
         Boolean header_found = true;
         try {
             while ((strCurrentLine = br.readLine()) != null) {

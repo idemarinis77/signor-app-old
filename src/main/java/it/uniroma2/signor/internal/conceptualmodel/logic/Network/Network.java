@@ -49,9 +49,9 @@ public class Network {
     public CyNode rootNode;
     private Node networkRootNode;
     private ArrayList<String> pathway_info = new ArrayList<String>();
-    public final HashMap<String, ?> parameters;
+    public final HashMap<String, Object> parameters;
     
-    public Network(SignorManager manager, HashMap<String, ?> parameters) {
+    public Network(SignorManager manager, HashMap<String, Object> parameters) {
         this.manager = manager;
         this.parameters = parameters;          
     }
@@ -121,6 +121,11 @@ public class Network {
     public Map<CyNode, Node> getNodes(){
         return nodes;
     }
+    
+    public Map<CyEdge, Edge> getEdges(){
+        return edges;
+    }
+    
     public ArrayList<String> getPathwayInfo(){
         return this.pathway_info;
     }

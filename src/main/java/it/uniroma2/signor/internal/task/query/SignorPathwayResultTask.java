@@ -37,6 +37,7 @@ import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.utils.HttpUtils;
+import it.uniroma2.signor.internal.view.NetworkView;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -75,6 +76,8 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathwayid);
             manager.presentationManager.updateSignorNetworkCreated(cynet, network);
             network.isPathwayNetwork = true;
+            manager.presentationManager.updateSignorViewCreated(network, NetworkView.Type.DEFAULT);
+            
             ArrayList<String> results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(URL, manager));
             if (cancelled) return;
             ArrayList<String> pathway_info = HttpUtils.parseWSNoheader(

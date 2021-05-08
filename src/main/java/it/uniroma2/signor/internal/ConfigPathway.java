@@ -24,6 +24,15 @@ public class ConfigPathway {
         public static final String SIGNORPTH_SIG_ID = "sig_id";
         public static final String SIGNORPTH_PATH_NAME = "path_name";
         
+        public static final HashMap<String,String> SIGNORPTHFIELDMAP = new HashMap() {
+                  {
+                     put("sig_id", "Pathway identifier");
+                     put("path_name", "Name");
+                     put("coalesce", "Description");
+                     put("path_curator", "Curator");
+            }
+        };
+        
         //Order of fields, tabbed by \t, for URL parsing. There is no header in URL
         public static final String[] HEADERPTH = {"PATHWAY_ID", "PATHWAY_NAME", "ENTITYA", "REGULATOR_LOCATION", "TYPEA", "IDA", "DATABASEA",
                                                     "ENTITYB", "TARGET_LOCATION", "TYPEB", "IDB", "DATABASEB", "EFFECT", 
@@ -40,7 +49,6 @@ public class ConfigPathway {
         public static final HashMap<String,String> PathwayDiseaseList = new HashMap() {
       
             {
-                     put("", "Select Disease below");
                      put("SIGNOR-AD", "Alzheimer");
                      put("SIGNOR-FSGS", "Focal segmental glomerulosclerosis");
                      put("SIGNOR-MSP", "Multiple sclerosis");
@@ -51,7 +59,6 @@ public class ConfigPathway {
         
         public static final HashMap<String,String> PathwayTumorList = new HashMap() {
                    {
-                     put("", "Select Tumor below");
                      put("SIGNOR-AML-MiniPathway", "Acute Myeloid Leukemia");
                      put("SIGNOR-CRC", "Colorectal Carcinoma");
                      put("SIGNOR-GBM", "Glioblastoma Multiforme");
@@ -67,14 +74,13 @@ public class ConfigPathway {
         
         public static final HashMap<String,String> PathwayList = new HashMap() {
                     {
-                     put("", "Select Pathway Below");
                      put("SIGNOR-AC", "Adipogenesis");
                      put("SIGNOR-AMPK", "AMPK");
                      put("SIGNOR-Autophagy", "Autophagy");
                      put("SIGNOR-CM", "Catecholamine");
                      put("SIGNOR-G1-S_trans", "Cell cycle: G1/S phase transition");
                      put("SIGNOR-G2-M_trans", "Cell cycle: G2/M phase transitio");
-                     put("SIGNOR-CS", "Complementing signal");
+                     put("SIGNOR-CS", "Complement signal");
                      put("SIGNOR-DR", "Death receptor signaling");
                      put("SIGNOR-EGF", "EGFR signaling");
                      put("SIGNOR-Fibrosis", "Fibrosis");
@@ -132,7 +138,7 @@ public class ConfigPathway {
                      put("Catecholamine", "SIGNOR-CM");
                      put("Cell cycle: G1/S phase transition", "SIGNOR-G1-S_trans");
                      put("Cell cycle: G2/M phase transitio", "SIGNOR-G2-M_trans");
-                     put("Complementing signal", "SIGNOR-CS");
+                     put("Complement signal", "SIGNOR-CS");
                      put("Death receptor signaling", "SIGNOR-DR");
                      put("EGFR signaling", "SIGNOR-EGF");
                      put("Fibrosis", "SIGNOR-Fibrosis");

@@ -29,6 +29,7 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
+import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,7 +105,7 @@ public class SignorBridgePanel extends JPanel {
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
-                    entity_info.add(new JLabel(key), gbc.down());
+                    entity_info.add(new SignorLabelStyledBold(key), gbc.down());
                     entity_info.add(new JLabel(value), gbc.right());
 
                 }

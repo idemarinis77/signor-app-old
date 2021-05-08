@@ -45,7 +45,7 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
     SignorManager manager;
     private ChoosePathwayoption choosePathwayoption;
     private SearchPTHQueryComponent searchPTHQueryComponent; 
-    public HashMap<String, String> parameters_shift;
+    public HashMap<String, Object> parameters_shift;
     public boolean param_shift = false;
     
     
@@ -61,10 +61,10 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
     }
 
     public TaskIterator createTaskIterator() {            
-        HashMap<String, String> parameters = choosePathwayoption.getParameter();
+        HashMap<String, Object> parameters = choosePathwayoption.getParameter();
         //I'm calling the task from option panel
         if (this.param_shift == true) parameters = parameters_shift;
-        String pathway= parameters.entrySet().iterator().next().getValue();
+        String pathway= (String) parameters.entrySet().iterator().next().getValue();
         String pathwayid = "";
         if(ConfigPathway.PathwayDiseaseList.containsValue(pathway))
                 pathwayid = ConfigPathway.PathwayDiseaseList.entrySet().stream()

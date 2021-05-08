@@ -206,7 +206,7 @@ public class Node implements Element {
 
     @Override
     public String toString() {
-        return cyNode.toString();
+        return summary.get("ENTITY");
     }
     @Override
     public boolean isSelected() {

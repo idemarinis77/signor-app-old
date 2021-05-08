@@ -11,6 +11,7 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.task.query.factories.AlgorithmFactory;
 import it.uniroma2.signor.internal.task.query.AlgorithmTask;
+import it.uniroma2.signor.internal.view.NetworkView;
 import java.util.List;
 import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.model.CyEdge;
@@ -78,8 +79,7 @@ public class DataUtils {
                        String interaction = cyrow.get(Config.NAMESPACE, "INTERACTION", String.class);
                        String sequence = cyrow.get(Config.NAMESPACE, "SEQUENCE", String.class);
                        CyNode cyNode = currentnet.addNode();    
-                       networksignor.PTMnodes.put(cyNode, cyNode.getSUID());
-                       
+                       networksignor.PTMnodes.put(cyNode, cyNode.getSUID());                       
                        
                        String label = cyrow.get(Config.NAMESPACE, "RESIDUE", String.class); 
                        manager.utils.flushEvents();
@@ -121,11 +121,12 @@ public class DataUtils {
                AlgorithmFactory algfactory = new AlgorithmFactory(networkView, manager);            
                manager.utils.execute(algfactory.createTaskIterator());
                writeNetworkPTMInfo(manager, networksignor);
-            }                   
+            }   
+            manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.PTM);
         }
         catch (Exception e) {
             //manager.utils.info(manager.lastCyNetwork.getSUID().toString());
-            manager.utils.info(e.toString()+" in Populate PTM Tables");   
+            manager.utils.error(e.toString()+" in Populate PTM Tables");   
         }
             
     }
@@ -194,7 +195,7 @@ public class DataUtils {
             currentnet.removeEdges(networksignor.PTMedges.keySet());
             UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
             manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
-            
+            manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.DEFAULT);
             
             
      /*       if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&

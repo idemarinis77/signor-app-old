@@ -5,6 +5,7 @@
  */
 package it.uniroma2.signor.internal.task.query;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.task.query.SignorPanelTask;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
@@ -85,7 +86,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 if (cancelled) return;
                 CyNetwork cynet = manager.createNetwork(netname);
                 manager.presentationManager.updateSignorNetworkCreated(cynet, network);
-                
+                manager.presentationManager.updateSignorViewCreated(network, NetworkView.Type.DEFAULT);
 
                 //Create tables
                 Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
@@ -122,8 +123,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 NetworkTable.buildDefaultTable(manager, "Network");           
 
-                /*manager.presentationManager.parameters = network.parameters;
-                manager.presentationManager.searched_query = terms;*/
+
                 network.writeSearchNetwork();     
                 if (cancelled) {
                     manager.utils.getService(CyNetworkManager.class).destroyNetwork(cynet);

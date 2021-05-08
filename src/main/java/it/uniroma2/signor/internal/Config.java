@@ -85,6 +85,7 @@ public class Config {
     public static final String NAMESPACE = "SIGNOR";
     public static final String NAMESPACEPTM = "SIGNOR - PTM";
     public static final String NTWPREFIX ="SIGNOR NTW - ";
+    public static final String INTERACTOMENAME = "INTERACTOME";
     
 //    public static final String SINGLESCOPE = "single";
 //    public static final String ALLSCOPE = "all";
@@ -216,6 +217,16 @@ public class Config {
            put("SIGNOR_ID", String.class);           
         }
     };
+    public static final HashMap<String,Class<?>> EDGESUMMARY = new HashMap(){
+        {           
+           put("MECHANISM", String.class);           
+           put("MODIFICATIONA", String.class);           
+           put("PMID", String.class);
+           put("ANNOTATOR", String.class);
+           put("SENTENCE", String.class);
+        }
+    };
+    
     //Fields from TSV for Edges
     public static final HashMap<String,String> EDGEFIELDMAP = new HashMap(){
         {

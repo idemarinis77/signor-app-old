@@ -150,7 +150,7 @@ public class SignorSummaryPanel extends JPanel {
     }
     private void buildPathWay(String pathid){
             SignorPathwayQueryFactory spq = new SignorPathwayQueryFactory(this.manager);
-            HashMap<String, String> formvalues = new HashMap<>() {
+            HashMap<String, Object> formvalues = new HashMap<>() {
                 {put ("PATHWAYID", pathid);}                 
             };
             spq.parameters_shift = formvalues;

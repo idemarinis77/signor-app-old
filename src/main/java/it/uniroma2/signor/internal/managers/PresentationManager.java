@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.event.*;
+import it.uniroma2.signor.internal.view.NetworkView;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.model.events.NetworkAddedEvent;
@@ -29,7 +30,7 @@ public class PresentationManager implements
         SignorNetworkCreatedListener {
     
     public HashMap<CyNetwork, Network> signorNetMap;
-    public HashMap<CyNetworkView, Network> signorViewMap;
+    public HashMap<Network, NetworkView.Type> signorViewMap;
     SignorManager manager;
     public HashMap<String, ?> parameters;
     public String searched_query;
@@ -42,31 +43,26 @@ public class PresentationManager implements
     public void updateSignorNetworkCreated(CyNetwork cynet, Network netw){
         if(signorNetMap != null){
            signorNetMap.put(cynet, netw);
-           manager.utils.info("Ho aggiunto la rete alla netMap "+signorNetMap.toString());
         }
         else {
            signorNetMap = new HashMap(){
                { put(cynet, netw); }
            };  
-           manager.utils.info("Ho aggiunto la rete alla netMap "+signorNetMap.toString());
         }
         manager.lastCyNetwork = cynet;
         manager.lastNetwork = netw;
     }
     
-    public void updateSignorViewCreated(CyNetworkView cyview, Network netw){
-        if(signorNetMap != null){
-           signorViewMap.put(cyview, netw);
-           manager.utils.info("Ho aggiunto la rete alla netViewMap "+signorViewMap.toString());
+    public void updateSignorViewCreated(Network netw, NetworkView.Type view_type){
+        if(signorViewMap != null){
+           signorViewMap.put(netw, view_type);
         }
         else {
            signorViewMap = new HashMap(){
-               { put(cyview, netw); }
+               { put(netw, view_type); }
            };  
-           manager.utils.info("Ho aggiunto la rete alla netViewMap "+signorViewMap.toString());
         }
-//        manager.lastCyNetwork = cynet;
-//        manager.lastNetwork = netw;
+
     }
     
     

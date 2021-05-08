@@ -6,6 +6,7 @@ import org.cytoscape.model.CyRow;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Element;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.Config;
 //import it.uniroma2.signor.internal.conceptualmodel.structures.EdgeFields;
 
 import java.lang.ref.WeakReference;
@@ -18,25 +19,19 @@ public class Edge implements Element {
     public final CyEdge cyEdge;
     public final String name;
     public final CyRow edgeRow;
-    //public final Node source;
-    //public final Node target;
-    //public final double score;
-
+    public final Node source;
+    public final Node target;
+    public final double score;
+    private HashMap<String,String> summary= new HashMap<String,String>();
 
     public static Edge createEdge(Network network, CyEdge edge) {
         if (network == null || edge == null) return null;
         CyRow edgeRow = network.getCyNetwork().getRow(edge);
         if (edgeRow == null){
-            System.out.println("ARCO NULLO");
             return null;
-        }
-        /*Boolean isSummary = EdgeFields.IS_SUMMARY.getValue(edgeRow);
-        if (isSummary) {
-            return new SummaryEdge(network, edge);
-        } else {
-            return new EvidenceEdge(network, edge);
-        }*/
-        return null;
+        }        
+        Edge new_edge = new Edge (network, edge);
+        return new_edge;       
     }
 
 
@@ -46,22 +41,20 @@ public class Edge implements Element {
         edgeRow = network.getCyNetwork().getRow(cyEdge);
 
         name = edgeRow.get(CyNetwork.NAME, String.class);
-        /*score = EdgeFields.SCORE.getValue(edgeRow);
-        source = network.getNode(cyEdge.getSource());
-        target = cyEdge.getTarget() != null ? network.getNode(cyEdge.getTarget()) : null;
-
-        sourceFeatureAcs = FEATURES.SOURCE.getValue(edgeRow);
-        if (sourceFeatureAcs != null) {
-            sourceFeatureAcs.removeIf(String::isBlank);
-        }
-        targetFeatureAcs = FEATURES.TARGET.getValue(edgeRow);
-        if (targetFeatureAcs != null) {
-            targetFeatureAcs.removeIf(String::isBlank);
-        }*/
+        source = network.getNodes().get(cyEdge.getSource());
+        target = network.getNodes().get(cyEdge.getTarget());
+        
+        score = ((edgeRow.get(Config.NAMESPACE, "SCORE", Double.class) == null) ? 0.0 : edgeRow.get(Config.NAMESPACE, "SCORE", Double.class)); 
+        
+        Config.EDGESUMMARY.forEach((k, v) ->
+                    this.summary.put(k, edgeRow.get(Config.NAMESPACE, k, String.class)));  
+       
     }
 
     //public abstract Map<Node, List<Feature>> getFeatures() ;
-
+    public HashMap<String,String> getSummary(){
+        return this.summary;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

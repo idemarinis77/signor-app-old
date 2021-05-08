@@ -107,7 +107,7 @@
                 <discreteMapping attributeName="SIGNOR::Interaction" attributeType="string">
                     <discreteMappingEntry attributeValue="down-regulates quantity" value="T"/>
                     <discreteMappingEntry attributeValue="up-regulates quantity" value="DELTA"/>
-                    <discreteMappingEntry attributeValue="form complex" value="OPEN_SQUARE"/>
+                    <discreteMappingEntry attributeValue="form complex" value="SQUARE"/>
                     <discreteMappingEntry attributeValue="down-regulates activity" value="T"/>
                     <discreteMappingEntry attributeValue="down-regulates quantity by destabilization" value="T"/>
                     <discreteMappingEntry attributeValue="down-regulates quantity by repression" value="T"/>
@@ -147,7 +147,7 @@
             <visualProperty default="255" name="EDGE_TRANSPARENCY"/>
             <visualProperty default="#000000" name="EDGE_SOURCE_ARROW_UNSELECTED_PAINT"/>
             <visualProperty default="" name="EDGE_TOOLTIP"/>
-            <visualProperty default="0.9746503308325081,-0.22373361975367617,0.4917699510829309" name="EDGE_BEND"/>
+            <visualProperty default="" name="EDGE_BEND"/>
             <visualProperty default="true" name="EDGE_CURVED"/>
             <visualProperty default="SOLID" name="EDGE_LINE_TYPE">
                 <discreteMapping attributeName="SIGNOR::DIRECT" attributeType="string">

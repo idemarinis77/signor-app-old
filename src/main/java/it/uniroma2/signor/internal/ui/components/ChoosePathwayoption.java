@@ -6,7 +6,7 @@
 package it.uniroma2.signor.internal.ui.components;
 import javax.swing.*;
 import java.awt.*;
-
+import java.util.Arrays;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 
@@ -39,9 +39,12 @@ public class ChoosePathwayoption extends JPanel {
     private EasyGBC egb=new EasyGBC();
 
     //private JLabel specie = new JLabel("Choose specie");
-    private JComboBox pathway = new JComboBox(ConfigPathway.PathwayList.values().toArray());
-    private JComboBox disease = new JComboBox(ConfigPathway.PathwayDiseaseList.values().toArray());
-    private JComboBox tumor = new JComboBox(ConfigPathway.PathwayTumorList.values().toArray());
+    
+    private JComboBox pathway;
+    private JComboBox disease;
+    //= new JComboBox(ConfigPathway.PathwayDiseaseList.values().toArray());
+    private JComboBox tumor;
+    //= new JComboBox(ConfigPathway.PathwayTumorList.values().toArray());
     private JButton clear= new JButton("Clear");
     private JButton select= new JButton("Select");
     
@@ -49,7 +52,28 @@ public class ChoosePathwayoption extends JPanel {
         super(new GridBagLayout());
         EasyGBC layoutHelper = new EasyGBC().insets(10, 5, 5, 5);
         setBackground(Color.LIGHT_GRAY);        
-               
+              
+        Object[] pathlist = ConfigPathway.PathwayList.values().toArray();
+        Arrays.sort(pathlist);
+        Object[] pathlist2 = Arrays.copyOf(pathlist, pathlist.length + 1);
+        pathlist2[0]= (Object) "Select Pathway Below";
+        System.arraycopy(pathlist, 0, pathlist2, 1, pathlist.length);
+        pathway = new JComboBox(pathlist2);
+        
+        Object[] pathdeslist = ConfigPathway.PathwayDiseaseList.values().toArray();
+        Arrays.sort(pathdeslist);
+        Object[] pathdeslist2 = Arrays.copyOf(pathdeslist, pathdeslist.length + 1);
+        pathdeslist2[0]= (Object) "Select Disease below";
+        System.arraycopy(pathdeslist, 0, pathdeslist2, 1, pathdeslist.length);
+        tumor = new JComboBox(pathdeslist2);
+        
+        Object[] pathtumlist = ConfigPathway.PathwayTumorList.values().toArray();
+        Arrays.sort(pathtumlist);
+        Object[] pathtumlist2 = Arrays.copyOf(pathtumlist, pathtumlist.length + 1);
+        pathtumlist2[0]= (Object) "Select Tumor below";
+        System.arraycopy(pathtumlist, 0, pathtumlist2, 1, pathtumlist.length);
+        disease = new JComboBox(pathtumlist2);       
+        
         Box pathway_box = Box.createVerticalBox();
         pathway_box.add(pathway);
         pathway_box.setBorder(BorderFactory.createTitledBorder("Pathway"));
@@ -107,21 +131,21 @@ public class ChoosePathwayoption extends JPanel {
 //        if(isReady()){
             
             
-    public HashMap<String, String> getParameter(){
+    public HashMap<String, Object> getParameter(){
         if(tumor.isEnabled()){
-            HashMap<String, String> formvalues = new HashMap<>() {
+            HashMap<String, Object> formvalues = new HashMap<>() {
                 {put ("PATHWAYID", (String) tumor.getSelectedItem());}                 
             };
             return formvalues;
         }
         if(pathway.isEnabled()){
-            HashMap<String, String> formvalues = new HashMap<>() {
+            HashMap<String, Object> formvalues = new HashMap<>() {
                 {put ("PATHWAYID", (String) pathway.getSelectedItem());}                 
             };
             return formvalues;
         }
         if(disease.isEnabled()){
-            HashMap<String, String> formvalues = new HashMap<>() {
+            HashMap<String, Object> formvalues = new HashMap<>() {
                 {put ("PATHWAYID", (String) disease.getSelectedItem());}                 
             };
             return formvalues;

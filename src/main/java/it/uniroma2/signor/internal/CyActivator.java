@@ -16,11 +16,12 @@ import org.osgi.framework.BundleContext;
 import org.cytoscape.task.read.LoadVizmapFileTaskFactory;
 import org.cytoscape.task.visualize.ApplyVisualStyleTaskFactory;
 import java.util.Properties;
-
+import static org.cytoscape.work.ServiceProperties.*;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericQueryFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
+import it.uniroma2.signor.internal.task.query.factories.SignorInteractomeFactory;
 import it.uniroma2.signor.internal.Config;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
@@ -51,8 +52,21 @@ public class CyActivator extends AbstractCyActivator {
             CyServiceRegistrar registrar = getService(bc, CyServiceRegistrar.class);
             SignorManager manager = new SignorManager(registrar);            
             CyApplicationManager cyApplicationManagerServiceRef = getService(bc,CyApplicationManager.class);
+            {
+                Properties propsSettings = new Properties();
+                propsSettings.setProperty(PREFERRED_MENU, "Apps.Signor");
+                propsSettings.setProperty(TITLE, "Download Signor INTERACTOME (11Mb)");
+                propsSettings.setProperty(MENU_GRAVITY, "6.0");
+                propsSettings.setProperty(IN_MENU_BAR, "true");
+                propsSettings.setProperty(INSERT_SEPARATOR_AFTER, "true");
+                
 
-            
+                propsSettings.setProperty(COMMAND_NAMESPACE, "signor");
+                propsSettings.setProperty(COMMAND, "download interactome");
+                propsSettings.setProperty(COMMAND_DESCRIPTION, "This query download the complete database of Signor");
+                
+                registerService(bc, new SignorInteractomeFactory(manager), TaskFactory.class, propsSettings);
+            }
             {
                 SignorGenericQueryFactory signorQuery = new SignorGenericQueryFactory(manager);
                 Properties propsSearch = new Properties();
@@ -92,14 +106,7 @@ public class CyActivator extends AbstractCyActivator {
                 manager.utils.error("CyActivator haveGUI() "+e.toString());
               }
             }
-            manager.utils.info("Signor App initialized");
-            
-//          Properties propsSettings = new Properties();
-//          propsSettings.setProperty(PREFERRED_MENU, "Apps.SIGNOR");
-//          propsSettings.setProperty(TITLE, "About");
-//          propsSettings.setProperty(MENU_GRAVITY, "21.0");
-//          propsSettings.setProperty(IN_MENU_BAR, "true");
-//          registerService(bc, new AboutTaskFactory(manager), TaskFactory.class, propsSettings);	
+            manager.utils.info("Signor App initialized");           
         }
         
 }

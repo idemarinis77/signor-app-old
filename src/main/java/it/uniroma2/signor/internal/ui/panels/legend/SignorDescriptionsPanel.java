@@ -57,7 +57,7 @@ public class SignorDescriptionsPanel extends JPanel {
         {
             EasyGBC gbc1=new EasyGBC();
             descPanel = new JPanel();
-            descPanel.setBackground(Color.WHITE);
+//            descPanel.setBackground(Color.WHITE);
             DescriptionInfo.add(descPanel, gbc1.down().anchor("north").expandHoriz());
             DescriptionInfo.add(Box.createVerticalGlue(), gbc1.down().down().expandVert());
             //modPanel.setLayout(new GridBagLayout());
@@ -84,20 +84,32 @@ public class SignorDescriptionsPanel extends JPanel {
 //                            manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get("PATHWAYID"), manager));
             
             ArrayList<String> pathInfo = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).getPathwayInfo();
-            manager.utils.info("DescriptionPanel createContent() "+manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.toString());
             String[] header_pth = pathInfo.get(0).split("\t");
             String[] path_info_packed=pathInfo.get(1).split("\t");
+            JPanel separator  = new JPanel();
+            separator.setLayout(new GridBagLayout());
+            separator.add(new SignorLabelStyledBold(">> Pathway info "), gbc.down().anchor("west"));
+            separator.setBackground(new Color(82, 166, 119));
+            descPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
+            JPanel pathinfo = new JPanel();
+            pathinfo.setLayout(new GridBagLayout());
+            
             for (int i = 0; i < header_pth.length; i++) {             
                 
-                descPanel.add(new JLabel(header_pth[i]), gbc.down());                
-                if ( path_info_packed[i].length() > 20) 
-                    descPanel.add(new HelpButton(manager, path_info_packed[i]), gbc.right());
-                else 
-                    descPanel.add(new JLabel(path_info_packed[i]), gbc.right());              
+                pathinfo.add(new JLabel(ConfigPathway.SIGNORPTHFIELDMAP.get(header_pth[i])), gbc.down());   
+                //Path_curator may not be present and path_info_packed is shorter than header_pth
+                if(i <path_info_packed.length){
+                
+                    if ( path_info_packed[i].length() > 20) 
+                        pathinfo.add(new HelpButton(manager, path_info_packed[i]), gbc.right());
+                    else 
+                        pathinfo.add(new JLabel(path_info_packed[i]), gbc.right());      
+                }
+                else pathinfo.add(new JLabel(""), gbc.right());
 
             }      
-
-        }
+            descPanel.add(pathinfo, gbc.down());
+        }        
         catch (Exception e){
             manager.utils.error("SignorDescriptionPanel CreateContent()"+e.toString());
         }       
