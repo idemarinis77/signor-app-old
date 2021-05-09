@@ -21,66 +21,66 @@ import javax.xml.parsers.*;
  */
 public class Config {
     
-    public enum DBLINK{
-        SIGNOR("signor", "Signor", s -> "https://signor.uniroma2.it/relation_result.php" + s),    
-        UNIPROT("uniprot", "UniProt", s -> "https://www.uniprot.org/uniprot/" + s),        
-        PUBMED("pubmed", "PUBMED", s -> "http://www.ncbi.nlm.nih.gov/pubmed/" + s),
-        CHEBI("chebi", "CHEBI", s -> "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=" + s),
-        PUBCHEM("pubchem", "PUBCHEM", s -> "https://pubchem.ncbi.nlm.nih.gov/compound/CHEBI:" + s),
-        MENTHA("mentha", "Mentha", s -> "http://mentha.uniroma2.it/result.php?q=ID" + s),
-        NDEX("ndex", "Ndex", s -> "https://ndexbio.org/"+ s),
-        DRUGBANK("drugbank", "DRUGBANK", s -> "https://drugbank.ca/" + s),
-        MiRBase("mirBase", "MiRBase", s -> "http://www.mirbase.org/ " + s);
-        
-        public String name;
-        public String fancyName;
-        public Function<String, String> queryFunction;
-
-        DBLINK(String name, String fancyName, Function<String, String> queryFunction) {
-            this.name = name;
-            this.fancyName = fancyName;
-            this.queryFunction = queryFunction;
-        }
-    }
-    
-    public static final Map<String, DBLINK> DBLINKSMAP = new HashMap();
-    
-    static {
-        for (DBLINK db: DBLINK.values()) {
-            DBLINKSMAP.put(db.name, db);
-        }
-    }
-    
-    
-    public enum WSSearchoption{
-       SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       CONNECTQUERY("CONNECTSEARCH",(o, s) ->  "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       PATHQUERY("PATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s);
-        
-        public String name;
-        public BiFunction<String, String, String> queryFunction;
-
-        WSSearchoption(String name, BiFunction<String, String, String> queryFunction) {
-            this.name = name;
-            this.queryFunction = queryFunction;
-        }
-    }
-   
-    public static final Map<String, WSSearchoption> WSSearchoptionMAP = new HashMap();
-    
-    static {
-        for (WSSearchoption ws: WSSearchoption.values()) {
-            WSSearchoptionMAP.put(ws.name, ws);
-        }
-    }    
-
-    
-    public static final String SIGNOR_ID = "SIGNOR_ID_SEARCH_FACTORY";
-    public static final String SIGNOR_NAME = "Signor single/bridge query";
-    public static final String SIGNOR_DESC = "Query SIGNOR Database to create your casual network";
-    public static final String SIGNOR_URL="https://signor.uniroma2.it";
+//    public enum DBLINK{
+//        SIGNOR("signor", "Signor", s -> "https://signor.uniroma2.it/relation_result.php" + s),    
+//        UNIPROT("uniprot", "UniProt", s -> "https://www.uniprot.org/uniprot/" + s),        
+//        PUBMED("pubmed", "PUBMED", s -> "http://www.ncbi.nlm.nih.gov/pubmed/" + s),
+//        CHEBI("chebi", "CHEBI", s -> "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=" + s),
+//        PUBCHEM("pubchem", "PUBCHEM", s -> "https://pubchem.ncbi.nlm.nih.gov/compound/CHEBI:" + s),
+//        MENTHA("mentha", "Mentha", s -> "http://mentha.uniroma2.it/result.php?q=ID" + s),
+//        NDEX("ndex", "Ndex", s -> "https://ndexbio.org/"+ s),
+//        DRUGBANK("drugbank", "DRUGBANK", s -> "https://drugbank.ca/" + s),
+//        MiRBase("mirBase", "MiRBase", s -> "http://www.mirbase.org/ " + s);
+//        
+//        public String name;
+//        public String fancyName;
+//        public Function<String, String> queryFunction;
+//
+//        DBLINK(String name, String fancyName, Function<String, String> queryFunction) {
+//            this.name = name;
+//            this.fancyName = fancyName;
+//            this.queryFunction = queryFunction;
+//        }
+//    }
+//    
+//    public static final Map<String, DBLINK> DBLINKSMAP = new HashMap();
+//    
+//    static {
+//        for (DBLINK db: DBLINK.values()) {
+//            DBLINKSMAP.put(db.name, db);
+//        }
+//    }
+//    
+//    
+//    public enum WSSearchoption{
+//       SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+//       CONNECTQUERY("CONNECTSEARCH",(o, s) ->  "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+//       SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+//       DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+//       PATHQUERY("PATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s);
+//        
+//        public String name;
+//        public BiFunction<String, String, String> queryFunction;
+//
+//        WSSearchoption(String name, BiFunction<String, String, String> queryFunction) {
+//            this.name = name;
+//            this.queryFunction = queryFunction;
+//        }
+//    }
+//   
+//    public static final Map<String, WSSearchoption> WSSearchoptionMAP = new HashMap();
+//    
+//    static {
+//        for (WSSearchoption ws: WSSearchoption.values()) {
+//            WSSearchoptionMAP.put(ws.name, ws);
+//        }
+//    }    
+//
+//    
+//    public static final String SIGNOR_ID = "SIGNOR_ID_SEARCH_FACTORY";
+//    public static final String SIGNOR_NAME = "Signor single/include bridge proteins query";
+//    public static final String SIGNOR_DESC = "Query SIGNOR Database to create your casual network";
+//    public static final String SIGNOR_URL="https://signor.uniroma2.it";
     
     public static final String NAMESPACE = "SIGNOR";
     public static final String NAMESPACEPTM = "SIGNOR - PTM";

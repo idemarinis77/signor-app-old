@@ -34,10 +34,12 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
 
     static URL SIGNOR_URL;
     private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
-    
+    public static final String SIGNORPTH_NAME = "Signor pathway query";
+    public static final String SIGNORPTH_DESC = "Query SIGNOR Database to visualize pathway";
+    public static final String SIGNORPTH_ID = "SIGNOR_PTH_ID_SEARCH_FACTORY"; 
     static {
         try {
-            SIGNOR_URL = new URL(Config.SIGNOR_URL);
+            SIGNOR_URL = new URL(ConfigResources.SIGNOR_URL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -50,7 +52,7 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
     
     
     public SignorPathwayQueryFactory(SignorManager manager) {
-         super(ConfigPathway.SIGNORPTH_ID, ConfigPathway.SIGNORPTH_NAME,ConfigPathway.SIGNORPTH_DESC, SIGNOR_ICON, SIGNOR_URL);
+         super(SIGNORPTH_ID, SIGNORPTH_NAME,SIGNORPTH_DESC, SIGNOR_ICON, SIGNOR_URL);
          this.manager = manager;
          choosePathwayoption = new ChoosePathwayoption(manager);
          searchPTHQueryComponent = new SearchPTHQueryComponent(manager); 

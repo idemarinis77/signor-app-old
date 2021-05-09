@@ -50,16 +50,17 @@ public class SignorDescriptionsPanel extends JPanel {
         setLayout(new GridBagLayout());
         this.manager = manager; 
         current_cynetwork_to_serch_into = manager.lastCyNetwork;
+      
         JPanel DescriptionInfo = new JPanel();
-        DescriptionInfo.setLayout(new GridBagLayout());
-        //ModificationInfo.setLayout(new BorderLayout());
+        DescriptionInfo.setLayout(new BorderLayout());
         DescriptionInfo.setBackground(Color.WHITE);
         {
             EasyGBC gbc1=new EasyGBC();
             descPanel = new JPanel();
+            descPanel.setLayout(new GridBagLayout());
 //            descPanel.setBackground(Color.WHITE);
-            DescriptionInfo.add(descPanel, gbc1.down().anchor("north").expandHoriz());
-            DescriptionInfo.add(Box.createVerticalGlue(), gbc1.down().down().expandVert());
+            DescriptionInfo.add(descPanel, BorderLayout.NORTH);
+//            DescriptionInfo.add(Box.createVerticalGlue(), gbc1.down().down().expandVert());
             //modPanel.setLayout(new GridBagLayout());
             //ModificationInfo.add(modPanel, BorderLayout.NORTH);
             //NodeInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
@@ -78,7 +79,7 @@ public class SignorDescriptionsPanel extends JPanel {
         try {                   
             //SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 2, manager);
             //sig_id	path_name	coalesce	path_curator
-            descPanel.setLayout(new GridLayout(4, 2));
+//            descPanel.setLayout(new GridLayout(4, 2));
 //            ArrayList<String> pathInfo = HttpUtils.parseWSNoheader(
 //                    HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+
 //                            manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get("PATHWAYID"), manager));
@@ -94,9 +95,8 @@ public class SignorDescriptionsPanel extends JPanel {
             JPanel pathinfo = new JPanel();
             pathinfo.setLayout(new GridBagLayout());
             
-            for (int i = 0; i < header_pth.length; i++) {             
-                
-                pathinfo.add(new JLabel(ConfigPathway.SIGNORPTHFIELDMAP.get(header_pth[i])), gbc.down());   
+            for (int i = 0; i < header_pth.length; i++) {                     
+                pathinfo.add(new SignorLabelStyledBold(ConfigPathway.SIGNORPTHFIELDMAP.get(header_pth[i])), gbc.down());   
                 //Path_curator may not be present and path_info_packed is shorter than header_pth
                 if(i <path_info_packed.length){
                 

@@ -70,12 +70,13 @@ public class Table {
         
     }
     
-    public void buildPTMTable(SignorManager manager, String title) {
+    public void buildPTMTable(SignorManager manager, String title, CyNetwork cynetwork) {
         var PTMtableFactory = manager.utils.getService(CyTableFactory.class);                  
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
         Set<CyTable> alltable = tableManager.getAllTables(true);
-        String prefix_col = manager.lastCyNetwork.getRow(manager.lastCyNetwork).get(CyNetwork.NAME, String.class)+" - ";
-        
+        String prefix_col = cynetwork.getRow(cynetwork).get(CyNetwork.NAME, String.class)+" - ";
+        //String prefix_col = manager.lastCyNetwork.getRow(manager.lastCyNetwork).get(CyNetwork.NAME, String.class)+" - ";
+
         switch(title){
             case "PTMNode":
                 //If Table is not created let's do it
@@ -84,7 +85,8 @@ public class Table {
                     Config.PTMNODEFIELD.forEach((k, v) ->
                         PTMNODEtable.createColumn(Config.NAMESPACEPTM, k, v, isMutable));             
                     tableManager.addTable(PTMNODEtable);
-                    manager.lastNetwork.SetPTMNodeTable(PTMNODEtable);
+//                    manager.lastNetwork.SetPTMNodeTable(PTMNODEtable);
+                    manager.presentationManager.signorNetMap.get(cynetwork).SetPTMNodeTable(PTMNODEtable);
                 }
             break;
             case "PTMEdge":
@@ -94,7 +96,8 @@ public class Table {
                     Config.PTMEDGEFIELD.forEach((k, v) ->
                         PTMEDGEtable.createColumn(Config.NAMESPACEPTM, k, v, isMutable));
                     tableManager.addTable(PTMEDGEtable);
-                    manager.lastNetwork.SetPTMEdgeTable(PTMEDGEtable);
+//                    manager.lastNetwork.SetPTMEdgeTable(PTMEDGEtable);
+                    manager.presentationManager.signorNetMap.get(cynetwork).SetPTMEdgeTable(PTMEDGEtable);
                 }
             break;
         }  

@@ -107,9 +107,9 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
 //            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
             
             Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            PTMTableNode.buildPTMTable(manager, "PTMNode");                
+            PTMTableNode.buildPTMTable(manager, "PTMNode", cynet);                
             Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            PTMTableEdge.buildPTMTable(manager, "PTMEdge");
+            PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
             
             Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             NetworkTable.buildDefaultTable(manager, "Network");           

@@ -53,8 +53,9 @@ public class ConfigResources {
     public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
     public static String PATHALLDESCRIPTIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?description";
     public static String PATHSINGLEDESCRIPTIONSQUERY= "https://signor.uniroma2.it/getPathwayData.php?pathway=";
-    public static String INTERACTOMEDWLD="https://signor.uniroma2.it/getData.php";
+    public static String INTERACTOMEDWLD="https://signor.uniroma2.it/getData.php?";
     //public static String ENTITYINFO = "https://signor.uniroma2.it/getData.php?entityInfo=";
+    public static final String SIGNOR_URL="https://signor.uniroma2.it";
     
     public enum WSSearchoption{
        SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),

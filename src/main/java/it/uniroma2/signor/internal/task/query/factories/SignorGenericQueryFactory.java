@@ -29,10 +29,12 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
 
     static URL SIGNOR_URL;
     private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
-    
+    public static final String SIGNOR_ID = "SIGNOR_ID_SEARCH_FACTORY";
+    public static final String SIGNOR_NAME = "Signor single/include bridge proteins query";
+    public static final String SIGNOR_DESC = "Query SIGNOR Database to create your casual network";
     static {
         try {
-            SIGNOR_URL = new URL(Config.SIGNOR_URL);
+            SIGNOR_URL = new URL(ConfigResources.SIGNOR_URL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -43,7 +45,7 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
     
     
     public SignorGenericQueryFactory(SignorManager manager) {
-         super(Config.SIGNOR_ID, Config.SIGNOR_NAME,Config.SIGNOR_DESC, SIGNOR_ICON, SIGNOR_URL);
+         super(SIGNOR_ID, SIGNOR_NAME,SIGNOR_DESC, SIGNOR_ICON, SIGNOR_URL);
          this.manager = manager;
     }
     public boolean isReady() {
@@ -58,7 +60,7 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
             parameters = chooseSearchoption.getParameter();
             parameters.put("QUERY", terms);
             manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 
-            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), Config.SIGNOR_NAME, parameters, terms));
+            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), SIGNOR_NAME, parameters, terms));
         }
         catch (Exception e){
             manager.utils.error("Problems in performing SIGNOR search "+e.toString());

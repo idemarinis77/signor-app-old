@@ -7,8 +7,10 @@ package it.uniroma2.signor.internal.managers;
 import java.util.HashMap;
 
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import it.uniroma2.signor.internal.event.*;
 import it.uniroma2.signor.internal.view.NetworkView;
+import it.uniroma2.signor.internal.utils.DataUtils;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.model.events.NetworkAddedEvent;
@@ -19,7 +21,15 @@ import org.cytoscape.view.model.events.NetworkViewAddedListener;
 import org.cytoscape.session.events.SessionLoadedEvent;
 import org.cytoscape.session.events.SessionLoadedListener;
 import java.util.Properties;
+import java.util.UUID;
 import org.cytoscape.application.CyApplicationManager;
+import org.cytoscape.model.CyEdge;
+import org.cytoscape.model.CyNetworkManager;
+import org.cytoscape.model.CyRow;
+import org.cytoscape.model.CyTable;
+import org.cytoscape.model.CyTableFactory;
+import org.cytoscape.model.subnetwork.CySubNetwork;
+import org.cytoscape.model.subnetwork.CyRootNetwork;
 import org.cytoscape.view.model.CyNetworkViewManager;
 /**
  *
@@ -27,14 +37,13 @@ import org.cytoscape.view.model.CyNetworkViewManager;
  */
 public class PresentationManager implements         
         SessionLoadedListener,
-        SignorNetworkCreatedListener {
+        SignorNetworkCreatedListener, NetworkAddedListener {
     
     public HashMap<CyNetwork, Network> signorNetMap;
     public HashMap<Network, NetworkView.Type> signorViewMap;
     SignorManager manager;
     public HashMap<String, ?> parameters;
     public String searched_query;
-    
     public PresentationManager(SignorManager manager) {        
         this.manager = manager;
         manager.utils.registerAllServices(this, new Properties());
@@ -62,10 +71,7 @@ public class PresentationManager implements
                { put(netw, view_type); }
            };  
         }
-
-    }
-    
-    
+    }    
     
     public void removeNetwork(Network network) {
         if (network == null) return;
@@ -94,4 +100,81 @@ public class PresentationManager implements
     public void handleEvent(SessionLoadedEvent e) {
         manager.utils.info(e.getLoadedSession().toString()+"Sessione View Aggiunta");              
     }
+    
+    @Override
+    public void handleEvent(NetworkAddedEvent e) {
+        try {
+            CyNetwork cyNetwork = e.getNetwork();
+            CySubNetwork newNetwork = (CySubNetwork) cyNetwork;
+            // I don't want to make configuration if this is the root Network
+            if(newNetwork.getRootNetwork().getBaseNetwork() != cyNetwork){
+                manager.utils.info(newNetwork.toString()+"** BASE NET **"+newNetwork.getRootNetwork().getBaseNetwork());
+                CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
+                Network parentNetwork = signorNetMap.get(parentCyNetwork);
+                manager.utils.info("PASSO "+parentNetwork.toString());
+                Network subnetwork = DataUtils.prepareSubnetwork(parentNetwork, cyNetwork);
+                signorNetMap.put(cyNetwork, subnetwork);
+                signorViewMap.put(subnetwork, NetworkView.Type.DEFAULT);
+                Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                PTMTableNode.buildPTMTable(parentNetwork.manager, "PTMNode", cyNetwork);
+
+                Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                PTMTableEdge.buildPTMTable(parentNetwork.manager, "PTMEdge", cyNetwork);       
+            }
+        }
+        catch (Exception ex){
+            manager.utils.error("Network Added Event "+ex.toString());
+        }
+
+//        Network parentNetwork = signorNetMap.get(parentCyNetwork);
+//        Network subnetwork = DataUtils.prepareSubnetwork(parentNetwork, cyNetwork);
+//       
+//        if (parentCyNetwork != null){
+//            signorNetMap.put(cyNetwork, subnetwork);
+//            signorViewMap.put(subnetwork, NetworkView.Type.DEFAULT);
+//            addSubNetwork(newNetwork, parentCyNetwork);            
+//        }
+//        else if (!loadingSession && ModelUtils.isIntactNetwork(cyNetwork) && !networkMap.containsKey(cyNetwork)) { // Cloned network
+//            Network network = new Network(manager);
+//            addNetwork(network, cyNetwork);
+//            CloneTableTaskFactory cloneTable = new CloneTableTaskFactory(manager);
+//            NetworkFields.UUID.setValue(cyNetwork.getRow(cyNetwork), UUID.randomUUID().toString());
+//
+//            CyTable featuresTable = network.getFeaturesTable();
+//            oldTablesToNewNetwork.put(featuresTable, network);
+//            manager.utils.execute(cloneTable.createTaskIterator(featuresTable));
+//
+//            CyTable identifiersTable = network.getIdentifiersTable();
+//            oldTablesToNewNetwork.put(identifiersTable, network);
+//            manager.utils.execute(cloneTable.createTaskIterator(identifiersTable));
+//        }
+    }
+    
+    /**
+     * Register and manage sub networks at their creation.<br>
+     * <p>
+     * The created sub network view must be set to its direct parent type.<br>
+     * To do so, addSubNetwork register the network view type of the direct parent within {@link #networkTypesToSet}.<br>
+     * {@link #handleEvent(NetworkViewAddedEvent)} will then set the new sub network view to its parent view type.<br>
+     * Cytoscape will then change from the correct view type to the root parent's one.<br>
+     * {@link #handleEvent(VisualStyleSetEvent)} then interrupt Cytoscape behaviour to set it to the correct style.
+     */
+    private void addSubNetwork(CySubNetwork subCyNetwork, CySubNetwork parentCyNetwork) {
+        if (signorNetMap.containsKey(parentCyNetwork)) {
+            Network parentNetwork = signorNetMap.get(parentCyNetwork);
+        }
+    }
+    
+//    public static CySubNetwork getParentCyNetwork(final CySubNetwork net, final SignorManager manager) {
+//        final CyTable hiddenTable = net.getTable(CyNetwork.class, CyNetwork.HIDDEN_ATTRS);
+//        final CyRow row = hiddenTable != null ? hiddenTable.getRow(net.getSUID()) : null;
+//        final Long suid = row != null ? row.get(PARENT_NETWORK_COLUMN, Long.class) : null;
+//
+//        if (suid != null) {
+//            final CyNetwork parent = manager.utils.getService(CyNetworkManager.class).getNetwork(suid);
+//            if (parent instanceof CySubNetwork) return (CySubNetwork) parent;
+//        }
+//
+//        return null;
+//    }
 }

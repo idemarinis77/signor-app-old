@@ -100,8 +100,10 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 
                 //Populate my logic netowrk
                 network.setNetwork(cynet);
-                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
+                if(network.parameters.get(Config.SINGLESEARCH).equals(true)){
                     network.setCyNodeRoot(terms);
+                    network.parameters.replace("QUERY", terms);
+                }
                 
                 netMan.addNetwork(cynet);            
                 CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
@@ -116,10 +118,10 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 //manager.presentationManager.updateSignorNetworkCreated(cynet, network);
 
                 Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                PTMTableNode.buildPTMTable(manager, "PTMNode");
+                PTMTableNode.buildPTMTable(manager, "PTMNode", cynet);
 
                 Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                PTMTableEdge.buildPTMTable(manager, "PTMEdge");
+                PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
                 Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 NetworkTable.buildDefaultTable(manager, "Network");           
 

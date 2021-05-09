@@ -219,6 +219,10 @@ public class SignorLegendPanel extends JPanel implements
                 sdp.recreateContent();
                 tabs.setSelectedComponent(sdp); 
                 manager.utils.info("New SIGNOR network PATHWAY "+newcynet); 
+                ptmviewON.setSelected(false);
+                ptmviewON.setEnabled(true);
+                defviewON.setSelected(true);
+                defviewON.setEnabled(false);
                 return;
             }
             

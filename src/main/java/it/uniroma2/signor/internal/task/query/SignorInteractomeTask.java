@@ -15,6 +15,12 @@ import it.uniroma2.signor.internal.view.NetworkView;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.net.URI;
+import java.net.URL;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.File;
+import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.cytoscape.model.CyNetwork;
@@ -26,6 +32,7 @@ import org.cytoscape.model.CyTableManager;
 import org.cytoscape.view.layout.CyLayoutAlgorithm;
 import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
 import org.cytoscape.view.model.CyNetworkView;
+import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.model.View;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskIterator;
@@ -43,16 +50,16 @@ public class SignorInteractomeTask extends AbstractTask {
     String URL = ConfigResources.INTERACTOMEDWLD;
     
     public SignorInteractomeTask(Network network){
-        this.manager = manager;
+        this.manager = network.manager;
         this.network = network;
     }
     public void run(TaskMonitor monitor) {        
-        monitor.setTitle("Loading all Signor Interactome ....  please wait");             
+        monitor.setTitle("Loading all Signor Interactome ....  please wait");    
         try {
 
-            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
-            if (cancelled) return;
-            BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
+                monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
+                if (cancelled) return;
+                BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             ArrayList<String> results = HttpUtils.parseWSNoheader(br);
             if(results.isEmpty()){
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for Signor Interactome",
@@ -61,27 +68,49 @@ public class SignorInteractomeTask extends AbstractTask {
             }
             else {
                 if (cancelled) return;
+
+//                InputStream inputStream = new URL(ConfigResources.INTERACTOMEDWLD).openStream();
+//                Scanner sc = new Scanner(inputStream, "UTF-8");
+//                int j =0;
+//                while(sc.hasNext()) {
+//                       String line = sc.nextLine();
+//                       if(j<10)
+//                            manager.utils.info(line);
+//                       j++;
+//                    }
+//                inputStream.close();
+
                 monitor.showMessage(TaskMonitor.Level.INFO, "Creating Interactome of "+results.size()+" interactors");
-                CyNetwork cynet = manager.createNetwork(Config.INTERACTOMENAME);
+                CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+Config.INTERACTOMENAME);
                 manager.presentationManager.updateSignorNetworkCreated(cynet, network);
                 manager.presentationManager.updateSignorViewCreated(network, NetworkView.Type.DEFAULT);
                 monitor.showMessage(TaskMonitor.Level.INFO, "Created network Interactome "+network.toString());
                 //Create tables
-//                Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-//                NodeTable.buildDefaultTable(manager, "Node");
-//                Table EdgeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-//                EdgeTable.buildDefaultTable(manager, "Edge");
+                Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                NodeTable.buildDefaultTable(manager, "Node");
+                Table EdgeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                EdgeTable.buildDefaultTable(manager, "Edge");
+
+                //Populate tables and create MyNetwork
+                CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
+                cynet = manager.createNetworkFromLine(results);
+                network.setNetwork(cynet);
+                
+                netMan.addNetwork(cynet);            
+//                CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
+//                CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
 //
-//                //Populate tables and create MyNetwork
-//                CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
-//                cynet = manager.createNetworkFromLine(results);
-//                Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-//                PTMTableNode.buildPTMTable(manager, "PTMNode");
-//
-//                Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-//                PTMTableEdge.buildPTMTable(manager, "PTMEdge");
-//                Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-//                NetworkTable.buildDefaultTable(manager, "Network");        
+//                //Apply style
+//                manager.signorStyleManager.applyStyle(ntwView);
+//                manager.signorStyleManager.installView(ntwView);         
+                
+                
+                Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                PTMTableNode.buildPTMTable(manager, "PTMNode", cynet);
+                Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
+                Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                NetworkTable.buildDefaultTable(manager, "Network");        
 //                //Populate my logic netowrk
 //                network.setNetwork(cynet);
 //                //DAVERIFICARE COME FARE

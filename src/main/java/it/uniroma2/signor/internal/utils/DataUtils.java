@@ -12,6 +12,7 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.task.query.factories.AlgorithmFactory;
 import it.uniroma2.signor.internal.task.query.AlgorithmTask;
 import it.uniroma2.signor.internal.view.NetworkView;
+import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import java.util.List;
 import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.model.CyEdge;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
 import org.cytoscape.model.CyNetwork;
+import org.cytoscape.model.CyTableFactory;
 
 
 
@@ -47,7 +49,19 @@ public class DataUtils {
             return cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(Config.NTWPREFIX);
         return false;
     }   
-    
+    public static Network prepareSubnetwork(Network parentnet, CyNetwork cyNetwork){
+        Network subnet = new Network(parentnet.manager, parentnet.parameters);
+        subnet.setNetwork(cyNetwork);
+        subnet.isDeasesNetwork = parentnet.isDeasesNetwork;
+        subnet.isPathwayNetwork = parentnet.isPathwayNetwork;
+        subnet.ptm_already_loaded = parentnet.ptm_already_loaded;
+        subnet.SetPathwayInfo(parentnet.getPathwayInfo());
+        if(parentnet.isSingleSearch()) {
+            String entity = (String) subnet.parameters.get("QUERY");
+            subnet.setCyNodeRoot(entity);
+        }
+        return subnet;
+    }
     public static void writeNetworkPTMInfo(SignorManager manager, Network network){
         CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
         CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
@@ -59,15 +73,18 @@ public class DataUtils {
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);        
         CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
         CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
-        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
+        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();        
         try {
-
             Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
             //Boolean ptm_already_loaded = currentnet.getDefaultNetworkTable().getColumn("PTM LOADED").getValues(Boolean.class).get(0);
             Boolean ptm_already_loaded = networksignor.ptm_already_loaded;
-            //CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
+//            CyNetworkTableManager cyNetworktableManager = manager.utils.getService(CyNetworkTableManager.class);
+            manager.utils.info("Created subnetwork with PTM Tables "+networksignor.PTMnodeTable+"*"
+                                +networksignor.PTMedgeTable);
+
             if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
                 tableManager.getAllTables(true).contains(networksignor.PTMedgeTable)){
+
                 //Starting populating PTM Table form Node and Edge tables default
                 List<CyRow> listrow = currentnet.getDefaultEdgeTable().getAllRows();
                 for(int i =0;  i< listrow.size(); i ++){                   

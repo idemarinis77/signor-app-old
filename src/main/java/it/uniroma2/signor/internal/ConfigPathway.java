@@ -15,9 +15,9 @@ import java.util.HashMap;
 public class ConfigPathway {
     
 
-        public static final String SIGNORPTH_NAME = "Signor pathway query";
-        public static final String SIGNORPTH_DESC = "Query SIGNOR Database to visualize pathway";
-        public static final String SIGNORPTH_ID = "SIGNOR_PTH_ID_SEARCH_FACTORY";
+//        public static final String SIGNORPTH_NAME = "Signor pathway query";
+//        public static final String SIGNORPTH_DESC = "Query SIGNOR Database to visualize pathway";
+//        public static final String SIGNORPTH_ID = "SIGNOR_PTH_ID_SEARCH_FACTORY";
         
         //Field to parse PATHWAY SIG and Name
         public static final String[] SIGNORPTH_DESCRIPTION = {"sig_id", "path_name", "path_description", "path_curator"};
