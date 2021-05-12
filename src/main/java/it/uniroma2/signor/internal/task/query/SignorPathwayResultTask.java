@@ -84,7 +84,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
                     HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+network.parameters.get("PATHWAYID"), manager));
             network.SetPathwayInfo(pathway_info);
             Table PthTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            PthTable.buildPTHTable(manager);
+            PthTable.buildPTHTable(manager, cynet);
             
             //Populate tables and create MyNetwork
             CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
@@ -112,7 +112,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
             
             Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-            NetworkTable.buildDefaultTable(manager, "Network");           
+            NetworkTable.buildDefaultTable(manager, "Network", cynet);           
 
             network.writeSearchNetwork();
             if (cancelled) {

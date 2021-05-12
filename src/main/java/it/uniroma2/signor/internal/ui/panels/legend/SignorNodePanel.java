@@ -25,6 +25,9 @@ import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
 import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkSearch;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.NodeField;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.ui.components.SignorButton;
@@ -104,7 +107,8 @@ public class SignorNodePanel extends JPanel {
                 String value = iterv.next().toString();
                 SignorLabelStyledBold id = new SignorLabelStyledBold(key);
                 nodeinfo.add(id, gbc.down());
-                if(key!= Config.NODEFIELDMAP.get("DATABASEA")){               
+//                if(key!= Config.NODEFIELDMAP.get("DATABASEA")){ 
+                if(key!= NodeField.DATABASE){
                     nodeinfo.add(new JLabel(value), gbc.right());
                 }
                 else {
@@ -133,22 +137,31 @@ public class SignorNodePanel extends JPanel {
     }
     
     private void buildSingleSearch(String id, Network network){
-        HashMap<String, Object> new_parameters = new HashMap<>() {
-                {put (Config.ALLSEARCH, false);}  
-                {put (Config.CONNECTSEARCH, false);} 
-                {put (Config.INCFIRSTNEISEARCH, false);} 
-                {put (Config.SHORTESTPATHSEARCH, false);}
-                {put (Config.SINGLESEARCH, true);}
-                {put (Config.SPECIES, network.parameters.get(Config.SPECIES));}
-                {put ("QUERY", id);}
-        };
+//        HashMap<String, Object> new_parameters = new HashMap<>() {
+//                {put (NetworkField.ALLSEARCH, false);}  
+//                {put (NetworkField.CONNECTSEARCH, false);} 
+//                {put (NetworkField.INCFIRSTNEISEARCH, false);} 
+//                {put (NetworkField.SHORTESTPATHSEARCH, false);}
+//                {put (NetworkField.SINGLESEARCH, true);}
+//                {put (NetworkField.SPECIES, network.parameters.get(NetworkField.SPECIES));}
+//                {put ("QUERY", id);}
+//        };
+        String species = (String) network.parameters.get(NetworkField.SPECIES);
+        if(species == null){
+            species = "Homo Sapiens";
+        }
+        HashMap<String, Object> new_parameters = NetworkSearch.buildSearch(id, species, NetworkField.SINGLESEARCH, false);
         Network new_network = new Network(manager, new_parameters);
         
         
-        String species = (String) network.parameters.get(Config.SPECIES);
+//        String species = (String) network.parameters.get(NetworkField.SPECIES);
+//        if(species == null){
+//            species = "Homo Sapiens";
+//            new_parameters.replace(NetworkField.SPECIES, species);
+//        }
         //(String search, Boolean includefirstneighbor, String species, 
 //            String terms, Network network)
-        SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(Config.SINGLESEARCH,
+        SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(NetworkField.SINGLESEARCH,
                                                     false, species, id, new_network);
         manager.utils.execute(sgrf.createTaskIterator());
     }

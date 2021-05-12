@@ -2,7 +2,9 @@ package it.uniroma2.signor.internal.conceptualmodel.structures;
 
 import org.cytoscape.model.*;
 import it.uniroma2.signor.internal.managers.SignorManager;
-
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
@@ -27,46 +29,57 @@ public class Table {
         this.initialSize = initialSize;      
     }
 
-    public void buildDefaultTable(SignorManager manager, String title) {
+    public void buildDefaultTable(SignorManager manager, String title, CyNetwork cynetwork) {
         //CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
         //CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
-
+        
         switch(title){
             case "Node":
-            Config.NODEFIELD.forEach((k, v) ->
-                    manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
+//            Config.NODEFIELD.forEach((k, v) ->
+            NodeField.NODEFIELD.forEach((k, v) ->
+                     TableUtil.createColumnIfNeeded(cynetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
+//                    cynetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
+//                    manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
                 break;            
             case "Edge":
-            Config.EDGEFIELD.forEach((k, v) -> 
-                   manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));
+            EdgeField.EDGEFIELD.forEach((k, v) -> 
+                    TableUtil.createColumnIfNeeded(cynetwork.getDefaultEdgeTable(), v, k, Config.NAMESPACE));
+//                   cynetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));
+//                   manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));
                 break;
             case "Network":
-            Config.NETWORKFIELD.forEach((k, v) ->
-                    manager.lastCyNetwork.getDefaultNetworkTable().createColumn(Config.NAMESPACE, k, v, false));
+                //            Config.NETWORKFIELD.forEach((k, v) ->
+                NetworkField.networkTableField().forEach((k, v) ->
+                      TableUtil.createColumnIfNeeded(cynetwork.getDefaultNetworkTable(), v, k, Config.NAMESPACE));
+//                    cynetwork.getDefaultNetworkTable().createColumn(Config.NAMESPACE, k, v, false));
+//                    manager.lastCyNetwork.getDefaultNetworkTable().createColumn(Config.NAMESPACE, k, v, false));
             break;
         }       
     }
     
-    public static void buildAdditionalInfoForSummary(SignorManager manager) {
+    public static void buildAdditionalInfoForSummary(SignorManager manager, CyNetwork cynetwork) {
         /*CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
         if (!tableManager.getTable(manager.lastCyNetwork.getDefaultNodeTable().getSUID()).
                           getColumns(Config.NAMESPACE).containsAll(Config.NODEFIELDADDITIONAL.keySet())) {*/
-                Config.NODEFIELDADDITIONAL.forEach((k, v) ->
-                  TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
+                NodeField.NODEFIELDADDITIONAL.forEach((k, v) ->
+                  TableUtil.createColumnIfNeeded(cynetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
                     /*manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
         }*/
         
     }
     
-    public void buildPTHTable(SignorManager manager) {
+    public void buildPTHTable(SignorManager manager, CyNetwork cynetwork) {
         //CyTable table, Class<?> clazz, String columnName, String namespace
-        Config.NODEFIELD.forEach((k, v) ->
-                   TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
+        NodeField.NODEFIELD.forEach((k, v) ->
+//        Config.NODEFIELD.forEach((k, v) ->
+                  TableUtil.createColumnIfNeeded(cynetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
+//                  TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultNodeTable(), v, k, Config.NAMESPACE));
                     //manager.lastCyNetwork.getDefaultNodeTable().createColumn(Config.NAMESPACE, k, v, false));
 
         ConfigPathway.EDGEFIELDPTH.forEach((k, v) ->
-                    //manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));     
-                    TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultEdgeTable(), v, k, Config.NAMESPACE));
+                    //manager.lastCyNetwork.getDefaultEdgeTable().createColumn(Config.NAMESPACE, k, v, false));
+                    TableUtil.createColumnIfNeeded(cynetwork.getDefaultEdgeTable(), v, k, Config.NAMESPACE));
+//                    TableUtil.createColumnIfNeeded(manager.lastCyNetwork.getDefaultEdgeTable(), v, k, Config.NAMESPACE));
         
     }
     
@@ -82,7 +95,7 @@ public class Table {
                 //If Table is not created let's do it
                 if(alltable.stream().filter(t -> t.getTitle().matches(prefix_col+title)).count() == 0){
                     CyTable PTMNODEtable = PTMtableFactory.createTable(prefix_col+title, primaryKey, Long.class, isPublic, isMutable, initialSize);
-                    Config.PTMNODEFIELD.forEach((k, v) ->
+                    PTMNodeField.PTMNODEFIELD.forEach((k, v) ->
                         PTMNODEtable.createColumn(Config.NAMESPACEPTM, k, v, isMutable));             
                     tableManager.addTable(PTMNODEtable);
 //                    manager.lastNetwork.SetPTMNodeTable(PTMNODEtable);
@@ -93,7 +106,7 @@ public class Table {
                 //If Table is not created let's do it
                 if(alltable.stream().filter(t -> t.getTitle().matches(prefix_col+title)).count() == 0){
                     CyTable PTMEDGEtable = PTMtableFactory.createTable(prefix_col+title, primaryKey, Long.class, isPublic, isMutable, initialSize);
-                    Config.PTMEDGEFIELD.forEach((k, v) ->
+                    PTMEdgeField.PTMEDGEFIELD.forEach((k, v) ->
                         PTMEDGEtable.createColumn(Config.NAMESPACEPTM, k, v, isMutable));
                     tableManager.addTable(PTMEDGEtable);
 //                    manager.lastNetwork.SetPTMEdgeTable(PTMEDGEtable);

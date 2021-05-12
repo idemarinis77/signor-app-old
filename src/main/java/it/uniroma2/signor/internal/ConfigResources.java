@@ -19,7 +19,7 @@ import java.util.function.Function;
 public class ConfigResources {
     //API for Databases
     public enum DBLINK{
-        SIGNOR("signor", "Signor", s -> "https://signor.uniroma2.it/relation_result.php?" + s),    
+        SIGNOR("signor", "Signor", s -> "https://signor.uniroma2.it/relation_result.php?id=" + s),    
         UNIPROT("uniprot", "UniProt", s -> "https://www.uniprot.org/uniprot/" + s),        
         PUBMED("pubmed", "PUBMED", s -> "http://www.ncbi.nlm.nih.gov/pubmed/" + s),
         CHEBI("chebi", "CHEBI", s -> "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=" + s),
@@ -57,9 +57,9 @@ public class ConfigResources {
     //public static String ENTITYINFO = "https://signor.uniroma2.it/getData.php?entityInfo=";
     public static final String SIGNOR_URL="https://signor.uniroma2.it";
     
-    public enum WSSearchoption{
+    public static enum WSSearchoption{
        SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
-       ALLQUERY("ALLSEARCH", (p, l) -> "https://signor.uniroma2.it/getData.php?type=all&proteins="+p+"&level="+l),
+       ALLQUERY("ALLSEARCH", (p, l) -> "https://signor.uniroma2.it/getData.php?type=connect&proteins="+p+"&level="+l),
        CONNECTQUERY("CONNECTSEARCH", (p, l) -> "https://signor.uniroma2.it/getData.php?type=connect&proteins="+p+"&level="+l),
        SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),

@@ -57,9 +57,9 @@ public class SignorInteractomeTask extends AbstractTask {
         monitor.setTitle("Loading all Signor Interactome ....  please wait");    
         try {
 
-                monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
-                if (cancelled) return;
-                BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
+            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
+            if (cancelled) return;
+            BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             ArrayList<String> results = HttpUtils.parseWSNoheader(br);
             if(results.isEmpty()){
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for Signor Interactome",
@@ -87,9 +87,9 @@ public class SignorInteractomeTask extends AbstractTask {
                 monitor.showMessage(TaskMonitor.Level.INFO, "Created network Interactome "+network.toString());
                 //Create tables
                 Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                NodeTable.buildDefaultTable(manager, "Node");
+                NodeTable.buildDefaultTable(manager, "Node", cynet);
                 Table EdgeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                EdgeTable.buildDefaultTable(manager, "Edge");
+                EdgeTable.buildDefaultTable(manager, "Edge",cynet);
 
                 //Populate tables and create MyNetwork
                 CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
@@ -110,7 +110,7 @@ public class SignorInteractomeTask extends AbstractTask {
                 Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
                 Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                NetworkTable.buildDefaultTable(manager, "Network");        
+                NetworkTable.buildDefaultTable(manager, "Network", cynet);        
 //                //Populate my logic netowrk
 //                network.setNetwork(cynet);
 //                //DAVERIFICARE COME FARE

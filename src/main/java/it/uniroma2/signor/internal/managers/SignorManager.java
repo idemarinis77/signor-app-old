@@ -10,6 +10,7 @@ import org.cytoscape.session.events.SessionLoadedListener;
 
 import java.util.HashMap;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.ConfigPathway;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,8 @@ import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.subnetwork.CySubNetwork;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.NodeField;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import java.util.Properties;
 import org.cytoscape.application.swing.CytoPanelComponent2;
@@ -49,7 +52,7 @@ public class SignorManager {
         sessionLoaderManager = new SessionLoaderManager(this);
         presentationManager = new PresentationManager(this);
         utils.registerService(sessionLoaderManager, SessionLoadedListener.class, new Properties());
-        signorStyleManager = new SignorStyleManager(this, Config.FILESTYLE);
+        signorStyleManager = new SignorStyleManager(this, ConfigResources.FILESTYLE);
         signorStyleManager.setupDefaultStyle();
     }
     
@@ -97,68 +100,86 @@ public class SignorManager {
     public CyNetwork createNetworkFromLine(ArrayList<String> results){
         CyNetwork signornet = this.lastCyNetwork;
         HashMap<String, CyNode> entity_read = new HashMap <String, CyNode>();
+        
         for (int i = 0; i < results.size(); i++) {            
             String[] attributes = results.get(i).split("\t");
             CyNode nodeSource;
             CyNode nodeTarget;         
-            if (!entity_read.containsKey(attributes[0])){
+            if (!entity_read.containsKey(attributes[Config.source_entity_position])){
                 nodeSource = signornet.addNode();
-                entity_read.put(attributes[0], nodeSource);
+                entity_read.put(attributes[Config.source_entity_position], nodeSource);
             }
             else {
-                nodeSource = entity_read.get(attributes[0]);
+                nodeSource = entity_read.get(attributes[Config.source_entity_position]);
             }
-            for (int a = 0; a < 4; a++){
-                  String attribute = Config.HEADERSINGLESEARCH[a];
-                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
+            for (int a = 0; a < Config.node_source_positions.length; a++){
+                  String attribute = Config.HEADERSINGLESEARCH[Config.node_source_positions[a]];
+//                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
+                  String map_attribute = NodeField.NODEFIELDMAP.get(attribute);
                   try {
-                        signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[a]);
+                        signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[Config.node_source_positions[a]]);
+                        if(map_attribute==NodeField.ENTITY){
+                            signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set("name", attributes[Config.node_source_positions[a]]);
+                            signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set("shared name", attributes[Config.node_source_positions[a]]);
+                        }
                   }
                   catch (Exception e){
                       this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[a]+" "+e.toString());
                   }
             } 
-            if (!entity_read.containsKey(attributes[4])){
+            if (!entity_read.containsKey(attributes[Config.target_entity_position])){
                 nodeTarget = signornet.addNode();
-                entity_read.put(attributes[4], nodeTarget);
+                entity_read.put(attributes[Config.target_entity_position], nodeTarget);
             }
             else {
-                nodeTarget = entity_read.get(attributes[4]);
+                nodeTarget = entity_read.get(attributes[Config.target_entity_position]);
             }
-            for (int a = 4; a < 8; a++){
-                  String attribute = Config.HEADERSINGLESEARCH[a];
-                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
+            //for (int a = 4; a < 8; a++){
+            for (int a = 0; a < Config.node_target_positions.length; a++){
+                  String attribute = Config.HEADERSINGLESEARCH[Config.node_target_positions[a]];
+                  String map_attribute = NodeField.NODEFIELDMAP.get(attribute);
                   try {
-                        signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[a]);
+                        signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[Config.node_target_positions[a]]);
+                        if(map_attribute==NodeField.ENTITY){
+                            signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set("name", attributes[Config.node_target_positions[a]]);
+                            signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set("shared name", attributes[Config.node_target_positions[a]]);
+                        }
                   }
                   catch (Exception e){
-                      this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[a]+" "+e.toString());
+                      this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[Config.node_target_positions[a]]+" "+e.toString());
                   }
             } 
             CyEdge edge = signornet.addEdge(nodeSource, nodeTarget, false);
-            for (int a = 8; a < attributes.length; a++){                
-                String attribute = Config.HEADERSINGLESEARCH[a];
-                String map_attribute = Config.EDGEFIELDMAP.get(attribute);
+            String shared_name_edge=attributes[Config.source_entity_position]+" ("+attributes[Config.interaction_position]+") "+attributes[Config.target_entity_position];
+            String shared_interaction=attributes[Config.interaction_position];
+            //Insert Cytoscape attribute
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("shared name", shared_name_edge);
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("shared interaction", shared_interaction);
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("name", shared_name_edge);
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("interaction", shared_interaction);
+            for (int a = 0; a < Config.edge_positions.length; a++){                
+                String attribute = Config.HEADERSINGLESEARCH[Config.edge_positions[a]];
+                String map_attribute = EdgeField.EDGEFIELDMAP.get(attribute);
                 try {
-                    if((a == attributes.length -1) && attributes[a].startsWith("0.")){
+                    if((a == Config.edge_positions.length -1) && attributes[Config.edge_positions[a]].startsWith("0.")){
                         //I'm reading the last field (Score) 
                         //Some lines could have no score, so I double check also the "0." at the beginning of the field
-                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Double.parseDouble(attributes[a]));
+                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Double.parseDouble(attributes[Config.edge_positions[a]]));
                     }
-                    else if (a == 12){
+                    else if (Config.edge_positions[a] == 12){
                         //I'm reading TAX_ID blank 
-                        if(attributes[a].isBlank())
+                        if(attributes[Config.edge_positions[a]].isBlank())
                            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, 0);
                         //I'm reading TAX_ID and it's of Integer type
                         else 
-                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Integer.parseInt(attributes[a]));
+                           signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Integer.parseInt(attributes[Config.edge_positions[a]]));
                     }
                     else {
-                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[a]);
+                        signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[Config.edge_positions[a]]);
                     }
                 }
                 catch (Exception e){
-                    this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[a]+" "+e.toString());
+                    this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[Config.edge_positions[a]]+" "+e.toString());
                 }
             }  
         }
@@ -188,9 +209,13 @@ public class SignorManager {
             }
             for (int a = 0; a < node_source_positions.length; a++){
                   String attribute = ConfigPathway.HEADERPTH[node_source_positions[a]];
-                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
+                  String map_attribute = NodeField.NODEFIELDMAP.get(attribute);
                   try {
                         signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[node_source_positions[a]]);
+                        if(map_attribute==NodeField.ENTITY){
+                            signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set("name", attributes[node_source_positions[a]]);
+                            signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set("shared name", attributes[node_source_positions[a]]);
+                        }
                   }
                   catch (Exception e){
                       this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[node_source_positions[a]]+" "+e.toString());
@@ -206,15 +231,26 @@ public class SignorManager {
             }
             for (int a = 0; a < node_target_positions.length; a++){
                   String attribute = ConfigPathway.HEADERPTH[node_target_positions[a]];
-                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
+                  String map_attribute = NodeField.NODEFIELDMAP.get(attribute);
                   try {
                         signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[node_target_positions[a]]);
+                        if(map_attribute==NodeField.ENTITY){
+                            signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set("name", attributes[node_target_positions[a]]);
+                            signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set("shared name", attributes[node_target_positions[a]]);
+                        }
                   }
                   catch (Exception e){
                       this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[node_target_positions[a]]+" "+e.toString());
                   }
             } 
             CyEdge edge = signornet.addEdge(nodeSource, nodeTarget, false);
+            String shared_name_edge=attributes[2]+" ("+attributes[12]+") "+attributes[7];
+            String shared_interaction=attributes[12];
+            //Insert Cytoscape attribute
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("shared name", shared_name_edge);
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("shared interaction", shared_interaction);
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("name", shared_name_edge);
+            signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("interaction", shared_interaction);
             int limit = edge_positions.length;
             //Score may miss so attributes are 31 and not 32
             if( attributes.length == 31 ) limit = edge_positions.length - 1;

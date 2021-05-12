@@ -17,6 +17,8 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.IconUtils;
 import it.uniroma2.signor.internal.ui.components.SearchQueryComponent;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkSearch;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.task.query.SignorGenericQueryTask;
 import it.uniroma2.signor.internal.ui.components.ChooseSearchoption;
 import java.util.HashMap;
@@ -55,12 +57,33 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
     public TaskIterator createTaskIterator() {
         String terms = queryComponent.getQueryText();
         HashMap<String, Object> parameters;
-  
+        HashMap <String, Object> buildParams = new HashMap ();
         try { 
             parameters = chooseSearchoption.getParameter();
             parameters.put("QUERY", terms);
+            if(parameters.get(NetworkField.ALLSEARCH).equals(true)){
+                buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), 
+                                                        NetworkField.ALLSEARCH, false);
+            }
+            else if(parameters.get(NetworkField.CONNECTSEARCH).equals(true)){
+                buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), 
+                                                        NetworkField.CONNECTSEARCH, false);
+            }
+            else if(parameters.get(NetworkField.INCFIRSTNEISEARCH).equals(true)){
+                buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), 
+                                                        NetworkField.INCFIRSTNEISEARCH, false);
+            }
+            else if(parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)){
+                buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), 
+                                                        NetworkField.SHORTESTPATHSEARCH, false);
+            }
+            else if(parameters.get(NetworkField.SINGLESEARCH).equals(true)){
+                buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), NetworkField.SINGLESEARCH, 
+                        (Boolean) parameters.get(NetworkField.INCFIRSTNEISEARCH));
+            }
             manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 
-            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, parameters), SIGNOR_NAME, parameters, terms));
+            manager.utils.info("Performing SIGNOR search for buildParams "+buildParams.toString());
+            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, buildParams), SIGNOR_NAME, buildParams, terms));
         }
         catch (Exception e){
             manager.utils.error("Problems in performing SIGNOR search "+e.toString());

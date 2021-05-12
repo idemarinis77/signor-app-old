@@ -25,8 +25,8 @@ import java.awt.event.ActionEvent;
 import java.util.stream.Collectors;
 import javax.swing.event.ChangeListener;
 import org.cytoscape.work.TaskFactory;
-import it.uniroma2.signor.internal.event.SignorNetworkPathCreatedListener;
-import it.uniroma2.signor.internal.event.SignorNetworkPathToCreateEvent;
+//import it.uniroma2.signor.internal.event.SignorNetworkPathCreatedListener;
+//import it.uniroma2.signor.internal.event.SignorNetworkPathToCreateEvent;
 
         
 /**

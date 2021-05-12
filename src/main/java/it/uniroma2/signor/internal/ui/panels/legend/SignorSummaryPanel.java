@@ -5,6 +5,7 @@
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.NodeField;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
@@ -108,7 +109,7 @@ public class SignorSummaryPanel extends JPanel {
             while(iter.hasNext()){
                 String key = iter.next().toString();
                 String value = iterv.next().toString();
-                if(key.equals(Config.PATHWAYLISTADDINFO)){
+                if(key.equals(NodeField.PATHWAYLISTADDINFO)){
 //                    JPanel listpath = new JPanel();
                     listpath.setLayout(new GridBagLayout());
                     String[] pathlist = value.split(" , ");                    

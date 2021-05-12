@@ -28,6 +28,7 @@ import it.uniroma2.signor.internal.utils.TimeUtils;
 import it.uniroma2.signor.internal.utils.DataUtils;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 
 import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.task.query.SignorPanelTask;
@@ -74,10 +75,12 @@ public class SignorLegendPanel extends JPanel implements
     private SignorDescriptionsPanel sdp;
     private SignorBridgePanel sbp;
     private SignorManager manager;
+    private CyNetwork current_cynetwork_to_serch_into;
 //    private boolean tabSingleSearchAdded = false;
 //    private boolean tabPathwayAdded = false;
     JRadioButton ptmviewON= new JRadioButton("PTM View");
     JRadioButton defviewON = new JRadioButton("Default View");
+    
 
     public SignorLegendPanel(SignorManager manager) {
 
@@ -93,13 +96,20 @@ public class SignorLegendPanel extends JPanel implements
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
                 ptmviewON.setEnabled(false);
-                DataUtils.PopulatePTMTables(manager); }
+                if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME)
+                    DataUtils.PopulatePTMTables(manager, true); 
+                else if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) != Config.INTERACTOMENAME)
+                    DataUtils.PopulatePTMTables(manager, false); 
+            }
         };
         ActionListener listenerDEF = new ActionListener() {            
             @Override public void actionPerformed(ActionEvent e) { 
                 ptmviewON.setEnabled(true);
                 defviewON.setEnabled(false);
-                DataUtils.ShowDefaultView(manager);                 
+                if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME)
+                    DataUtils.ShowDefaultView(manager, true);
+                else if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) != Config.INTERACTOMENAME)
+                    DataUtils.ShowDefaultView(manager, false);                                  
             }
                 //da implementare il ritorno al default
         };       
@@ -120,8 +130,8 @@ public class SignorLegendPanel extends JPanel implements
         ModeView.add(defviewON); 
         add(ModeView, BorderLayout.NORTH);               
 
-        tabs.add("Nodes", snp); 
-        tabs.add("Edges", sep);
+//        tabs.add("Nodes", snp); 
+//        tabs.add("Edges", sep);
 
         add(tabs, BorderLayout.CENTER);    
         manager.utils.registerAllServices(this, new Properties());
@@ -195,6 +205,7 @@ public class SignorLegendPanel extends JPanel implements
     @Override
     public void handleEvent(SignorNetworkCreatedEvent event){
         try {
+            
             CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
             CyNetwork newcynet = cyApplicationManager.getCurrentNetwork();
             for (CyNetwork k :  manager.presentationManager.signorNetMap.keySet()){
@@ -205,6 +216,7 @@ public class SignorLegendPanel extends JPanel implements
             }
             if (event.getNewNetwork().isPathwayNetwork.equals(true)){
                 //sdp.current_cynetwork_to_serch_into=manager.presentationManager.event.getNewNetwork();
+                this.current_cynetwork_to_serch_into = newcynet;
                 snp.current_cynetwork_to_serch_into = newcynet;
                 sep.current_cynetwork_to_serch_into = newcynet;
                 sdp.current_cynetwork_to_serch_into = newcynet;    
@@ -219,16 +231,17 @@ public class SignorLegendPanel extends JPanel implements
                 sdp.recreateContent();
                 tabs.setSelectedComponent(sdp); 
                 manager.utils.info("New SIGNOR network PATHWAY "+newcynet); 
-                ptmviewON.setSelected(false);
-                ptmviewON.setEnabled(true);
-                defviewON.setSelected(true);
-                defviewON.setEnabled(false);
-                return;
+//                ptmviewON.setSelected(false);
+//                ptmviewON.setEnabled(true);
+//                defviewON.setSelected(true);
+//                defviewON.setEnabled(false);
+//                return;
             }
             
             //if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
 //            if (event.getNewNetwork().parameters.containsKey(Config.SINGLESEARCH)){
-            if(event.getNewNetwork().parameters.get(Config.SINGLESEARCH).equals(true)){  
+            else if(event.getNewNetwork().parameters.get(NetworkField.SINGLESEARCH).equals(true)){  
+                this.current_cynetwork_to_serch_into = newcynet;
                 ssp.current_cynetwork_to_serch_into = newcynet;
                 srp.current_cynetwork_to_serch_into = newcynet;
                 smp.current_cynetwork_to_serch_into = newcynet;
@@ -248,9 +261,10 @@ public class SignorLegendPanel extends JPanel implements
 //                }
             }
             
-            if(event.getNewNetwork().parameters.get(Config.ALLSEARCH).equals(true) || 
-               event.getNewNetwork().parameters.get(Config.CONNECTSEARCH).equals(true)){                       
+            else if(event.getNewNetwork().parameters.get(NetworkField.ALLSEARCH).equals(true) || 
+               event.getNewNetwork().parameters.get(NetworkField.CONNECTSEARCH).equals(true)){                       
                 tabs.removeAll();
+                this.current_cynetwork_to_serch_into = newcynet;
                 sbp.current_cynetwork_to_serch_into = newcynet; 
                 sep.current_cynetwork_to_serch_into = newcynet;
                 snp.current_cynetwork_to_serch_into = newcynet;   
@@ -288,8 +302,7 @@ public class SignorLegendPanel extends JPanel implements
             else{
                 showCytoPanel();
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
-                       if (manager.presentationManager.signorNetMap.containsKey(newcynet)){
-                           
+                       if (manager.presentationManager.signorNetMap.containsKey(newcynet)){                           
                           {
                                Network network = manager.presentationManager.signorNetMap.get(newcynet);
                                NetworkView.Type netviewtype = manager.presentationManager.signorViewMap.get(network);
@@ -306,8 +319,12 @@ public class SignorLegendPanel extends JPanel implements
                                     defviewON.setEnabled(true);
                                }
                            }
-                            if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
-                                
+                          if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
+                              this.current_cynetwork_to_serch_into = newcynet;
+                              tabs.removeAll();
+                          }
+                          else if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
+                                this.current_cynetwork_to_serch_into = newcynet;
                                 snp.current_cynetwork_to_serch_into = newcynet;
                                 sep.current_cynetwork_to_serch_into = newcynet; 
                                 sdp.current_cynetwork_to_serch_into = newcynet;
@@ -319,7 +336,8 @@ public class SignorLegendPanel extends JPanel implements
                                 tabs.setSelectedComponent(sdp);
                                 return;
                             }
-                            if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.SINGLESEARCH).equals(true)) {                                   
+                            else if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.SINGLESEARCH).equals(true)) {                                   
+                                   this.current_cynetwork_to_serch_into = newcynet;
                                    snp.current_cynetwork_to_serch_into = newcynet;
                                    sep.current_cynetwork_to_serch_into = newcynet; 
                                    ssp.current_cynetwork_to_serch_into = newcynet;  
@@ -336,9 +354,10 @@ public class SignorLegendPanel extends JPanel implements
                                    smp.recreateContent();
                                    tabs.setSelectedComponent(ssp);
                             }   
-                            if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.ALLSEARCH).equals(true) ||
-                                manager.presentationManager.signorNetMap.get(newcynet).parameters.get(Config.CONNECTSEARCH).equals(true)){
+                            else if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.ALLSEARCH).equals(true) ||
+                                manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.CONNECTSEARCH).equals(true)){
                                    tabs.removeAll();                               
+                                   this.current_cynetwork_to_serch_into = newcynet;
                                    sbp.current_cynetwork_to_serch_into = newcynet;   
                                    sep.current_cynetwork_to_serch_into = newcynet;
                                    snp.current_cynetwork_to_serch_into = newcynet;   

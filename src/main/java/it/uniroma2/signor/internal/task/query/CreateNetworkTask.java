@@ -15,6 +15,7 @@ import org.cytoscape.model.*;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
 import java.io.*;
@@ -90,9 +91,9 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
 
                 //Create tables
                 Table NodeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                NodeTable.buildDefaultTable(manager, "Node");
+                NodeTable.buildDefaultTable(manager, "Node", cynet);
                 Table EdgeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                EdgeTable.buildDefaultTable(manager, "Edge");
+                EdgeTable.buildDefaultTable(manager, "Edge", cynet);
 
                 //Populate tables and create MyNetwork
                 CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
@@ -100,7 +101,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 
                 //Populate my logic netowrk
                 network.setNetwork(cynet);
-                if(network.parameters.get(Config.SINGLESEARCH).equals(true)){
+                if(network.parameters.get(NetworkField.SINGLESEARCH).equals(true)){
                     network.setCyNodeRoot(terms);
                     network.parameters.replace("QUERY", terms);
                 }
@@ -123,7 +124,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
                 Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                NetworkTable.buildDefaultTable(manager, "Network");           
+                NetworkTable.buildDefaultTable(manager, "Network", cynet);           
 
 
                 network.writeSearchNetwork();     

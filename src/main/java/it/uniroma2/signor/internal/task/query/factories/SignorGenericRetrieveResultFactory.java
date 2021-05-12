@@ -8,6 +8,7 @@ import it.uniroma2.signor.internal.task.query.CreateNetworkTask;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import org.cytoscape.work.AbstractTaskFactory;
 import org.cytoscape.work.TaskIterator;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.Config;
 import java.net.MalformedURLException;
@@ -40,9 +41,9 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
         String URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms); 
         if(includefirstneighbor)
             URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "2");
-        else if(search == Config.CONNECTSEARCH)
+        else if(search == NetworkField.CONNECTSEARCH)
             URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "1");       
-        else if(search == Config.ALLSEARCH)
+        else if(search == NetworkField.ALLSEARCH)
             URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "3");           
         this.network.manager.utils.info("SignorGenericRetrieveResultFactory createTaskIterator(), retrieving info from"+URL+netName);
         return new TaskIterator(new CreateNetworkTask(network, terms, URL, netName, parameters)); 

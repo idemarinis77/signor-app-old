@@ -100,7 +100,7 @@ public class SignorDescriptionsPanel extends JPanel {
                 //Path_curator may not be present and path_info_packed is shorter than header_pth
                 if(i <path_info_packed.length){
                 
-                    if ( path_info_packed[i].length() > 20) 
+                    if ( path_info_packed[i].length() > 20 && ConfigPathway.SIGNORPTHFIELDMAP.get(header_pth[i])== "Description") 
                         pathinfo.add(new HelpButton(manager, path_info_packed[i]), gbc.right());
                     else 
                         pathinfo.add(new JLabel(path_info_packed[i]), gbc.right());      

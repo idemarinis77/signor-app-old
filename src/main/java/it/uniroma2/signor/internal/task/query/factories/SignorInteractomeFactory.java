@@ -11,9 +11,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.Icon;
 
-
+import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.task.query.SignorInteractomeTask;
 import java.util.HashMap;
 import org.cytoscape.work.AbstractTaskFactory;
@@ -29,15 +29,13 @@ public class SignorInteractomeFactory extends AbstractTaskFactory{
     HashMap <String, Object> parameters = new HashMap();
     
     public SignorInteractomeFactory(SignorManager manager) {
-         this.manager = manager;
-         parameters.put("INTERACTOME", true);
-         
-         
+         this.manager = manager;        
+//         parameters.put(NetworkField.QUERY, Config.INTERACTOMENAME);
     }
    
 
     public TaskIterator createTaskIterator() {            
-        
+            parameters =NetworkSearch.buildSearch(Config.INTERACTOMENAME, "Homo Sapiens", "", false);
             return new TaskIterator(new SignorInteractomeTask(new Network(manager, parameters))); 
         
     }

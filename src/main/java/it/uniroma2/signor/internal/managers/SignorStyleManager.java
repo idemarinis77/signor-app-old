@@ -16,6 +16,7 @@ import java.util.Iterator;
 import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.task.read.LoadVizmapFileTaskFactory;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.ConfigResources;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import org.cytoscape.application.CyApplicationManager;
@@ -43,7 +44,7 @@ public class SignorStyleManager {
         //DefaultSignorStyle dfsm = new SignorPTMStyle(sm, filename);        
         Boolean newStyle = true;
         for (VisualStyle createdStyle : vmm.getAllVisualStyles()) {
-            if (createdStyle.getTitle().equals(Config.SIGNOR_VER_STYLE)) {
+            if (createdStyle.getTitle().equals(ConfigResources.SIGNOR_VER_STYLE)) {
                 newStyle = false;                
                 break;
             }
@@ -55,7 +56,7 @@ public class SignorStyleManager {
     }
     public void applyStyle(CyNetworkView view){
         for (VisualStyle createdStyle : vmm.getAllVisualStyles()) {
-            if (createdStyle.getTitle().equals(Config.SIGNOR_VER_STYLE)) { 
+            if (createdStyle.getTitle().equals(ConfigResources.SIGNOR_VER_STYLE)) { 
                 vmm.setVisualStyle(createdStyle, view);
                 createdStyle.apply(view);
                 view.updateView();           

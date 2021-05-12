@@ -11,6 +11,7 @@ import org.cytoscape.work.TaskMonitor;
 import java.util.HashMap;
 import org.cytoscape.work.TaskFactory;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.ui.panels.result.SignorResultPanel;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
@@ -50,15 +51,15 @@ public class SignorGenericQueryTask extends AbstractTask {
         Boolean includefirstneighbor = false;
 
         //Parsing data
-        if (parameters.get(Config.SINGLESEARCH).equals(true)) {search = Config.SINGLESEARCH; }
-        if (parameters.get(Config.ALLSEARCH).equals(true)) {search = Config.ALLSEARCH; }
-        if (parameters.get(Config.CONNECTSEARCH).equals(true)) {search = Config.CONNECTSEARCH; }
-        if (parameters.get(Config.SHORTESTPATHSEARCH).equals(true)) {search = Config.SHORTESTPATHSEARCH; }
-        if (parameters.get(Config.INCFIRSTNEISEARCH).equals(true)) {includefirstneighbor = true; }            
-        String species = parameters.get(Config.SPECIES).toString();
+        if (parameters.get(NetworkField.SINGLESEARCH).equals(true)) {search = NetworkField.SINGLESEARCH; }
+        if (parameters.get(NetworkField.ALLSEARCH).equals(true)) {search = NetworkField.ALLSEARCH; }
+        if (parameters.get(NetworkField.CONNECTSEARCH).equals(true)) {search = NetworkField.CONNECTSEARCH; }
+        if (parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)) {search = NetworkField.SHORTESTPATHSEARCH; }
+        if (parameters.get(NetworkField.INCFIRSTNEISEARCH).equals(true)) {includefirstneighbor = true; }            
+        String species = parameters.get(NetworkField.SPECIES).toString();
 
         try{
-            if (search == Config.SINGLESEARCH){
+            if (search == NetworkField.SINGLESEARCH){
                 final Boolean fneighcopy = includefirstneighbor;
                 final String finalsearch = search;
                 final String terms_trimmed = terms.trim();
@@ -115,7 +116,7 @@ public class SignorGenericQueryTask extends AbstractTask {
                 }
                 
             }
-            if (search == Config.CONNECTSEARCH || search == Config.ALLSEARCH){                
+            if (search == NetworkField.CONNECTSEARCH || search == NetworkField.ALLSEARCH){                
                 String terms_for_all = terms.replace(" ", "%2C").trim();
                 manager.utils.info(terms_for_all+" "+search);
                 TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), terms_for_all, network);

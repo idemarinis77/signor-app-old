@@ -37,10 +37,12 @@ import org.cytoscape.view.model.CyNetworkViewManager;
  */
 public class PresentationManager implements         
         SessionLoadedListener,
-        SignorNetworkCreatedListener, NetworkAddedListener {
+        SignorNetworkCreatedListener, NetworkAddedListener,
+        NetworkViewAddedListener {
     
     public HashMap<CyNetwork, Network> signorNetMap;
     public HashMap<Network, NetworkView.Type> signorViewMap;
+    public HashMap<CyNetworkView, CyNetwork> signorCyNetworkViewMap;
     SignorManager manager;
     public HashMap<String, ?> parameters;
     public String searched_query;
@@ -86,6 +88,22 @@ public class PresentationManager implements
             if (signornet.parameters.get("SINGLESEARCH").equals(true))
                 signornet.setCyNodeRoot(searched_query);
         }
+    }
+    
+    public void handleEvent (NetworkViewAddedEvent e){
+        
+        CyNetwork cyNetwork = e.getNetworkView().getModel();
+        CyNetworkView cyNetworkView = e.getNetworkView();
+        if(signorCyNetworkViewMap != null){
+           signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
+        }
+        else {
+           signorCyNetworkViewMap = new HashMap(){
+               { put(cyNetworkView, cyNetwork); }
+           };  
+        }
+        manager.signorStyleManager.applyStyle(cyNetworkView);
+        manager.signorStyleManager.installView(cyNetworkView); 
     }
     /*@Override
     public void handleEvent (NetworkAddedEvent e){

@@ -5,6 +5,7 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyRow;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Element;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
 //import it.uniroma2.signor.internal.conceptualmodel.structures.EdgeFields;
@@ -46,7 +47,7 @@ public class Edge implements Element {
         
         score = ((edgeRow.get(Config.NAMESPACE, "SCORE", Double.class) == null) ? 0.0 : edgeRow.get(Config.NAMESPACE, "SCORE", Double.class)); 
         
-        Config.EDGESUMMARY.forEach((k, v) ->
+        EdgeField.EDGESUMMARY.forEach((k, v) ->
                     this.summary.put(k, edgeRow.get(Config.NAMESPACE, k, String.class)));  
        
     }

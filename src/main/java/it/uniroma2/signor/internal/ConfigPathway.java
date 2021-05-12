@@ -190,41 +190,41 @@ SIGNOR-SCUP SARS-CoV
 SIGNOR-WNT_Myogenesis WNT*/
 
         
-        public static final HashMap<String,String> FIELDPTHWORDER= new HashMap(){
-            {
-               put("ENTITYA", "ENTITY");
-               put("TYPEA", "TYPE");
-               put("IDA", "IDA");
-               put("DATABASEA", "DATABASE");
-               put("ENTITYB", "ENTITY");
-               put("TYPEB", "TYPE");
-               put("IDB", "IDB");
-               put("PATHWAY_ID", "PATHWAY_ID");
-               put("PATHWAY_NAME", "PATHWAY_NAME");
-               put("EFFECT", "EFFECT");
-               put("TARGET_LOCATION", "TARGET_LOCATION");
-               put("MECHANISM", "MECHANISM");
-               put("RESIDUE", "RESIDUE");
-               put("SEQUENCE", "SEQUENCE");
-               put("TAX_ID", "TAX_ID");
-               put("CELL_DATA", "CELL_DATA");
-               put("PMID", "PMID");
-               put("DIRECT", "DIRECT");
-               put("ANNOTATOR", "ANNOTATOR");
-               put("SENTENCE", "SENTENCE");
-               put("SIGNOR_ID", "SIGNOR_ID");
-               put("REGULATOR_LOCATION", "REGULATOR_LOCATION");
-               put("NOTES", "NOTES");
-               put("TISSUE_DATA", "TISSUE_DATA");
-               put("MODIFICATIONB", "MODIFICATIONB");
-               put("MODBSEQ", "MODBSEQ");
-               put("MODULATOR_COMPLEX", "MODULATOR_COMPLEX"); 
-               put("TARGET_COMPLEX", "TARGET_COMPLEX");
-               put("MODIFICATIONA", "MODIFICATIONA");
-               put("MODASEQ", "MODASEQ");
-               put("SCORE", "SCORE");
-            }
-        };
+//        public static final HashMap<String,String> FIELDPTHWORDER= new HashMap(){
+//            {
+//               put("ENTITYA", "ENTITY");
+//               put("TYPEA", "TYPE");
+//               put("IDA", "IDA");
+//               put("DATABASEA", "DATABASE");
+//               put("ENTITYB", "ENTITY");
+//               put("TYPEB", "TYPE");
+//               put("IDB", "IDB");
+//               put("PATHWAY_ID", "PATHWAY_ID");
+//               put("PATHWAY_NAME", "PATHWAY_NAME");
+//               put("EFFECT", "EFFECT");
+//               put("TARGET_LOCATION", "TARGET_LOCATION");
+//               put("MECHANISM", "MECHANISM");
+//               put("RESIDUE", "RESIDUE");
+//               put("SEQUENCE", "SEQUENCE");
+//               put("TAX_ID", "TAX_ID");
+//               put("CELL_DATA", "CELL_DATA");
+//               put("PMID", "PMID");
+//               put("DIRECT", "DIRECT");
+//               put("ANNOTATOR", "ANNOTATOR");
+//               put("SENTENCE", "SENTENCE");
+//               put("SIGNOR_ID", "SIGNOR_ID");
+//               put("REGULATOR_LOCATION", "REGULATOR_LOCATION");
+//               put("NOTES", "NOTES");
+//               put("TISSUE_DATA", "TISSUE_DATA");
+//               put("MODIFICATIONB", "MODIFICATIONB");
+//               put("MODBSEQ", "MODBSEQ");
+//               put("MODULATOR_COMPLEX", "MODULATOR_COMPLEX"); 
+//               put("TARGET_COMPLEX", "TARGET_COMPLEX");
+//               put("MODIFICATIONA", "MODIFICATIONA");
+//               put("MODASEQ", "MODASEQ");
+//               put("SCORE", "SCORE");
+//            }
+//        };
         public static final HashMap<String,Class<?>> EDGEFIELDPTH= new HashMap(){
             {
                put("PATHWAY_ID", String.class);

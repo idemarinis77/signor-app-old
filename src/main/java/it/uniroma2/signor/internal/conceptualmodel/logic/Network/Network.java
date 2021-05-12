@@ -96,7 +96,9 @@ public class Network {
     }
    
     public boolean isSingleSearch(){
-        return this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, "SINGLESEARCH", Boolean.class);
+        if (this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, "SINGLESEARCH", Boolean.class)!=null)
+            return true;
+        return false;
     }
     
     public void setCyNodeRoot(String entity){

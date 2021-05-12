@@ -11,11 +11,13 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 
 /**
  *
@@ -32,7 +34,7 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
     private JRadioButton allbutton = new JRadioButton("all", true);
     private JRadioButton connbutton= new JRadioButton("connect", false);
     private JRadioButton shortpath= new JRadioButton("shortest path", false);
-    private JRadioButton inclfirstnei = new JRadioButton("include first neighbor", false);
+    private JRadioButton inclfirstnei = new JRadioButton("include bridge proteins query", false);
     
     public ChooseSearchoption(SignorManager manager){
         super(new GridBagLayout());
@@ -73,14 +75,15 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
             
     public HashMap<String, Object> getParameter(){
         HashMap<String, Object> formvalues = new HashMap<>() {
-            {put (Config.SINGLESEARCH, singlebutton.isSelected());
-             put (Config.ALLSEARCH, allbutton.isSelected());
-             put (Config.CONNECTSEARCH, connbutton.isSelected());
-             put (Config.SHORTESTPATHSEARCH, shortpath.isSelected());
-             put (Config.INCFIRSTNEISEARCH, inclfirstnei.isSelected() && inclfirstnei.isEnabled());
-             put (Config.SPECIES, organism.getSelectedItem());
+            {put (NetworkField.SINGLESEARCH, singlebutton.isSelected());
+             put (NetworkField.ALLSEARCH, allbutton.isSelected());
+             put (NetworkField.CONNECTSEARCH, connbutton.isSelected());
+             put (NetworkField.SHORTESTPATHSEARCH, shortpath.isSelected());
+             put (NetworkField.INCFIRSTNEISEARCH, inclfirstnei.isSelected() && inclfirstnei.isEnabled());
+             put (NetworkField.SPECIES, organism.getSelectedItem());
             }
         };
+
         return formvalues;
     }
 
