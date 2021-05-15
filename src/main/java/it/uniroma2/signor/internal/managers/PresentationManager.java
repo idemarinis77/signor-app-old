@@ -6,7 +6,8 @@
 package it.uniroma2.signor.internal.managers;
 import java.util.HashMap;
 
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
+import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import it.uniroma2.signor.internal.event.*;
 import it.uniroma2.signor.internal.view.NetworkView;
@@ -20,7 +21,8 @@ import org.cytoscape.view.model.events.NetworkViewAddedEvent;
 import org.cytoscape.view.model.events.NetworkViewAddedListener;
 import org.cytoscape.session.events.SessionLoadedEvent;
 import org.cytoscape.session.events.SessionLoadedListener;
-import java.util.Properties;
+
+import java.util.*;
 import java.util.UUID;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyEdge;
@@ -37,8 +39,7 @@ import org.cytoscape.view.model.CyNetworkViewManager;
  */
 public class PresentationManager implements         
         SessionLoadedListener,
-        SignorNetworkCreatedListener, NetworkAddedListener,
-        NetworkViewAddedListener {
+        SignorNetworkCreatedListener, NetworkAddedListener, NetworkViewAddedListener{
     
     public HashMap<CyNetwork, Network> signorNetMap;
     public HashMap<Network, NetworkView.Type> signorViewMap;
@@ -84,26 +85,44 @@ public class PresentationManager implements
     public void handleEvent (SignorNetworkCreatedEvent e){
         manager.utils.info(e.getNewNetwork().toString());
         Network signornet = e.getNewNetwork();
-        if (signornet.parameters.containsKey("SINGLESEARCH")){
-            if (signornet.parameters.get("SINGLESEARCH").equals(true))
+        if (signornet.parameters.containsKey(NetworkField.SINGLESEARCH)){
+            if (signornet.parameters.get(NetworkField.SINGLESEARCH).equals(true))
                 signornet.setCyNodeRoot(searched_query);
         }
     }
-    
+    @Override
     public void handleEvent (NetworkViewAddedEvent e){
-        
-        CyNetwork cyNetwork = e.getNetworkView().getModel();
+
         CyNetworkView cyNetworkView = e.getNetworkView();
-        if(signorCyNetworkViewMap != null){
-           signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
+        manager.utils.info("NetworkView Created "+e.getNetworkView().toString()+"***"+cyNetworkView.getModel().toString());
+        CyNetwork cyNetwork = cyNetworkView.getModel();
+        try {
+            if (signorNetMap.containsKey(cyNetwork)) {
+                manager.utils.info("INSIDE NetworkView Created ");
+                if(signorCyNetworkViewMap != null){
+                   signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
+                }                
+                else {
+                   signorCyNetworkViewMap = new HashMap(){
+                       { put(cyNetworkView, cyNetwork); }
+                   };  
+                }    
+                String query = (String) signorNetMap.get(cyNetwork).parameters.get(NetworkField.QUERY);
+                if(query == Config.INTERACTOMENAME || cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).contains(Config.INTERACTOMENAME)){
+                    //apply SIGNOR STYLE
+                    List<CyNetwork> nets = new ArrayList<CyNetwork>();  
+                    nets.add(cyNetwork);
+//                    manager.utils.getService(CyApplicationManager.class).setCurrentNetwork(cyNetwork);
+//                    manager.utils.getService(CyApplicationManager.class).setSelectedNetworks(nets);
+                    manager.signorStyleManager.applyStyle(cyNetworkView);                    
+//                  manager.utils.getService(CyApplicationManager.class).setCurrentNetworkView(cyNetworkView);
+//                  manager.signorStyleManager.installView(cyNetworkView);             
+                }
+            }
         }
-        else {
-           signorCyNetworkViewMap = new HashMap(){
-               { put(cyNetworkView, cyNetwork); }
-           };  
+        catch (Exception ex){
+            manager.utils.error("Cannot create view for "+cyNetwork.toString()+" "+ex.toString());
         }
-        manager.signorStyleManager.applyStyle(cyNetworkView);
-        manager.signorStyleManager.installView(cyNetworkView); 
     }
     /*@Override
     public void handleEvent (NetworkAddedEvent e){
@@ -124,7 +143,7 @@ public class PresentationManager implements
         try {
             CyNetwork cyNetwork = e.getNetwork();
             CySubNetwork newNetwork = (CySubNetwork) cyNetwork;
-            // I don't want to make configuration if this is the root Network
+            // I don't want to make any action if this is the root Network
             if(newNetwork.getRootNetwork().getBaseNetwork() != cyNetwork){
                 manager.utils.info(newNetwork.toString()+"** BASE NET **"+newNetwork.getRootNetwork().getBaseNetwork());
                 CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
@@ -132,7 +151,7 @@ public class PresentationManager implements
                 manager.utils.info("PASSO "+parentNetwork.toString());
                 Network subnetwork = DataUtils.prepareSubnetwork(parentNetwork, cyNetwork);
                 signorNetMap.put(cyNetwork, subnetwork);
-                signorViewMap.put(subnetwork, NetworkView.Type.DEFAULT);
+                signorViewMap.put(subnetwork, signorViewMap.get(parentNetwork));
                 Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableNode.buildPTMTable(parentNetwork.manager, "PTMNode", cyNetwork);
 

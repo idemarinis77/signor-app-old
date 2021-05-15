@@ -74,29 +74,25 @@ public class SignorNodePanel extends JPanel {
         repaint();        
     }   
     
-    public void selectedNodes() {
-        nodesPanel.removeAll();
+    public void selectedNodes() {        
         this.selectionRunning=true;
         Network network = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into);
-        Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);        
-//        SignorPanelRow node_current_info = new SignorPanelRow(0,3, this.manager);
-        
-//        CyRow rownode = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID());
-//        node_current_info.signorPanelRowDetailNode(nodesPanel,gbc, rownode); 
-
-        Iterator iter_sel_nodes = selectedNodes.iterator();
-        while(iter_sel_nodes.hasNext()){
+        Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true); 
+        if(selectedNodes.size()>0){
+            nodesPanel.removeAll();
             JPanel separator  = new JPanel();
             separator.setLayout(new GridBagLayout());
             separator.add(new SignorLabelStyledBold(">> Node info "), gbc.down().anchor("west"));
             separator.setBackground(new Color(82, 166, 119));
             nodesPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
+        }
+        Iterator iter_sel_nodes = selectedNodes.iterator();
+        while(iter_sel_nodes.hasNext()){            
             CyNode node_current = (CyNode) iter_sel_nodes.next();
-            Node node = network.getNodes().get(node_current);
-            
+            Node node = network.getNodes().get(node_current);            
             HashMap <String,String> summary = node.getSummary();
-            String entity_id = summary.get("ID");
-            String entity_name = summary.get("ENTITY");
+            String entity_id = summary.get(NodeField.ID);
+            String entity_name = summary.get(NodeField.ENTITY);
             Iterator iter = summary.keySet().iterator();
             Iterator iterv = summary.values().iterator();
             JPanel nodeinfo = new JPanel();
@@ -137,30 +133,13 @@ public class SignorNodePanel extends JPanel {
     }
     
     private void buildSingleSearch(String id, Network network){
-//        HashMap<String, Object> new_parameters = new HashMap<>() {
-//                {put (NetworkField.ALLSEARCH, false);}  
-//                {put (NetworkField.CONNECTSEARCH, false);} 
-//                {put (NetworkField.INCFIRSTNEISEARCH, false);} 
-//                {put (NetworkField.SHORTESTPATHSEARCH, false);}
-//                {put (NetworkField.SINGLESEARCH, true);}
-//                {put (NetworkField.SPECIES, network.parameters.get(NetworkField.SPECIES));}
-//                {put ("QUERY", id);}
-//        };
+
         String species = (String) network.parameters.get(NetworkField.SPECIES);
         if(species == null){
             species = "Homo Sapiens";
         }
         HashMap<String, Object> new_parameters = NetworkSearch.buildSearch(id, species, NetworkField.SINGLESEARCH, false);
-        Network new_network = new Network(manager, new_parameters);
-        
-        
-//        String species = (String) network.parameters.get(NetworkField.SPECIES);
-//        if(species == null){
-//            species = "Homo Sapiens";
-//            new_parameters.replace(NetworkField.SPECIES, species);
-//        }
-        //(String search, Boolean includefirstneighbor, String species, 
-//            String terms, Network network)
+        Network new_network = new Network(manager, new_parameters);    
         SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(NetworkField.SINGLESEARCH,
                                                     false, species, id, new_network);
         manager.utils.execute(sgrf.createTaskIterator());

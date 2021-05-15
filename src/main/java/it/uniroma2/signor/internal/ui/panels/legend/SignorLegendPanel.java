@@ -56,6 +56,9 @@ import org.cytoscape.application.events.SetCurrentNetworkViewEvent;
 import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.application.swing.CytoPanel;
 import org.cytoscape.application.swing.CytoPanelState;
+import org.cytoscape.model.events.NetworkAddedEvent;
+import org.cytoscape.model.events.NetworkAddedListener;
+import org.cytoscape.model.subnetwork.CySubNetwork;
 import org.cytoscape.view.model.CyNetworkView;
 
 public class SignorLegendPanel extends JPanel implements 
@@ -63,7 +66,7 @@ public class SignorLegendPanel extends JPanel implements
         CytoPanelComponent2,
         SelectedNodesAndEdgesListener,
         SignorNetworkCreatedListener,         
-        SetCurrentNetworkListener {       
+        SetCurrentNetworkListener{       
 
     private final JTabbedPane tabs = new JTabbedPane(JTabbedPane.BOTTOM);
     private static final Icon icon = IconUtils.createImageIcon(ConfigResources.icon_path);
@@ -213,7 +216,8 @@ public class SignorLegendPanel extends JPanel implements
                     newcynet = k;
                     break;
                 }
-            }
+            }                  
+       
             if (event.getNewNetwork().isPathwayNetwork.equals(true)){
                 //sdp.current_cynetwork_to_serch_into=manager.presentationManager.event.getNewNetwork();
                 this.current_cynetwork_to_serch_into = newcynet;
@@ -258,7 +262,6 @@ public class SignorLegendPanel extends JPanel implements
                 smp.recreateContent(); 
                 tabs.setSelectedComponent(ssp);       
                 manager.utils.info("New SIGNOR network SINGLE SEARCH"+newcynet);                    
-//                }
             }
             
             else if(event.getNewNetwork().parameters.get(NetworkField.ALLSEARCH).equals(true) || 
@@ -285,6 +288,27 @@ public class SignorLegendPanel extends JPanel implements
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");
         }        
     }
+    
+//    @Override
+//    public void handleEvent(NetworkAddedEvent e) {
+//        try {
+//            CyNetwork cyNetwork = e.getNetwork();
+//            CySubNetwork newNetwork = (CySubNetwork) cyNetwork;
+//            // If this is a subnetwork with ptm setted I disable the option to switch from Default and PTM
+//            if(newNetwork.getRootNetwork().getBaseNetwork() != cyNetwork){
+//                CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
+//                Network parentNetwork = manager.presentationManager.signorNetMap.get(parentCyNetwork);
+//                if(manager.presentationManager.signorViewMap.get(parentNetwork) == NetworkView.Type.PTM){
+//                    defviewON.setEnabled(false);
+//                    ptmviewON.setEnabled(false);
+//                }
+//            }
+//        }
+//        catch (Exception ex){
+//            manager.utils.error("SignorLegend handleEvent() "+ex.toString());
+//        }
+//    }
+    
 //    @Override
 //    public void handleEvent(SetCurrentNetworkViewEvent e) {
 //        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString());
@@ -302,8 +326,13 @@ public class SignorLegendPanel extends JPanel implements
             else{
                 showCytoPanel();
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
-                       if (manager.presentationManager.signorNetMap.containsKey(newcynet)){                           
-                          {
+                    if (manager.presentationManager.signorNetMap.containsKey(newcynet)){                           
+                          
+//                           CyNetwork cyNetwork = e.getNetwork();
+                           CySubNetwork subCynetowrk = (CySubNetwork) newcynet;
+                           // If this is a subnetwork with ptm setted I disable the option to switch from Default and PTM
+                           
+                            {
                                Network network = manager.presentationManager.signorNetMap.get(newcynet);
                                NetworkView.Type netviewtype = manager.presentationManager.signorViewMap.get(network);
                                if (netviewtype == NetworkView.Type.DEFAULT) {
@@ -318,7 +347,31 @@ public class SignorLegendPanel extends JPanel implements
                                     defviewON.setSelected(false);
                                     defviewON.setEnabled(true);
                                }
-                           }
+                          }
+                            if(subCynetowrk.getRootNetwork().getBaseNetwork() != newcynet){
+//                                CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
+//                                Network parentNetwork = manager.presentationManager.signorNetMap.get(parentCyNetwork);
+                                manager.utils.info("Sono in set network "+newcynet.toString());
+                                Network subNetwork = manager.presentationManager.signorNetMap.get(newcynet);
+//                                if(subNetwork.isPTMNetwork()){
+//                                    defviewON.setEnabled(false);
+//                                    defviewON.setSelected(false);
+//                                    ptmviewON.setSelected(true);
+//                                    ptmviewON.setEnabled(false);                                    
+//                                }
+                                if(manager.presentationManager.signorViewMap.get(subNetwork)==NetworkView.Type.PTM){
+                                    defviewON.setEnabled(false);
+                                    defviewON.setSelected(false);
+                                    ptmviewON.setSelected(true);
+                                    ptmviewON.setEnabled(false);     
+                                }
+                                else {
+                                    defviewON.setEnabled(false);
+                                    defviewON.setSelected(true);
+                                    ptmviewON.setSelected(false);
+                                    ptmviewON.setEnabled(true); 
+                                }
+                            }
                           if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
                               this.current_cynetwork_to_serch_into = newcynet;
                               tabs.removeAll();

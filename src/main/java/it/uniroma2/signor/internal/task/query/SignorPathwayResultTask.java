@@ -89,14 +89,14 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             //Populate tables and create MyNetwork
             CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
             cynet = manager.createPathwayFromLine(results, cynet);
-           
-            //Populate my logic netowrk
-            network.setNetwork(cynet);
-             
+
+            network.setNetwork(cynet);             
             
             netMan.addNetwork(cynet);   
             CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
-            CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
+            CyNetworkView ntwView = cnvf.createNetworkView(cynet);  
+//            ViewUtils.registerView(manager, ntwView);
+            if (cancelled) return;
             //Apply style
             manager.signorStyleManager.applyStyle(ntwView);
             manager.signorStyleManager.installView(ntwView);            
@@ -124,8 +124,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
                     return;
                 }
             AlgorithmFactory algfactory = new AlgorithmFactory(ntwView, manager);            
-            manager.utils.execute(algfactory.createTaskIterator());
-            
+            manager.utils.execute(algfactory.createTaskIterator());          
             
             manager.utils.showResultsPanel();                
             manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));  

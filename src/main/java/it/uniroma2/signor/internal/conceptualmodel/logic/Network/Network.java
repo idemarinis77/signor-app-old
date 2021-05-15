@@ -6,9 +6,9 @@ import org.cytoscape.model.events.*;
 import org.cytoscape.task.hide.HideTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.NodeCouple;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.Edge;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 
-import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.HttpUtils;
 
@@ -45,6 +45,7 @@ public class Network {
    
     public Boolean isPathwayNetwork = false;
     public Boolean isDeasesNetwork = false;
+//    public Boolean isPTMNetwork = false;
     public Boolean ptm_already_loaded = false;
     public CyNode rootNode;
     private Node networkRootNode;
@@ -94,19 +95,29 @@ public class Network {
             //this.cyNetwork.getDefaultNetworkTable().getRowCount()
          }
     }
-   
+    public boolean isPTMNetwork(){
+        Iterator it = nodes.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry pair = (Map.Entry)it.next();
+            Node node = (Node) pair.getValue();            
+            if (node.getSummary().get(NodeField.TYPE)=="residue"){
+                return true;
+            }
+        }   
+        return false;
+    }    
     public boolean isSingleSearch(){
-        if (this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, "SINGLESEARCH", Boolean.class)!=null)
+        if (this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class)!=null)
             return true;
         return false;
     }
     
     public void setCyNodeRoot(String entity){
-        Collection<CyRow> listrow = this.cyNetwork.getDefaultNodeTable().getMatchingRows​(Config.NAMESPACE, "ID", entity);
+        Collection<CyRow> listrow = this.cyNetwork.getDefaultNodeTable().getMatchingRows​(Config.NAMESPACE, NodeField.ID, entity);
         CyNode rootNode_to_find;
         for (listrow.iterator(); listrow.iterator().hasNext();){
             CyRow row = listrow.iterator().next();
-            if (row.get(Config.NAMESPACE, "ID", String.class).equals(entity)){
+            if (row.get(Config.NAMESPACE, NodeField.ID, String.class).equals(entity)){
                 rootNode_to_find = cyNetwork.getNode(row.get("SUID", Long.class));
                 this.rootNode = rootNode_to_find;
                 break;

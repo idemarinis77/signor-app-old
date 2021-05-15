@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
@@ -73,23 +73,19 @@ public class SignorRelationsPanel extends JPanel {
     
     public void createContent(){
         try {                             
-                relPanel.setLayout(new GridLayout(0, 2));
-                Dimension parentSize = relPanel.getParent().getSize();
-                relPanel.setPreferredSize(new Dimension(parentSize.width-250, parentSize.height));
-                Integer it = 0;
-                for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {
-                    CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getSource().getSUID());
-                    CyRow cyrow_node_t = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
-                    CyRow edge_row= current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
+            relPanel.setLayout(new GridLayout(0, 2));
+//                Dimension parentSize = relPanel.getParent().getSize();
+//                relPanel.setPreferredSize(new Dimension(parentSize.width-250, parentSize.height));
+            Integer it = 0;
+            for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {
+                CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getSource().getSUID());
+                CyRow cyrow_node_t = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
+                CyRow edge_row= current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
                     
-                    relPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.position(0, it));
-                    relPanel.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
-                    
-                    it ++;
-                    
-                }
-                
-            
+                relPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, NodeField.ENTITY, String.class)), gbc.position(0, it));
+                relPanel.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, NodeField.ENTITY, String.class)), gbc.right());                    
+                it ++;                    
+            }                           
         }
         catch (Exception e){
             manager.utils.error("SignorRelationsPanel createContent() "+e.toString());

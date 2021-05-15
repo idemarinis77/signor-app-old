@@ -16,6 +16,8 @@ public class NodeField {
     public static final String TYPE ="TYPE";
     public static final String ID = "ID";
     public static final String DATABASE= "DATABASE";
+    public static final String SOURCE= "SOURCE";
+    public static final String TARGET= "TARGET";
     
     public static final HashMap<String,Class<?>> NODEFIELD= new HashMap(){
         {

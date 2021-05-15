@@ -6,7 +6,7 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Element;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.Edge;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
-
+import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,8 +56,8 @@ public class Node implements Element {
         String species = network.parameters.get(NetworkField.SPECIES).toString();
         String NodeID = this.summary.get(NodeField.ID);
         network.manager.utils.info("Searching pthw for "+NodeID);
-        Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PTHIDA);
-        Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(ConfigPathway.PATHWAYNAME);
+        Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(PathwayField.PTHIDA);
+        Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(PathwayField.PATHWAYNAME);
         try {
             Table.buildAdditionalInfoForSummary(network.manager, network.getCyNetwork());
             BufferedReader br =  HttpUtils.getHTTPSignor(ConfigResources.PATHALLRELATIONSQUERY, network.manager);

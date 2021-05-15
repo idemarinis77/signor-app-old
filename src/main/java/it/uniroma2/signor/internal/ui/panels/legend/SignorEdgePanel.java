@@ -72,24 +72,22 @@ public class SignorEdgePanel extends JPanel {
     }   
     
     public void selectedEdges() {
-        edgesPanel.removeAll();
+        
         this.selectionRunning=true;
         Network network = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into);
         Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);   
-        
-//        SignorPanelRow edge_current_info = new SignorPanelRow(6,2, this.manager);
-//        CyEdge edge_current = selectedEdges.iterator().next();
-//        
-//        CyRow rowedge = current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(edge_current.getSUID());
-//        edge_current_info.signorPanelRowDetailEdge(edgesPanel,gbc, rowedge);   
-        
-        Iterator iter_sel_edges = selectedEdges.iterator();
-        while(iter_sel_edges.hasNext()){
+        if(selectedEdges.size()>0){
+            edgesPanel.removeAll();
+
             JPanel separator  = new JPanel();
             separator.setLayout(new GridBagLayout());
             separator.add(new SignorLabelStyledBold(">> Edge info "), gbc.down().anchor("west"));
             separator.setBackground(new Color(82, 166, 119));
             edgesPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
+        }
+        Iterator iter_sel_edges = selectedEdges.iterator();
+        while(iter_sel_edges.hasNext()){
+            
             CyEdge edge_current = (CyEdge) iter_sel_edges.next();
             Edge edge = network.getEdges().get(edge_current);            
             HashMap <String,String> summary = edge.getSummary();         

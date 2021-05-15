@@ -5,6 +5,7 @@
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
@@ -96,11 +97,12 @@ public class SignorDescriptionsPanel extends JPanel {
             pathinfo.setLayout(new GridBagLayout());
             
             for (int i = 0; i < header_pth.length; i++) {                     
-                pathinfo.add(new SignorLabelStyledBold(ConfigPathway.SIGNORPTHFIELDMAP.get(header_pth[i])), gbc.down());   
+                pathinfo.add(new SignorLabelStyledBold(PathwayField.SIGNORPTHFIELDMAP.get(header_pth[i])), gbc.down());   
                 //Path_curator may not be present and path_info_packed is shorter than header_pth
                 if(i <path_info_packed.length){
-                
-                    if ( path_info_packed[i].length() > 20 && ConfigPathway.SIGNORPTHFIELDMAP.get(header_pth[i])== "Description") 
+                    manager.utils.info(header_pth[i]+" campo dell'header");
+//                    if ( path_info_packed[i].length() > 20 && PathwayField.SIGNORPTHFIELDMAP.get(header_pth[i])== "Description") 
+                    if ( path_info_packed[i].length() > 20 && header_pth[i].startsWith(PathwayField.SIGNORPTH_DESCRIPTION))
                         pathinfo.add(new HelpButton(manager, path_info_packed[i]), gbc.right());
                     else 
                         pathinfo.add(new JLabel(path_info_packed[i]), gbc.right());      

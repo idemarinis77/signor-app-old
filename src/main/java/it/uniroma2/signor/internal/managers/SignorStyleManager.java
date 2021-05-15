@@ -67,6 +67,6 @@ public class SignorStyleManager {
     public void installView(CyNetworkView view){
         manager.utils.getService(CyNetworkViewManager.class).addNetworkView(view);
         manager.utils.getService(CyApplicationManager.class).setCurrentNetworkView(view);
-        manager.lastCyNetworkView = view;
+//        manager.lastCyNetworkView = view;
     }
 }

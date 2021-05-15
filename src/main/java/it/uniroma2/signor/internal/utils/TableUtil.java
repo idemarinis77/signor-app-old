@@ -81,7 +81,11 @@ public class TableUtil {
         if (table.getColumn(columnName) != null)
             table.deleteColumn(columnName);
     }
-
+    public static boolean ifColumnIfExist(CyTable table, String namespace, String columnName) {
+        if (table.getColumn(namespace, columnName) != null)
+            return true;
+        else return false;
+    }
     public static String getName(CyNetwork network, CyIdentifiable ident) {
         return getString(network, ident, CyNetwork.NAME);
     }

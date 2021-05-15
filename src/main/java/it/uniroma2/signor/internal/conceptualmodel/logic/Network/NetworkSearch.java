@@ -110,6 +110,21 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.VIEW, false);
             return buildSearchParams;
         }
+        else if(type == NetworkField.PATHWAYSEARCH) {
+            buildSearchParams.put(NetworkField.SINGLESEARCH, false);
+            buildSearchParams.put(NetworkField.ALLSEARCH, false);
+            buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
+            buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, false);
+            buildSearchParams.put(NetworkField.PATHWAYSEARCH, true);
+            buildSearchParams.put(NetworkField.DISEASESEARCH, false);
+            buildSearchParams.put(NetworkField.QUERY, query);
+            buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
+            buildSearchParams.put(NetworkField.SPECIES, organism);
+            buildSearchParams.put(NetworkField.PATHWAYID, query);
+            buildSearchParams.put(NetworkField.PTMLOADED, false);
+            buildSearchParams.put(NetworkField.VIEW, false);
+            return buildSearchParams;
+        }
         return null;
     }
     

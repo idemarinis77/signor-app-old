@@ -13,15 +13,15 @@ import java.util.HashMap;
 public class PTMEdgeField {
     public static final String EdgeParent = "EdgeParent";
     public static final String NodeSourceSUID = "NodeSourceSUID";
-    public static final String  NodeTargetSUID = "NodeTargetSUID";
-    public static final String  INTERACTION = "INTERACTION";
+    public static final String NodeTargetSUID = "NodeTargetSUID";
+    public static final String Interaction = "INTERACTION";
     
     public static final HashMap<String,Class<?>> PTMEDGEFIELD= new HashMap(){
         {
            put(EdgeParent, Long.class);           
            put(NodeSourceSUID, Long.class);           
            put(NodeTargetSUID, Long.class);           
-           put(INTERACTION, String.class);
+           put(Interaction, String.class);
         }
     };
 }

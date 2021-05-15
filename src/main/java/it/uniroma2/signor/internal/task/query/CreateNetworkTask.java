@@ -17,6 +17,7 @@ import org.cytoscape.work.TaskMonitor;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
+import it.uniroma2.signor.internal.task.query.factories.AlgorithmFactory;
 import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
 import java.io.*;
 import java.time.Duration;
@@ -103,7 +104,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 network.setNetwork(cynet);
                 if(network.parameters.get(NetworkField.SINGLESEARCH).equals(true)){
                     network.setCyNodeRoot(terms);
-                    network.parameters.replace("QUERY", terms);
+                    network.parameters.replace(NetworkField.QUERY, terms);
                 }
                 
                 netMan.addNetwork(cynet);            
@@ -136,29 +137,9 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                     destroyNetwork(manager, network);
                     return;
                 }
-//                if(network.parameters.get(Config.SINGLESEARCH).equals(true))
-//                    network.setCyNodeRoot(terms);                
-                
-                CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
-                CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
-                if (alg == null) alg = layoutManager.getLayout("force-directed");
-                Object context = alg.getDefaultLayoutContext();
-                TunableSetter setter = manager.utils.getService(TunableSetter.class);
-                Map<String, Object> layoutArgs = new HashMap<>();
-                layoutArgs.put("defaultNodeMass", 10.0);
-                setter.applyTunables(context, layoutArgs);
-                Set<View<CyNode>> nodeViews = new HashSet<>(ntwView.getNodeViews());
-                TaskIterator taskIterator = alg.createTaskIterator(ntwView, context, nodeViews, null);
-                insertTasksAfterCurrentTask(taskIterator);   
-
-//                double scale = 0.5;
-//                double newScale = ntwView.getVisualProperty(NETWORK_SCALE_FACTOR).doubleValue() * scale;
-//                ntwView.setVisualProperty(NETWORK_SCALE_FACTOR, newScale);
-//                manager.signorStyleManager.installView(ntwView);
-//                ZoomNetworkViewTaskFactory zvtf = new ZoomNetworkViewTaskFactory(0.5, manager);
-//                manager.utils.execute(zvtf.createTaskIterator(ntwView));
-//                
-                
+            
+                AlgorithmFactory algfactory = new AlgorithmFactory(ntwView, manager);            
+                manager.utils.execute(algfactory.createTaskIterator());          
                 
                 manager.utils.showResultsPanel();            
                 manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));        

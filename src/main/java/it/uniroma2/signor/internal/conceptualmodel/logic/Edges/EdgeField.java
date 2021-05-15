@@ -13,6 +13,7 @@ import java.util.HashMap;
  */
 public class EdgeField {
     public static final String Interaction = "Interaction";
+    public static final String EFFECT = "EFFECT";
     public static final String MECHANISM = "MECHANISM";
     public static final String RESIDUE ="RESIDUE";
     public static final String SEQUENCE ="SEQUENCE";
@@ -70,26 +71,26 @@ public class EdgeField {
     //Fields from TSV for Edges
     public static final HashMap<String,String> EDGEFIELDMAP = new HashMap(){
         {
-           put("EFFECT", "Interaction");
-           put("MECHANISM", "MECHANISM");
-           put("RESIDUE", "RESIDUE");
-           put("SEQUENCE", "SEQUENCE");
-           put("TAX_ID", "TAX_ID");
-           put("CELL_DATA", "CELL_DATA");
-           put("TISSUE_DATA", "TISSUE_DATA");
-           put("MODULATOR_COMPLEX", "MODULATOR_COMPLEX");
-           put("TARGET_COMPLEX", "TARGET_COMPLEX");
-           put("MODIFICATIONA", "MODIFICATIONA");
-           put("MODASEQ", "MODASEQ");
-           put("MODIFICATIONB", "MODIFICATIONB");
-           put("MODBSEQ", "MODBSEQ");
-           put("PMID", "PMID");
-           put("DIRECT", "DIRECT");
-           put("NOTES", "NOTES");
-           put("ANNOTATOR", "ANNOTATOR");
-           put("SENTENCE", "SENTENCE");
-           put("SCORE", "SCORE");
-           put("SIGNOR_ID", "SIGNOR_ID");           
+           put(EFFECT, Interaction);
+           put(MECHANISM, MECHANISM);
+           put(RESIDUE, RESIDUE);
+           put(SEQUENCE, SEQUENCE);
+           put(TAX_ID, TAX_ID);
+           put(CELL_DATA, CELL_DATA);
+           put(TISSUE_DATA, TISSUE_DATA);
+           put(MODULATOR_COMPLEX, MODULATOR_COMPLEX);
+           put(TARGET_COMPLEX, TARGET_COMPLEX);
+           put(MODIFICATIONA, MODIFICATIONA);
+           put(MODASEQ, MODASEQ);
+           put(MODIFICATIONB, MODIFICATIONB);
+           put(MODBSEQ, MODBSEQ);
+           put(PMID, PMID);
+           put(DIRECT, DIRECT);
+           put(NOTES, NOTES);
+           put(ANNOTATOR, ANNOTATOR);
+           put(SENTENCE, SENTENCE);
+           put(SCORE, SCORE);
+           put(SIGNOR_ID, SIGNOR_ID);           
         }
     };
 }

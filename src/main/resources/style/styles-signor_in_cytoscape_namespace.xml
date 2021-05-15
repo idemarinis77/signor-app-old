@@ -23,7 +23,7 @@
             <visualProperty default="0.0" name="NODE_DEPTH"/>
             <visualProperty default="C,C,c,0.00,0.00" name="NODE_CUSTOMGRAPHICS_POSITION_2"/>
             <visualProperty default="0.0" name="NODE_CUSTOMGRAPHICS_SIZE_6"/>
-            <visualProperty default="#00CC00" name="NODE_FILL_COLOR">
+            <visualProperty default="#FFFFFF" name="NODE_FILL_COLOR">
                 <discreteMapping attributeName="SIGNOR::TYPE" attributeType="string">
                     <discreteMappingEntry attributeValue="phenotype" value="#99FF99"/>
                     <discreteMappingEntry attributeValue="smallmolecule" value="#FFFF00"/>
@@ -32,6 +32,7 @@
                     <discreteMappingEntry attributeValue="proteinfamily" value="#FFFFFF"/>
                     <discreteMappingEntry attributeValue="complex" value="#708CCD"/>
                     <discreteMappingEntry attributeValue="stimulus" value="#FFCCCC"/>
+                    <discreteMappingEntry attributeValue="residue" value="#CC00CC"/>
                 </discreteMapping>
             </visualProperty>
             <visualProperty default="255" name="NODE_BORDER_TRANSPARENCY"/>
@@ -46,7 +47,11 @@
             <visualProperty default="0.0" name="NODE_CUSTOMGRAPHICS_SIZE_8"/>
             <visualProperty default="C,C,c,0.00,0.00" name="NODE_CUSTOMGRAPHICS_POSITION_5"/>
             <visualProperty default="#FFFF00" name="NODE_SELECTED_PAINT"/>
-            <visualProperty default="#000000" name="NODE_BORDER_PAINT"/>
+            <visualProperty default="#000000" name="NODE_BORDER_PAINT">
+                <discreteMapping attributeName="SIGNOR::TYPE" attributeType="string">
+                    <discreteMappingEntry attributeValue="residue" value="#FFFFFF"/>
+                </discreteMapping>
+            </visualProperty>
             <visualProperty default="org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ]," name="NODE_CUSTOMGRAPHICS_6"/>
             <visualProperty default="C,C,c,0.00,0.00" name="NODE_CUSTOMGRAPHICS_POSITION_4"/>
             <visualProperty default="0.0" name="NODE_CUSTOMGRAPHICS_SIZE_1"/>
@@ -72,7 +77,11 @@
             <visualProperty default="0.0" name="NODE_CUSTOMGRAPHICS_SIZE_3"/>
             <visualProperty default="true" name="NODE_NESTED_NETWORK_IMAGE_VISIBLE"/>
             <visualProperty default="C,C,c,0.00,0.00" name="NODE_CUSTOMGRAPHICS_POSITION_1"/>
-            <visualProperty default="40.0" name="NODE_HEIGHT"/>
+            <visualProperty default="40.0" name="NODE_HEIGHT">
+                <discreteMapping attributeName="SIGNOR::TYPE" attributeType="string">
+                    <discreteMappingEntry attributeValue="residue" value="20.0"/>
+                </discreteMapping>
+            </visualProperty>
             <visualProperty default="0.0" name="NODE_Z_LOCATION"/>
             <visualProperty default="C,C,c,0.00,0.00" name="NODE_CUSTOMGRAPHICS_POSITION_3"/>
             <visualProperty default="S,N,c,0.00,0.00" name="NODE_LABEL_POSITION"/>
@@ -88,10 +97,14 @@
                 </discreteMapping>
             </visualProperty>
             <visualProperty default="0.0" name="NODE_CUSTOMGRAPHICS_SIZE_9"/>
-            <visualProperty default="40.0" name="NODE_WIDTH"/>
+            <visualProperty default="40.0" name="NODE_WIDTH">
+                <discreteMapping attributeName="SIGNOR::TYPE" attributeType="string">
+                    <discreteMappingEntry attributeValue="residue" value="20.0"/>
+                </discreteMapping>
+            </visualProperty>
             <visualProperty default="255" name="NODE_LABEL_TRANSPARENCY"/>
             <visualProperty default="" name="NODE_LABEL">
-                <passthroughMapping attributeName="SIGNOR::ENTITY" attributeType="string"/>
+                <passthroughMapping attributeName="name" attributeType="string"/>
             </visualProperty>
             <visualProperty default="org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ]," name="NODE_CUSTOMGRAPHICS_9"/>
             <visualProperty default="0.0" name="NODE_Y_LOCATION"/>

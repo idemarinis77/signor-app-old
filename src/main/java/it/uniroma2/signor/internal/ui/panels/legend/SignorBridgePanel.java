@@ -158,7 +158,7 @@ public class SignorBridgePanel extends JPanel {
         manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString());
         
         SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(NetworkField.CONNECTSEARCH, true, NetworkField.SPECIES,
-                                                  (String) new_parameters.get("QUERY"), newnetwork);
+                                                  (String) new_parameters.get(NetworkField.QUERY), newnetwork);
         manager.utils.execute(sgrf.createTaskIterator());
     }
     private void addEntity(Network network, String new_entity){
@@ -193,7 +193,7 @@ public class SignorBridgePanel extends JPanel {
         
         SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(default_search, 
                 (boolean) new_parameters.get(NetworkField.INCFIRSTNEISEARCH), NetworkField.SPECIES,
-                                                  (String) new_parameters.get("QUERY"), newnetwork);
+                                                  (String) new_parameters.get(NetworkField.QUERY), newnetwork);
         manager.utils.execute(sgrf.createTaskIterator());
     }
 }

@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
@@ -74,16 +75,15 @@ public class SignorModificationsPanel extends JPanel {
             //SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 2, manager);
             modPanel.setLayout(new GridLayout(0, 5));
             Integer it =0;
-            for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {
-                
+            for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {                
                 CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
                 CyRow cyrow_edge = current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
-                if (!cyrow_edge.get(Config.NAMESPACE, "RESIDUE", String.class).isEmpty()){
-                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "RESIDUE", String.class)), gbc.down());
-                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "SEQUENCE", String.class)), gbc.right());
-                    modPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());
-                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "Interaction", String.class).split(" ")[0]), gbc.right());
-                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, "MECHANISM", String.class)), gbc.right());
+                if (cyrow_edge.get(Config.NAMESPACE, EdgeField.RESIDUE, String.class)!=null){
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, EdgeField.RESIDUE, String.class)), gbc.down());
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, EdgeField.SEQUENCE, String.class)), gbc.right());
+                    modPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, NodeField.ENTITY, String.class)), gbc.right());
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, EdgeField.Interaction, String.class).split(" ")[0]), gbc.right());
+                    modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, EdgeField.MECHANISM, String.class)), gbc.right());
                 }
                 it++;                
             }                  

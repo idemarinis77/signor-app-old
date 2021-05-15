@@ -19,6 +19,9 @@ import it.uniroma2.signor.internal.utils.IconUtils;
 import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.ui.components.SearchPTHQueryComponent;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkSearch;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import it.uniroma2.signor.internal.task.query.SignorGenericQueryTask;
 import it.uniroma2.signor.internal.task.query.SignorPathwayResultTask;
 import it.uniroma2.signor.internal.ui.components.ChoosePathwayoption;
@@ -86,12 +89,16 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
                             .map(entry-> entry.getKey())
                             .collect(Collectors.joining());
         parameters.clear();
-        parameters.put(ConfigPathway.PATHWAYID, pathwayid);
+        parameters.put(PathwayField.PATHWAYID, pathwayid);
+        manager.utils.info(parameters.toString());
+        HashMap <String, Object> buildParams = NetworkSearch.buildSearch(pathwayid, (String) parameters.get(NetworkField.SPECIES), 
+                                                        NetworkField.PATHWAYSEARCH, false);
+        manager.utils.info("nuovo array "+buildParams.toString());
         try { 
             /*parameters = chooseSearchoption.getParameter();
             parameters.put("QUERY", pathway);*/
             manager.utils.info("Performing SIGNOR PTH search for "+parameters.toString()); 
-            return new TaskIterator(new SignorPathwayResultTask(new Network(manager, parameters), pathwayid)); 
+            return new TaskIterator(new SignorPathwayResultTask(new Network(manager, buildParams), pathwayid)); 
         }
         catch (Exception e){
             manager.utils.error("Problems in performing SIGNOR PTH search "+e.toString());

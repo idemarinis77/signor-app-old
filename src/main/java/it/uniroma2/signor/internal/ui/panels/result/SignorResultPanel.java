@@ -29,7 +29,7 @@ import java.util.Iterator;
 import static java.util.stream.Collectors.toList;
 import org.cytoscape.work.TaskFactory;
 import it.uniroma2.signor.internal.Config;
-
+import java.util.Arrays;
 /**
  *
  * @author amministratore
@@ -69,9 +69,7 @@ public class SignorResultPanel extends JPanel {
         return component.getPreferredSize().width;
     }
     
-    private void init(Integer numberresutls, String species) {
-        
-        
+    private void init(Integer numberresutls, String species) {             
         
         descriptionPanel = new VerticalPanel();
         descriptionPanel.add(new CenteredLabel(numberresutls+" results found for organism "+species, 16, Color.BLACK), layoutHelper.down().expandHoriz());
@@ -95,25 +93,39 @@ public class SignorResultPanel extends JPanel {
         //Iterator lines = results.listIterator();
         JPanel table_of_result_to_scroll = new JPanel(new GridBagLayout());
         for ( Iterator lines = results.listIterator(); lines.hasNext();){
+            
+            int i = 0;
             String line = (String) lines.next();
             String[] fields = line.split("\t");
+            if(Config.SPECIESLIST.get(species)=="10090" || Config.SPECIESLIST.get(species) == "10116")
+                i++;
             SignorPanelRow listresults = new SignorPanelRow(1, 4, manager);
-            JLabel primaentity = new JLabel(fields[0]);
-            JLabel primaid = new JLabel(fields[1]);
-            JLabel primatype = new JLabel(fields[2]);
+            JLabel primaentity = new JLabel(fields[i]);
+            JLabel primaid = new JLabel(fields[i+1]);
+            listresults.add(primaentity, layoutHelper.insets(2,2,2,2));
+            listresults.add(primaid);
+            if(Config.SPECIESLIST.get(species)=="10090" || Config.SPECIESLIST.get(species) == "10116"){
+                JLabel primatype = new JLabel("proteins");
+                listresults.add(primatype);
+            }
+            else{ 
+                JLabel primatype = new JLabel(fields[i+2]);
+                listresults.add(primatype);
+            }
             SignorButton link= new SignorButton("Get relations");
             //****************************************
             //*******************************************
             //ATTENTION TO VERIFY THE RESULTS WITH THE NEW HEADER
-            if(Config.SPECIESLIST.get(species)=="9606")
-               link.addActionListener(e -> buildNetworkFromSelection(fields[1]));
-            else 
-               link.addActionListener(e -> buildNetworkFromSelection(fields[2]));
+            final int j = i+1;
+//            if(Config.SPECIESLIST.get(species)=="9606")
+               link.addActionListener(e -> buildNetworkFromSelection(fields[j]));
+//            else 
+//               link.addActionListener(e -> buildNetworkFromSelection(fields[2]));
             //add(listresults, layoutHelper.down());
             
-            listresults.add(primaentity, layoutHelper.insets(2,2,2,2));
-            listresults.add(primaid);
-            listresults.add(primatype);
+//            listresults.add(primaentity, layoutHelper.insets(2,2,2,2));
+//            listresults.add(primaid);
+//            listresults.add(primatype);
             listresults.add(link);  
             table_of_result_to_scroll.add(listresults, layoutHelper.down());
         }

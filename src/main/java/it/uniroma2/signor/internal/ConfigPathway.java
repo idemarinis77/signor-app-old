@@ -20,32 +20,48 @@ public class ConfigPathway {
 //        public static final String SIGNORPTH_ID = "SIGNOR_PTH_ID_SEARCH_FACTORY";
         
         //Field to parse PATHWAY SIG and Name
-        public static final String[] SIGNORPTH_DESCRIPTION = {"sig_id", "path_name", "path_description", "path_curator"};
-        public static final String SIGNORPTH_SIG_ID = "sig_id";
-        public static final String SIGNORPTH_PATH_NAME = "path_name";
-        
-        public static final HashMap<String,String> SIGNORPTHFIELDMAP = new HashMap() {
-                  {
-                     put("sig_id", "Pathway identifier");
-                     put("path_name", "Name");
-                     put("coalesce", "Description");
-                     put("path_curator", "Curator");
-            }
-        };
-        
-        //Order of fields, tabbed by \t, for URL parsing. There is no header in URL
+//        public static final String[] SIGNORPTH_DESCRIPTION = {"sig_id", "path_name", "path_description", "path_curator"};
+//        public static final String SIGNORPTH_SIG_ID = "sig_id";
+//        public static final String SIGNORPTH_PATH_NAME = "path_name";
+//        
+//        public static final HashMap<String,String> SIGNORPTHFIELDMAP = new HashMap() {
+//                  {
+//                     put("sig_id", "Pathway identifier");
+//                     put("path_name", "Name");
+//                     put("coalesce", "Description");
+//                     put("path_curator", "Curator");
+//            }
+//        };
+//        
+//        //Order of fields, tabbed by \t, for URL parsing. There is no header in URL
+//        public static final String[] HEADERPTH = {"PATHWAY_ID", "PATHWAY_NAME", "ENTITYA", "REGULATOR_LOCATION", "TYPEA", "IDA", "DATABASEA",
+//                                                    "ENTITYB", "TARGET_LOCATION", "TYPEB", "IDB", "DATABASEB", "EFFECT", 
+//                                                    "MECHANISM", "RESIDUE", "SEQUENCE", "TAX_ID", "CELL_DATA",
+//                                                    "TISSUE_DATA", "MODULATOR_COMPLEX", "TARGET_COMPLEX", "MODIFICATIONA", "MODASEQ", 
+//                                                    "MODIFICATIONB", "MODBSEQ", "PMID", "DIRECT", "NOTES", "ANNOTATOR", 
+//                                                    "SENTENCE", "SIGNOR_ID","SCORE"};
+//        
+//        //These attributes are used to search for list of pathway to show in summary sheet
+//        public static final String PTHIDA = "IDA";
+//        public static final String PATHWAYNAME = "PATHWAY_NAME";
+//        public static final String PATHWAYID = "PATHWAYID";
+//        
+    
         public static final String[] HEADERPTH = {"PATHWAY_ID", "PATHWAY_NAME", "ENTITYA", "REGULATOR_LOCATION", "TYPEA", "IDA", "DATABASEA",
                                                     "ENTITYB", "TARGET_LOCATION", "TYPEB", "IDB", "DATABASEB", "EFFECT", 
                                                     "MECHANISM", "RESIDUE", "SEQUENCE", "TAX_ID", "CELL_DATA",
                                                     "TISSUE_DATA", "MODULATOR_COMPLEX", "TARGET_COMPLEX", "MODIFICATIONA", "MODASEQ", 
                                                     "MODIFICATIONB", "MODBSEQ", "PMID", "DIRECT", "NOTES", "ANNOTATOR", 
                                                     "SENTENCE", "SIGNOR_ID","SCORE"};
-        
-        //These attributes are used to search for list of pathway to show in summary sheet
-        public static final String PTHIDA = "IDA";
-        public static final String PATHWAYNAME = "PATHWAY_NAME";
-        public static final String PATHWAYID = "PATHWAYID";
-        
+    
+        public static int node_source_positions[] = {2,4,5,6};
+        public static int node_target_positions[]= {7,9,10,11};
+        public static int edge_positions[] = {0,1,3,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31};
+        public static int source_entity_position= 2;
+        public static int target_entity_position= 7;
+        public static int interaction_position= 12;
+    
+    
         public static final HashMap<String,String> PathwayDiseaseList = new HashMap() {
       
             {
@@ -225,61 +241,61 @@ SIGNOR-WNT_Myogenesis WNT*/
 //               put("SCORE", "SCORE");
 //            }
 //        };
-        public static final HashMap<String,Class<?>> EDGEFIELDPTH= new HashMap(){
-            {
-               put("PATHWAY_ID", String.class);
-               put("PATHWAY_NAME", String.class);
-               put("Interaction", String.class);
-               put("TARGET_LOCATION", String.class);
-               put("MECHANISM", String.class);
-               put("RESIDUE", String.class);
-               put("SEQUENCE", String.class);
-               put("TAX_ID", Integer.class);
-               put("CELL_DATA", String.class);
-               put("PMID", String.class);
-               put("DIRECT", String.class);
-               put("ANNOTATOR", String.class);
-               put("SENTENCE", String.class);
-               put("SIGNOR_ID", String.class);
-               put("REGULATOR_LOCATION", String.class);
-               put("NOTES", String.class);
-               put("TISSUE_DATA", String.class);
-               put("MODIFICATIONB", String.class);
-               put("MODBSEQ", String.class);
-               put("MODULATOR_COMPLEX", String.class); 
-               put("TARGET_COMPLEX", String.class);
-               put("MODIFICATIONA", String.class);
-               put("MODASEQ", String.class);
-               put("SCORE", Double.class);
-            }
-        };
-        public static final HashMap<String,String> EDGEFIELDPTHMAP= new HashMap(){
-            {
-               put("PATHWAY_ID", "PATHWAY_ID");
-               put("PATHWAY_NAME","PATHWAY_NAME");
-               put("EFFECT", "Interaction");
-               put("TARGET_LOCATION", "TARGET_LOCATION");
-               put("MECHANISM", "MECHANISM");
-               put("RESIDUE", "RESIDUE");
-               put("SEQUENCE", "SEQUENCE");
-               put("TAX_ID", "TAX_ID");
-               put("CELL_DATA", "CELL_DATA");
-               put("PMID", "PMID");
-               put("DIRECT", "DIRECT");
-               put("ANNOTATOR", "ANNOTATOR");
-               put("SENTENCE", "SENTENCE");
-               put("SIGNOR_ID", "SIGNOR_ID");
-               put("REGULATOR_LOCATION", "REGULATOR_LOCATION");
-               put("NOTES", "NOTES");
-               put("TISSUE_DATA", "TISSUE_DATA");
-               put("MODIFICATIONB", "MODIFICATIONB");
-               put("MODBSEQ", "MODBSEQ");
-               put("MODULATOR_COMPLEX", "MODULATOR_COMPLEX"); 
-               put("TARGET_COMPLEX", "TARGET_COMPLEX");
-               put("MODIFICATIONA", "MODIFICATIONA");
-               put("MODASEQ", "MODASEQ");
-               put("SCORE", "SCORE");
-            }
-        };
-     
+//        public static final HashMap<String,Class<?>> EDGEFIELDPTH= new HashMap(){
+//            {
+//               put("PATHWAY_ID", String.class);
+//               put("PATHWAY_NAME", String.class);
+//               put("Interaction", String.class);
+//               put("TARGET_LOCATION", String.class);
+//               put("MECHANISM", String.class);
+//               put("RESIDUE", String.class);
+//               put("SEQUENCE", String.class);
+//               put("TAX_ID", Integer.class);
+//               put("CELL_DATA", String.class);
+//               put("PMID", String.class);
+//               put("DIRECT", String.class);
+//               put("ANNOTATOR", String.class);
+//               put("SENTENCE", String.class);
+//               put("SIGNOR_ID", String.class);
+//               put("REGULATOR_LOCATION", String.class);
+//               put("NOTES", String.class);
+//               put("TISSUE_DATA", String.class);
+//               put("MODIFICATIONB", String.class);
+//               put("MODBSEQ", String.class);
+//               put("MODULATOR_COMPLEX", String.class); 
+//               put("TARGET_COMPLEX", String.class);
+//               put("MODIFICATIONA", String.class);
+//               put("MODASEQ", String.class);
+//               put("SCORE", Double.class);
+//            }
+//        };
+//        public static final HashMap<String,String> EDGEFIELDPTHMAP= new HashMap(){
+//            {
+//               put("PATHWAY_ID", "PATHWAY_ID");
+//               put("PATHWAY_NAME","PATHWAY_NAME");
+//               put("EFFECT", "Interaction");
+//               put("TARGET_LOCATION", "TARGET_LOCATION");
+//               put("MECHANISM", "MECHANISM");
+//               put("RESIDUE", "RESIDUE");
+//               put("SEQUENCE", "SEQUENCE");
+//               put("TAX_ID", "TAX_ID");
+//               put("CELL_DATA", "CELL_DATA");
+//               put("PMID", "PMID");
+//               put("DIRECT", "DIRECT");
+//               put("ANNOTATOR", "ANNOTATOR");
+//               put("SENTENCE", "SENTENCE");
+//               put("SIGNOR_ID", "SIGNOR_ID");
+//               put("REGULATOR_LOCATION", "REGULATOR_LOCATION");
+//               put("NOTES", "NOTES");
+//               put("TISSUE_DATA", "TISSUE_DATA");
+//               put("MODIFICATIONB", "MODIFICATIONB");
+//               put("MODBSEQ", "MODBSEQ");
+//               put("MODULATOR_COMPLEX", "MODULATOR_COMPLEX"); 
+//               put("TARGET_COMPLEX", "TARGET_COMPLEX");
+//               put("MODIFICATIONA", "MODIFICATIONA");
+//               put("MODASEQ", "MODASEQ");
+//               put("SCORE", "SCORE");
+//            }
+//        };
+//     
 }
