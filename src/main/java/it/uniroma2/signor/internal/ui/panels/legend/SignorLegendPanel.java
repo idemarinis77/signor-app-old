@@ -289,33 +289,6 @@ public class SignorLegendPanel extends JPanel implements
         }        
     }
     
-//    @Override
-//    public void handleEvent(NetworkAddedEvent e) {
-//        try {
-//            CyNetwork cyNetwork = e.getNetwork();
-//            CySubNetwork newNetwork = (CySubNetwork) cyNetwork;
-//            // If this is a subnetwork with ptm setted I disable the option to switch from Default and PTM
-//            if(newNetwork.getRootNetwork().getBaseNetwork() != cyNetwork){
-//                CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
-//                Network parentNetwork = manager.presentationManager.signorNetMap.get(parentCyNetwork);
-//                if(manager.presentationManager.signorViewMap.get(parentNetwork) == NetworkView.Type.PTM){
-//                    defviewON.setEnabled(false);
-//                    ptmviewON.setEnabled(false);
-//                }
-//            }
-//        }
-//        catch (Exception ex){
-//            manager.utils.error("SignorLegend handleEvent() "+ex.toString());
-//        }
-//    }
-    
-//    @Override
-//    public void handleEvent(SetCurrentNetworkViewEvent e) {
-//        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString());
-////        manager.utils.info("SignorLegendPanel handleEvent(SetCurrentNetworkViewEvent) "+e.getNetworkView().toString()+
-////                " "+manager.presentationManager.signorViewMap.get(e.getNetworkView()));
-//        
-//    }
     @Override
     public void handleEvent(SetCurrentNetworkEvent e) {       
         try {
@@ -328,7 +301,7 @@ public class SignorLegendPanel extends JPanel implements
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
                     if (manager.presentationManager.signorNetMap.containsKey(newcynet)){                           
                           
-//                           CyNetwork cyNetwork = e.getNetwork();
+//                          CyNetwork cyNetwork = e.getNetwork();
                            CySubNetwork subCynetowrk = (CySubNetwork) newcynet;
                            // If this is a subnetwork with ptm setted I disable the option to switch from Default and PTM
                            
@@ -425,7 +398,7 @@ public class SignorLegendPanel extends JPanel implements
             }
         }
         catch(Exception err){
-            manager.utils.error("SignorLegendPanel handleEvent(SetCurrentNetworkEvent) "+e.getNetwork().toString()+" "+err.toString());
+            manager.utils.error("SignorLegendPanel handleEvent(SetCurrentNetworkEvent) "+e.getNetwork().toString());
         }  
     }   
 }

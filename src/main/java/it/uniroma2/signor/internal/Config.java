@@ -23,7 +23,7 @@ public class Config {
  
     public static final String NAMESPACE = "SIGNOR";
     public static final String NAMESPACEPTM = "SIGNOR - PTM";
-    public static final String NTWPREFIX ="SIGNOR NTW - ";
+    public static final String NTWPREFIX ="SIGNOR Network - ";
     public static final String INTERACTOMENAME = "INTERACTOME";
     
     public static final HashMap<String,String> SPECIESLIST = new HashMap<>(){

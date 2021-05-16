@@ -67,6 +67,7 @@ public class DataUtils {
     }   
     public static Network prepareSubnetwork(Network parentnet, CyNetwork cyNetwork){
         Network subnet = new Network(parentnet.manager, parentnet.parameters);
+        
         subnet.setNetwork(cyNetwork);
         subnet.isDeasesNetwork = parentnet.isDeasesNetwork;
         subnet.isPathwayNetwork = parentnet.isPathwayNetwork;
@@ -75,8 +76,7 @@ public class DataUtils {
         if(parentnet.isSingleSearch()) {
             String entity = (String) subnet.parameters.get(NetworkField.QUERY);
             subnet.setCyNodeRoot(entity);
-        }
-        subnet.writeSearchNetwork();
+        }        
         return subnet;
     }
 //    public static void writeNetworkPTMInfo(SignorManager manager, Network network, Boolean setted){
@@ -179,8 +179,10 @@ public class DataUtils {
 //               writeNetworkPTMInfo(manager, networksignor, true);
 //               networksignor.isPTMNetwork= true;
                networksignor.ptm_already_loaded = false;
-            }   
-            manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.PTM);
+               networksignor.parameters.replace(NetworkField.PTMLOADED, true); 
+               networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.PTM.name());
+               manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.PTM);
+            }              
         }
         catch (Exception e) {
             manager.utils.error("DataUtils PopulatePTMTables() "+e.toString());   
@@ -219,6 +221,7 @@ public class DataUtils {
                 UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
                 manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
             }
+            networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
             manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.DEFAULT);   
             networksignor.PTMnodes.clear();
             networksignor.PTMedges.clear();
@@ -274,6 +277,22 @@ public class DataUtils {
          
     }
             
-    
+    public static void loadPTMfromTable (Network networksignor, CyNetwork cynet){
+        List uid_parent_edge_to_load = networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, PTMEdgeField.EdgeParent).getValues(Long.class);
+        for (Object uid_parent_edge: uid_parent_edge_to_load){
+                CyEdge edge_to_load = cynet.getEdge((Long) uid_parent_edge);
+                networksignor.ParentEdges.put(edge_to_load, (Long) uid_parent_edge);
+        }
+        List ptm_edge_to_load = networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, "SUID").getValues(Long.class);
+        for (Object uid_ptm_edge: ptm_edge_to_load){
+            CyEdge edge_to_load = cynet.getEdge((Long) uid_ptm_edge);
+            networksignor.PTMedges.put(edge_to_load, (Long) uid_ptm_edge);
+        }
+        List ptm_node_to_load = networksignor.PTMnodeTable.getColumn(Config.NAMESPACEPTM, "SUID").getValues(Long.class);
+        for (Object uid_ptm_node: ptm_node_to_load){
+            CyNode node_to_load = cynet.getNode((Long) uid_ptm_node);
+            networksignor.PTMnodes.put(node_to_load, (Long) uid_ptm_node);
+        }
+    }
 
 }

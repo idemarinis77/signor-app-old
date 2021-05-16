@@ -56,24 +56,7 @@ public class Network {
         this.manager = manager;
         this.parameters = parameters;          
     }
-
-    public Network(CyNetwork cynet, String netname, SignorManager manager){
-        //Creating netowrk from session
-        this.manager = manager;
-        if(netname.startsWith("SIGNOR NTWP")){
-            isPathwayNetwork = true;
-            parameters = null;
-        }
-        else if(netname.startsWith("SIGNOR NTWD")){
-            isDeasesNetwork = true;
-            parameters = null;
-        }
-        else {
-            parameters = new HashMap() { {put("SINGLESEARCH", true); }};
-        }
-        this.cyNetwork = cynet;
-        setNetwork(cynet);
-    }
+    
     public CyNetwork getCyNetwork() {
         return cyNetwork;
     }

@@ -10,7 +10,7 @@ import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
 import java.util.HashMap;
 import org.cytoscape.work.TaskFactory;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
 import it.uniroma2.signor.internal.managers.SignorManager;
@@ -83,6 +83,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             ArrayList<String> pathway_info = HttpUtils.parseWSNoheader(
                     HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+network.parameters.get("PATHWAYID"), manager));
             network.SetPathwayInfo(pathway_info);
+            network.parameters.replace(NetworkField.PATHWAYINFO, pathway_info.toString());
             Table PthTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             PthTable.buildPTHTable(manager, cynet);
             

@@ -7,7 +7,9 @@ package it.uniroma2.signor.internal.conceptualmodel.logic.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.Config;
 import java.util.*;
-
+import org.cytoscape.model.CyRow;
+import it.uniroma2.signor.internal.view.NetworkView;
+import it.uniroma2.signor.internal.managers.SignorManager;
 /**
  *
  * @author amministratore
@@ -41,13 +43,15 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
             buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
+            buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
             buildSearchParams.put(NetworkField.QUERY, query);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
             buildSearchParams.put(NetworkField.PTMLOADED, false);
-            buildSearchParams.put(NetworkField.VIEW, false);
+            buildSearchParams.put(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
+            buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false);            
             return buildSearchParams;
         }
         else if(type == NetworkField.ALLSEARCH){
@@ -56,13 +60,15 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
             buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
+            buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
             buildSearchParams.put(NetworkField.QUERY, query);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
             buildSearchParams.put(NetworkField.PTMLOADED, false);
-            buildSearchParams.put(NetworkField.VIEW, false);
+            buildSearchParams.put(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
+            buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
         else if(type == NetworkField.CONNECTSEARCH){
@@ -71,13 +77,15 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.CONNECTSEARCH, true);
             buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
+            buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
             buildSearchParams.put(NetworkField.QUERY, query);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, include_f_n);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
             buildSearchParams.put(NetworkField.PTMLOADED, false);
-            buildSearchParams.put(NetworkField.VIEW, false);
+            buildSearchParams.put(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
+            buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
          else if(type == NetworkField.SHORTESTPATHSEARCH){
@@ -86,13 +94,15 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
             buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, true);
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
+            buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
             buildSearchParams.put(NetworkField.QUERY, query);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
             buildSearchParams.put(NetworkField.PTMLOADED, false);
-            buildSearchParams.put(NetworkField.VIEW, false);
+            buildSearchParams.put(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
+            buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
         else if(query == Config.INTERACTOMENAME){
@@ -101,13 +111,15 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
             buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, true);
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
+            buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
             buildSearchParams.put(NetworkField.QUERY, query);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
             buildSearchParams.put(NetworkField.PTMLOADED, false);
-            buildSearchParams.put(NetworkField.VIEW, false);
+            buildSearchParams.put(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
+            buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
         else if(type == NetworkField.PATHWAYSEARCH) {
@@ -116,18 +128,48 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
             buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, true);
+            buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
             buildSearchParams.put(NetworkField.QUERY, query);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, query);
             buildSearchParams.put(NetworkField.PTMLOADED, false);
-            buildSearchParams.put(NetworkField.VIEW, false);
+            buildSearchParams.put(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
+            buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
         return null;
+    }   
+    
+    public static HashMap<String, Object> buildParamsFromNetworkRecord(CyRow record, SignorManager manager){
+
+        HashMap <String, Object> new_param =  new HashMap();
+        HashMap <String, Class<?>> model_network = NetworkField.networkTableField();
+        Iterator key_set = model_network.keySet().iterator();
+        Iterator value_set = model_network.values().iterator();  
+        for (Map.Entry<String, Class<?>> entry : model_network.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(value.equals(String.class)){  
+               Object record_value = (Object) record.get(Config.NAMESPACE, (String) key, String.class);                               
+               new_param.put((String) key, record_value);
+            }     
+            if(value.equals(Boolean.class)){  
+               Object record_value = (Object) record.get(Config.NAMESPACE, (String) key, Boolean.class);                               
+               new_param.put((String) key, record_value);
+            } 
+            if(value.equals(Double.class)){  
+               Object record_value = (Object) record.get(Config.NAMESPACE, (String) key, Double.class);                               
+               new_param.put((String) key, record_value);
+            } 
+            if(value.equals(Integer.class)){  
+               Object record_value = (Object) record.get(Config.NAMESPACE, (String) key, Integer.class);                               
+               new_param.put((String) key, record_value);
+            } 
+        }
+        return new_param;       
+      
     }
-    
-    
-    
+
 }

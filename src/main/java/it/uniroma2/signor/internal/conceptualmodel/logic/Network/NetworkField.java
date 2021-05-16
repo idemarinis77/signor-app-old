@@ -21,9 +21,11 @@ public class NetworkField {
     public static String SPECIES = "SPECIES";
     public static String PTMLOADED  = "PTMLOADED";
     public static String PATHWAYSEARCH = "PATHWAYSEARCH";
+    public static String PATHWAYINFO = "PATHWAYINFO";
     public static String DISEASESEARCH = "DISEASESEARCH";
     public static String PATHWAYID = "PATHWAYID";
     public static String VIEW = "VIEW";
+    public static String ROOTNETWORKPTM = "ROOTNETWORKPTM";
     
     public static HashMap<String, Class<?>> networkTableField(){
         HashMap<String, Class<?>> params = new HashMap ();
@@ -32,13 +34,15 @@ public class NetworkField {
         params.put(NetworkField.CONNECTSEARCH, Boolean.class);
         params.put(NetworkField.SHORTESTPATHSEARCH, Boolean.class);
         params.put(NetworkField.PATHWAYSEARCH, Boolean.class);
+        params.put(NetworkField.PATHWAYINFO, String.class);
         params.put(NetworkField.DISEASESEARCH, Boolean.class);
         params.put(NetworkField.QUERY, String.class);
         params.put(NetworkField.INCFIRSTNEISEARCH, Boolean.class);
         params.put(NetworkField.SPECIES, String.class);
         params.put(NetworkField.PATHWAYID, String.class);        
         params.put(NetworkField.PTMLOADED, Boolean.class); 
-        params.put(NetworkField.VIEW, Boolean.class); 
+        params.put(NetworkField.VIEW, String.class); 
+        params.put(NetworkField.ROOTNETWORKPTM, Boolean.class);
         return params;
     }
 }

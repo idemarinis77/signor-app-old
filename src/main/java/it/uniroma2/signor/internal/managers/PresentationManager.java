@@ -38,12 +38,11 @@ import org.cytoscape.view.model.CyNetworkViewManager;
  * @author amministratore
  */
 public class PresentationManager implements         
-        SessionLoadedListener,
         SignorNetworkCreatedListener, NetworkAddedListener, NetworkViewAddedListener{
     
-    public HashMap<CyNetwork, Network> signorNetMap;
-    public HashMap<Network, NetworkView.Type> signorViewMap;
-    public HashMap<CyNetworkView, CyNetwork> signorCyNetworkViewMap;
+    public HashMap<CyNetwork, Network> signorNetMap = new HashMap();
+    public HashMap<Network, NetworkView.Type> signorViewMap = new HashMap();
+    public HashMap<CyNetworkView, CyNetwork> signorCyNetworkViewMap = new HashMap();
     SignorManager manager;
     public HashMap<String, ?> parameters;
     public String searched_query;
@@ -81,6 +80,7 @@ public class PresentationManager implements
         CyNetwork cyNetwork = network.getCyNetwork();
         if (cyNetwork == null) return;
         signorNetMap.remove(cyNetwork);        
+        signorViewMap.remove(network);
     }
     public void handleEvent (SignorNetworkCreatedEvent e){
         manager.utils.info(e.getNewNetwork().toString());
@@ -93,70 +93,63 @@ public class PresentationManager implements
     @Override
     public void handleEvent (NetworkViewAddedEvent e){
 
-        CyNetworkView cyNetworkView = e.getNetworkView();
-        manager.utils.info("NetworkView Created "+e.getNetworkView().toString()+"***"+cyNetworkView.getModel().toString());
-        CyNetwork cyNetwork = cyNetworkView.getModel();
-        try {
-            if (signorNetMap.containsKey(cyNetwork)) {
-                manager.utils.info("INSIDE NetworkView Created ");
-                if(signorCyNetworkViewMap != null){
-                   signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
-                }                
-                else {
-                   signorCyNetworkViewMap = new HashMap(){
-                       { put(cyNetworkView, cyNetwork); }
-                   };  
-                }    
-                String query = (String) signorNetMap.get(cyNetwork).parameters.get(NetworkField.QUERY);
-                if(query == Config.INTERACTOMENAME || cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).contains(Config.INTERACTOMENAME)){
-                    //apply SIGNOR STYLE
-                    List<CyNetwork> nets = new ArrayList<CyNetwork>();  
-                    nets.add(cyNetwork);
-//                    manager.utils.getService(CyApplicationManager.class).setCurrentNetwork(cyNetwork);
-//                    manager.utils.getService(CyApplicationManager.class).setSelectedNetworks(nets);
-                    manager.signorStyleManager.applyStyle(cyNetworkView);                    
-//                  manager.utils.getService(CyApplicationManager.class).setCurrentNetworkView(cyNetworkView);
-//                  manager.signorStyleManager.installView(cyNetworkView);             
+        if(manager.sessionLoaderManager.loadingsession.equals(false)){
+            CyNetworkView cyNetworkView = e.getNetworkView();
+            manager.utils.info("NetworkView Created "+e.getNetworkView().toString()+"***"+cyNetworkView.getModel().toString());
+            CyNetwork cyNetwork = cyNetworkView.getModel();
+            try {
+                if (signorNetMap.containsKey(cyNetwork)) {
+                    manager.utils.info("INSIDE NetworkView Created ");
+                    if(signorCyNetworkViewMap != null){
+                       signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
+                    }                
+                    else {
+                       signorCyNetworkViewMap = new HashMap(){
+                           { put(cyNetworkView, cyNetwork); }
+                       };  
+                    }    
+                    String query = (String) signorNetMap.get(cyNetwork).parameters.get(NetworkField.QUERY);
+                    if(query == Config.INTERACTOMENAME || cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).contains(Config.INTERACTOMENAME)){
+                        //apply SIGNOR STYLE
+                        List<CyNetwork> nets = new ArrayList<CyNetwork>();  
+                        nets.add(cyNetwork);
+    //                    manager.utils.getService(CyApplicationManager.class).setCurrentNetwork(cyNetwork);
+    //                    manager.utils.getService(CyApplicationManager.class).setSelectedNetworks(nets);
+                        manager.signorStyleManager.applyStyle(cyNetworkView);                    
+    //                  manager.utils.getService(CyApplicationManager.class).setCurrentNetworkView(cyNetworkView);
+    //                  manager.signorStyleManager.installView(cyNetworkView);             
+                    }
                 }
             }
+            catch (Exception ex){
+                manager.utils.error("Cannot create view for "+cyNetwork.toString()+" "+ex.toString());
+            }
         }
-        catch (Exception ex){
-            manager.utils.error("Cannot create view for "+cyNetwork.toString()+" "+ex.toString());
-        }
     }
-    /*@Override
-    public void handleEvent (NetworkAddedEvent e){
-        manager.utils.info(e.getNetwork().toString()+"Network Aggiunta");
-    }
-    
-    @Override
-    public void handleEvent (NetworkViewAddedEvent e){
-        manager.utils.info(e.getNetworkView().toString()+"Network View Aggiunta");
-    }*/
-    @Override
-    public void handleEvent(SessionLoadedEvent e) {
-        manager.utils.info(e.getLoadedSession().toString()+"Sessione View Aggiunta");              
-    }
-    
+     
     @Override
     public void handleEvent(NetworkAddedEvent e) {
         try {
             CyNetwork cyNetwork = e.getNetwork();
             CySubNetwork newNetwork = (CySubNetwork) cyNetwork;
             // I don't want to make any action if this is the root Network
-            if(newNetwork.getRootNetwork().getBaseNetwork() != cyNetwork){
+            if(newNetwork.getRootNetwork().getBaseNetwork() != cyNetwork && DataUtils.isSignorNetwork(cyNetwork)){
                 manager.utils.info(newNetwork.toString()+"** BASE NET **"+newNetwork.getRootNetwork().getBaseNetwork());
                 CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
                 Network parentNetwork = signorNetMap.get(parentCyNetwork);
+                NetworkView.Type nettype = signorViewMap.get(parentNetwork);
                 manager.utils.info("PASSO "+parentNetwork.toString());
                 Network subnetwork = DataUtils.prepareSubnetwork(parentNetwork, cyNetwork);
+                if (nettype.name() == NetworkView.Type.PTM.name())
+                    subnetwork.parameters.replace(NetworkField.ROOTNETWORKPTM, true);
                 signorNetMap.put(cyNetwork, subnetwork);
-                signorViewMap.put(subnetwork, signorViewMap.get(parentNetwork));
+                signorViewMap.put(subnetwork, nettype);
                 Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableNode.buildPTMTable(parentNetwork.manager, "PTMNode", cyNetwork);
 
                 Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                PTMTableEdge.buildPTMTable(parentNetwork.manager, "PTMEdge", cyNetwork);       
+                PTMTableEdge.buildPTMTable(parentNetwork.manager, "PTMEdge", cyNetwork); 
+                subnetwork.writeSearchNetwork();
             }
         }
         catch (Exception ex){
@@ -196,11 +189,11 @@ public class PresentationManager implements
      * Cytoscape will then change from the correct view type to the root parent's one.<br>
      * {@link #handleEvent(VisualStyleSetEvent)} then interrupt Cytoscape behaviour to set it to the correct style.
      */
-    private void addSubNetwork(CySubNetwork subCyNetwork, CySubNetwork parentCyNetwork) {
-        if (signorNetMap.containsKey(parentCyNetwork)) {
-            Network parentNetwork = signorNetMap.get(parentCyNetwork);
-        }
-    }
+//    private void addSubNetwork(CySubNetwork subCyNetwork, CySubNetwork parentCyNetwork) {
+//        if (signorNetMap.containsKey(parentCyNetwork)) {
+//            Network parentNetwork = signorNetMap.get(parentCyNetwork);
+//        }
+//    }
     
 //    public static CySubNetwork getParentCyNetwork(final CySubNetwork net, final SignorManager manager) {
 //        final CyTable hiddenTable = net.getTable(CyNetwork.class, CyNetwork.HIDDEN_ATTRS);
