@@ -91,13 +91,14 @@ public class DataUtils {
         CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
         CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
         CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();        
+
         try {
             Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
             Boolean ptm_already_loaded = networksignor.ptm_already_loaded;
             Map<CyNode, Node> nodes = networksignor.getNodes();
             if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
                 tableManager.getAllTables(true).contains(networksignor.PTMedgeTable)){
-
+                manager.utils.info("Ci sono nell'if");
                 //Starting populating PTM Table form Node and Edge tables default
                 List<CyRow> listrow = currentnet.getDefaultEdgeTable().getAllRows();
                 for(int i =0;  i< listrow.size(); i ++){                   
@@ -115,10 +116,14 @@ public class DataUtils {
                        
                                              
                        CyNode cyNodeSourceParent = cyEdgeParent.getSource();
+                       String cyEdgeParent_name = cyrow.get("name", String.class);
+                       String cyEdgeParent_shared_name = cyrow.get("shared name", String.class);
                        CyNode cyNodeTargetParent = cyEdgeParent.getTarget();
                        
                        String residue = cyrow.get(Config.NAMESPACE, EdgeField.RESIDUE, String.class);
                        String mechanism = cyrow.get(Config.NAMESPACE, EdgeField.MECHANISM, String.class);
+                       String mechanism_orig = mechanism;
+                       String effect = cyrow.get(Config.NAMESPACE, EdgeField.Interaction, String.class);
                        if(mechanism.startsWith("de")) mechanism = mechanism.substring(2);
                        String label = networksignor.getNodes().get(cyNodeTargetParent).toString()+"_"+residue+"_"+mechanism;
 
@@ -131,36 +136,32 @@ public class DataUtils {
 //                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 20.0);  
 //                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0.0);               
 //                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_LABEL, label);                                       
-                       
                        CyEdge cyEdge = currentnet.addEdge(cyNodeSourceParent, cyNode, false);
                        if(!ptm_already_loaded){
                            networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, PTMNodeField.RESIDUE, cyrow.get(Config.NAMESPACE, "RESIDUE", String.class));
                            networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, PTMNodeField.TYPE, "residue");
                            networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, PTMNodeField.SEQUENCE, sequence); 
                            networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, PTMNodeField.SOURCE, cyNodeSourceParent.getSUID()); 
-                       }                       
-     
-                       String first_interaction = MappingDirectionInteraction(interaction, NodeField.SOURCE);
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("shared name", parent_edge_uid.toString());
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("shared interaction", "up-regulates activity");                       
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("name", parent_edge_uid.toString());
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("interaction", "up-regulates activity");
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set(Config.NAMESPACE, EdgeField.Interaction, "up-regulates activity");
+                       }                           
+                       String first_interaction = MappingDirectionInteraction(mechanism_orig, NodeField.SOURCE);
+
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set(Config.NAMESPACE, EdgeField.Interaction, first_interaction);
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("shared name", cyEdgeParent_shared_name);
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("shared interaction", first_interaction);                       
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("name", cyEdgeParent_name);
                        networksignor.PTMedges.put(cyEdge, cyEdge.getSUID());                       
                        if(!ptm_already_loaded){
                            networksignor.PTMedgeTable.getRow(cyEdge.getSUID()).set(Config.NAMESPACEPTM, PTMEdgeField.EdgeParent, parent_edge_uid);
                            networksignor.PTMedgeTable.getRow(cyEdge.getSUID()).set(Config.NAMESPACEPTM, PTMEdgeField.NodeSourceSUID, cyNodeSourceParent.getSUID());
                            networksignor.PTMedgeTable.getRow(cyEdge.getSUID()).set(Config.NAMESPACEPTM, PTMEdgeField.NodeTargetSUID, cyNodeTargetParent.getSUID());
                            networksignor.PTMedgeTable.getRow(cyEdge.getSUID()).set(Config.NAMESPACEPTM, PTMEdgeField.Interaction, interaction);   
-
                        }
-                       String second_interaction = MappingDirectionInteraction(interaction, NodeField.TARGET);
-                       CyEdge cyEdge2 = currentnet.addEdge(cyNodeTargetParent, cyNode, false);     
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("shared name", parent_edge_uid.toString());
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("shared interaction", "down-regulates activity");
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("name", parent_edge_uid.toString());
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("interaction", "down-regulates activity");
-                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set(Config.NAMESPACE, EdgeField.Interaction, "down-regulates activity");
+                       String second_interaction = MappingSecondDirectionInteraction(first_interaction, effect);
+                       CyEdge cyEdge2 = currentnet.addEdge(cyNodeTargetParent, cyNode, false);
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set(Config.NAMESPACE, EdgeField.Interaction, second_interaction);
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("shared name", cyEdgeParent_shared_name);
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("shared interaction", second_interaction);
+                       currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("name", cyEdgeParent_name);
                        networksignor.PTMedges.put(cyEdge2, cyEdge2.getSUID());
                        if(!ptm_already_loaded){
                            networksignor.PTMedgeTable.getRow(cyEdge2.getSUID()).set(Config.NAMESPACEPTM, PTMEdgeField.EdgeParent, parent_edge_uid);
@@ -171,15 +172,16 @@ public class DataUtils {
                        //manager.utils.flushEvents();
                    }                   
                }       
-               if(!interactome){
+//               if(!interactome){
                    HideEdgeParentPTM(manager);
                    AlgorithmFactory algfactory = new AlgorithmFactory(networkView, manager);            
                    manager.utils.execute(algfactory.createTaskIterator());
-               }
+//               }
 //               writeNetworkPTMInfo(manager, networksignor, true);
 //               networksignor.isPTMNetwork= true;
                networksignor.ptm_already_loaded = false;
-               networksignor.parameters.replace(NetworkField.PTMLOADED, true); 
+               if(!interactome)
+                  networksignor.parameters.replace(NetworkField.PTMLOADED, true); 
                networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.PTM.name());
                manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.PTM);
             }              
@@ -217,10 +219,10 @@ public class DataUtils {
             
             currentnet.removeNodes(networksignor.PTMnodes.keySet());
             currentnet.removeEdges(networksignor.PTMedges.keySet());
-            if(!interactome){
+//            if(!interactome){
                 UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
                 manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
-            }
+//            }
             networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
             manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.DEFAULT);   
             networksignor.PTMnodes.clear();
@@ -233,48 +235,27 @@ public class DataUtils {
         
     }
     
-    private static String MappingDirectionInteraction(String edge_interaction, String source_or_target){
+    private static String MappingDirectionInteraction(String mechanism, String source_or_target){
         //EFFECT
         //up-regulates*
         //down-regulates*
-        //formcomplex
         
-        //MECHANISM
-        //acetylation
-        //binding
-        //catalytic activity
-        //chemical activation
-        //chemical inhibition
-        //cleavage
-        //deacetylation
-        //demethylation
-        //dephosphorylation
-        //desumoylation
-        //deubiquitination
-        //glycosylation
-        //gtpase-activating protein
-        //guanine nucleotide exchange factor
-        //hydroxylation
-        //lipidation
-        //methylation
-        //neddylation
-        //oxidation
-        //palmitoylation
-        //phosphorylation
-        //post transcriptional regulation
-        //post translational modification
-        //relocalization
-        //s-nitrosylation
-        //small molecule catalysis
-        //sumoylation
-        //transcriptional activation
-        //transcriptional regulation
-        //transcriptional repression
-        //translation regulation
-        //tyrosination
-        //ubiquitination
-        return "up-regulates activity";
-         
+        if(mechanism.startsWith("de") && source_or_target == NodeField.SOURCE)
+            return "down-regulates";
+        else return "up-regulates";              
+    }
+    private static String MappingSecondDirectionInteraction(String first_interaction, String effect){
+        //EFFECT
+        //up-regulates*
+        //down-regulates*
+        
+        if(effect.startsWith("up") && first_interaction.startsWith("up"))
+            return "up-regulates";
+        else if (effect.startsWith("down") && first_interaction.startsWith("up"))
+            return "down-regulates";
+        else if (effect.startsWith("down") && first_interaction.startsWith("down"))
+            return "up-regulates";
+        else return "down-regulates";
     }
             
     public static void loadPTMfromTable (Network networksignor, CyNetwork cynet){

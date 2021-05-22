@@ -279,10 +279,23 @@ public class SignorLegendPanel extends JPanel implements
                 manager.utils.info("New SIGNOR the rest of search"+newcynet); 
                
             }
-            ptmviewON.setSelected(false);
-            ptmviewON.setEnabled(true);
-            defviewON.setSelected(true);
-            defviewON.setEnabled(false);
+            else if (event.getNewNetwork().parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
+                this.current_cynetwork_to_serch_into = newcynet;
+                tabs.removeAll();
+            }
+            if(manager.sessionLoaderManager.loadingsession.equals(true) && 
+                    event.getNewNetwork().parameters.get(NetworkField.ROOTNETWORKPTM).equals(true)){
+                ptmviewON.setSelected(true);
+                ptmviewON.setEnabled(false);
+                defviewON.setSelected(false);
+                defviewON.setEnabled(false);
+            }
+            else {
+                ptmviewON.setSelected(false);
+                ptmviewON.setEnabled(true);
+                defviewON.setSelected(true);
+                defviewON.setEnabled(false);
+            }
         }
         catch (Exception e){
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");
@@ -392,7 +405,10 @@ public class SignorLegendPanel extends JPanel implements
                                    tabs.add("SEARCHED ENTITIES", sbp);
                                    sbp.recreateContent();
                                    tabs.setSelectedComponent(sbp);
-                            }   
+                            }
+                            else if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
+                               this.current_cynetwork_to_serch_into = newcynet;
+                            }
                         }                            
                     }
             }

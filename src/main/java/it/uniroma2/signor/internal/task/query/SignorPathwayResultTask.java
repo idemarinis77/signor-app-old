@@ -72,8 +72,13 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             manager.utils.info("SignorPathwayResultTask run(): il pathway ID e "+pathwayid);
             String URL = ConfigResources.WSSearchoptionMAP.get("PATHWAYSEARCH").queryFunction.apply(pathwayid, "only"); 
             monitor.setTitle("Querying Signor Network");            
-            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);           
-            CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathwayid);
+            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);   
+            String pathway_description  = ConfigPathway.MapPathwayDescID.entrySet().stream()
+                            .filter(entry -> entry.getValue().equals(pathwayid))
+                            .map(entry-> entry.getKey())
+                            .collect(Collectors.joining());
+            //CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathwayid);
+            CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathway_description);
             manager.presentationManager.updateSignorNetworkCreated(cynet, network);
             network.isPathwayNetwork = true;
             manager.presentationManager.updateSignorViewCreated(network, NetworkView.Type.DEFAULT);

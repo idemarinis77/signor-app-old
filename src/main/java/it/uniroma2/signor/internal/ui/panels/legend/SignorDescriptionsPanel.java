@@ -100,7 +100,6 @@ public class SignorDescriptionsPanel extends JPanel {
                 pathinfo.add(new SignorLabelStyledBold(PathwayField.SIGNORPTHFIELDMAP.get(header_pth[i])), gbc.down());   
                 //Path_curator may not be present and path_info_packed is shorter than header_pth
                 if(i <path_info_packed.length){
-                    manager.utils.info(header_pth[i]+" campo dell'header");
 //                    if ( path_info_packed[i].length() > 20 && PathwayField.SIGNORPTHFIELDMAP.get(header_pth[i])== "Description") 
                     if ( path_info_packed[i].length() > 20 && header_pth[i].startsWith(PathwayField.SIGNORPTH_DESCRIPTION))
                         pathinfo.add(new HelpButton(manager, path_info_packed[i]), gbc.right());

@@ -10,6 +10,7 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
+import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
 import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.view.NetworkView;
 import java.io.BufferedReader;
@@ -113,8 +114,8 @@ public class SignorInteractomeTask extends AbstractTask {
                 NetworkTable.buildDefaultTable(manager, "Network", cynet);        
 //                //Populate my logic netowrk
 //                network.setNetwork(cynet);
-//                //DAVERIFICARE COME FARE
-//                //network.writeSearchNetwork();     
+//                DAVERIFICARE COME FARE
+                network.writeSearchNetwork();     
 //                if (cancelled) {
 //                    manager.utils.getService(CyNetworkManager.class).destroyNetwork(cynet);
 //                }
@@ -123,6 +124,9 @@ public class SignorInteractomeTask extends AbstractTask {
 //                    destroyNetwork(manager, network);
 //                    return;
 //                }
+
+                manager.utils.showResultsPanel();            
+                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));
             }
         }
             catch (Exception e){

@@ -109,7 +109,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.SINGLESEARCH, false);
             buildSearchParams.put(NetworkField.ALLSEARCH, false);
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
-            buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, true);
+            buildSearchParams.put(NetworkField.SHORTESTPATHSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);

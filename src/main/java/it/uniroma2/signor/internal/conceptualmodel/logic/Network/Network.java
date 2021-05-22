@@ -91,7 +91,7 @@ public class Network {
     }    
     public boolean isSingleSearch(){
         if (this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class)!=null)
-            return true;
+            return this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class);
         return false;
     }
     

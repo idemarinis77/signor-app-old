@@ -53,7 +53,7 @@ public class SignorManager {
         sessionLoaderManager = new SessionLoaderManager(this);
         presentationManager = new PresentationManager(this);
         utils.registerService(sessionLoaderManager, SessionLoadedListener.class, new Properties());
-        utils.registerService(sessionLoaderManager, SessionAboutToBeSavedListener.class, new Properties());
+//        utils.registerService(sessionLoaderManager, SessionAboutToBeSavedListener.class, new Properties());
         signorStyleManager = new SignorStyleManager(this, ConfigResources.FILESTYLE);
         signorStyleManager.setupDefaultStyle();
     }

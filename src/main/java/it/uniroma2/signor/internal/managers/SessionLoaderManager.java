@@ -22,8 +22,9 @@ import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
 import it.uniroma2.signor.internal.view.NetworkView;
+import java.util.ArrayList;
         
-public class SessionLoaderManager implements SessionLoadedListener, SessionAboutToBeSavedListener  {
+public class SessionLoaderManager implements SessionLoadedListener  {
     final SignorManager manager;
     public Boolean loadingsession = false;
     
@@ -31,35 +32,31 @@ public class SessionLoaderManager implements SessionLoadedListener, SessionAbout
         this.manager = manager;
     }
     
-    @Override
-    public void handleEvent(SessionAboutToBeSavedEvent event) {
-        //I want to be sure to write information in the network record
-//        @Tunable (description="choose file to save session")
-        CySessionManager cysessionManager = manager.utils.getService(CySessionManager.class);
-//        CySession cysession = cysessionManager.getCurrentSession();
-        manager.utils.info("SessionAboutToBeSavedEvent "+cysessionManager.getCurrentSession().getNetworks().toString());
-//        for (CyNetwork cynetwork : cysessionManager.getCurrentSession().getNetworks()) {
-//        
-//            manager.utils.info("SessionAboutToBeSavedEvent "+cynetwork.toString());
-//            Network network = manager.presentationManager.signorNetMap.get(cynetwork);
-//            
-//            if(network != null && DataUtils.isSignorNetwork(cynetwork)){
-//                network.writeSearchNetwork();
-//                manager.utils.info("SessionAboutToBeSavedEvent "+network.toString());
-//            }
-//        }        
-    }
+//    @Override
+//    public void handleEvent(SessionAboutToBeSavedEvent event) {
+//        //I want to be sure to write information in the network record
+////        @Tunable (description="choose file to save session")
+//        CySessionManager cysessionManager = manager.utils.getService(CySessionManager.class);
+////        CySession cysession = cysessionManager.getCurrentSession();
+//        manager.utils.info("SessionAboutToBeSavedEvent "+cysessionManager.getCurrentSession().getNetworks().toString());
+////        for (CyNetwork cynetwork : cysessionManager.getCurrentSession().getNetworks()) {
+////        
+////            manager.utils.info("SessionAboutToBeSavedEvent "+cynetwork.toString());
+////            Network network = manager.presentationManager.signorNetMap.get(cynetwork);
+////            
+////            if(network != null && DataUtils.isSignorNetwork(cynetwork)){
+////                network.writeSearchNetwork();
+////                manager.utils.info("SessionAboutToBeSavedEvent "+network.toString());
+////            }
+////        }        
+//    }
     @Override
     public void handleEvent(SessionLoadedEvent event) {
 
         this.loadingsession = true;
-        try {
-            manager.presentationManager.signorNetMap.clear();
-            manager.presentationManager.signorViewMap.clear();
-        }
-        catch (Exception e){
-            manager.utils.error("SessionLoadedEvent problem clearing presentation maps "+e.toString());
-        }
+        manager.presentationManager.signorNetMap.clear();
+        manager.presentationManager.signorViewMap.clear();
+        manager.presentationManager.signorCyNetworkViewMap.clear();
         
         CySession loadedSession = event.getLoadedSession();       
 
@@ -81,11 +78,21 @@ public class SessionLoaderManager implements SessionLoadedListener, SessionAbout
                     Collection<CyTableMetadata> tables = loadedSession.getTables();
                     linkPTMTableToNewtork(tables, signornet);
                     manager.utils.info("reloading network "+cyNetwork.toString()+params.toString());
-                    signornet.setNetwork(cyNetwork);
+                    if(searched_query!=Config.INTERACTOMENAME)
+                        signornet.setNetwork(cyNetwork);    
                     if((Boolean)params.get(NetworkField.SINGLESEARCH).equals(true) )
                        signornet.setCyNodeRoot(searched_query);
-                    if((Boolean)params.get(NetworkField.PTMLOADED).equals(true) )
+                    if((Boolean)params.get(NetworkField.PTMLOADED).equals(true) && searched_query!=Config.INTERACTOMENAME)
                         DataUtils.loadPTMfromTable(signornet, cyNetwork);
+                    if((String) params.get(NetworkField.PATHWAYINFO)!=""){
+                       String pathway_info_from_db = (String) params.get(NetworkField.PATHWAYINFO);
+                       String[] pathway_field = pathway_info_from_db.split(",");
+                       ArrayList<String> pathway_info = new ArrayList<String>();
+                       for (int i = 0; i<pathway_field.length; i++) {
+                           pathway_info.add(pathway_field[i]);
+                       }
+                       signornet.SetPathwayInfo(pathway_info);
+                    }
                     manager.utils.showResultsPanel(); 
                     manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, signornet)); 
                 }
