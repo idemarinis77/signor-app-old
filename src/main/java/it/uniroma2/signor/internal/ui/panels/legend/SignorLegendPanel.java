@@ -83,11 +83,12 @@ public class SignorLegendPanel extends JPanel implements
 //    private boolean tabPathwayAdded = false;
     JRadioButton ptmviewON= new JRadioButton("PTM View");
     JRadioButton defviewON = new JRadioButton("Default View");
-    
+    Boolean registered;
 
     public SignorLegendPanel(SignorManager manager) {
 
-        this.manager = manager;        
+        this.manager = manager;      
+        this.registered = true;
         snp = new SignorNodePanel(manager);
         sep = new SignorEdgePanel(manager);
         ssp = new SignorSummaryPanel(manager);
@@ -186,7 +187,8 @@ public class SignorLegendPanel extends JPanel implements
     public void showCytoPanel() {
         CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);
         CytoPanel cytoPanel = swingApplication.getCytoPanel(CytoPanelName.EAST);
-        if (cytoPanel.indexOfComponent(Config.identifier_panel)<=0) {
+//        if (cytoPanel.indexOfComponent(Config.identifier_panel)<=0) {
+        if (!registered) {
             manager.utils.registerService(this, CytoPanelComponent.class, new Properties());
         }
         if (cytoPanel.getState() == CytoPanelState.HIDE)
@@ -203,6 +205,7 @@ public class SignorLegendPanel extends JPanel implements
     }
     public void hideCytoPanel() {
         manager.utils.unregisterService(this, CytoPanelComponent.class);
+        this.registered = false;
     }
     
     @Override
@@ -306,10 +309,10 @@ public class SignorLegendPanel extends JPanel implements
     public void handleEvent(SetCurrentNetworkEvent e) {       
         try {
             CyNetwork newcynet = e.getNetwork();
-            if (newcynet != null && !DataUtils.isSignorNetwork(e.getNetwork())){
-                hideCytoPanel();
-            }                    
-            else{
+            if (newcynet != null && DataUtils.isSignorNetwork(e.getNetwork())){
+//                hideCytoPanel();
+//            }                    
+//            else{
                 showCytoPanel();
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
                     if (manager.presentationManager.signorNetMap.containsKey(newcynet)){                           
@@ -411,6 +414,9 @@ public class SignorLegendPanel extends JPanel implements
                             }
                         }                            
                     }
+            }
+            else {
+               hideCytoPanel(); 
             }
         }
         catch(Exception err){

@@ -26,7 +26,7 @@ import org.cytoscape.work.TaskFactory;
  * @author amministratore
  */
 public class SignorPanelFactory extends AbstractTaskFactory{
-    private SignorManager manager;
+    final SignorManager manager;
     boolean show = false;
     
     public SignorPanelFactory(SignorManager manager){
@@ -57,6 +57,7 @@ public class SignorPanelFactory extends AbstractTaskFactory{
         // We always want to be able to shut it off
         if (!show) return true;
 
-        return manager.utils.getService(CyApplicationManager.class).getCurrentNetwork() != null;
+//        return manager.utils.getService(CyApplicationManager.class).getCurrentNetwork() != null;
+        return manager.presentationManager.getCurrentNetwork() !=null;
     }
 }

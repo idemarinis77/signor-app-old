@@ -111,10 +111,7 @@ public class DataUtils {
                        String sequence = cyrow.get(Config.NAMESPACE, EdgeField.SEQUENCE, String.class);
                        CyNode cyNode = currentnet.addNode();    
                        networksignor.PTMnodes.put(cyNode, cyNode.getSUID());                      
-//                       String label = cyrow.get(Config.NAMESPACE, "RESIDUE", String.class); 
-//                       currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set("name", label);
-                       
-                                             
+
                        CyNode cyNodeSourceParent = cyEdgeParent.getSource();
                        String cyEdgeParent_name = cyrow.get("name", String.class);
                        String cyEdgeParent_shared_name = cyrow.get("shared name", String.class);
@@ -172,11 +169,11 @@ public class DataUtils {
                        //manager.utils.flushEvents();
                    }                   
                }       
-//               if(!interactome){
+               if(!interactome){
                    HideEdgeParentPTM(manager);
                    AlgorithmFactory algfactory = new AlgorithmFactory(networkView, manager);            
                    manager.utils.execute(algfactory.createTaskIterator());
-//               }
+               }
 //               writeNetworkPTMInfo(manager, networksignor, true);
 //               networksignor.isPTMNetwork= true;
                networksignor.ptm_already_loaded = false;

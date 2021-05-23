@@ -90,9 +90,10 @@ public class Network {
         return false;
     }    
     public boolean isSingleSearch(){
-        if (this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class)!=null)
-            return this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class);
-        return false;
+//        if (this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class)!=null)
+//            return this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class);
+//        return false;
+          return (Boolean) this.parameters.get(NetworkField.SINGLESEARCH);
     }
     
     public void setCyNodeRoot(String entity){

@@ -118,7 +118,6 @@ public class PresentationManager implements
                 CyTable ptmEdge = network.PTMedgeTable;
                 if (ptmEdge != null) tableManager.deleteTable(ptmEdge.getSUID());
 //            }
-            manager.utils.signorLegendPanel.hideCytoPanel();
             signorNetMap.remove(cyNetwork);
         }
     }   
@@ -189,4 +188,12 @@ public class PresentationManager implements
             manager.utils.error("Network Added Event "+ex.toString());
         }
     }    
+    
+    public CyNetwork getCurrentCyNetwork() {
+        return manager.utils.getService(CyApplicationManager.class).getCurrentNetwork();
+    }
+    
+    public Network getCurrentNetwork() {
+        return signorNetMap.get(getCurrentCyNetwork());
+    }
 }
