@@ -67,11 +67,11 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
             }
             else if(parameters.get(NetworkField.CONNECTSEARCH).equals(true)){
                 buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), 
-                                                        NetworkField.CONNECTSEARCH, false);
+                                                        NetworkField.CONNECTSEARCH, (Boolean) parameters.get(NetworkField.INCFIRSTNEISEARCH));
             }
             else if(parameters.get(NetworkField.INCFIRSTNEISEARCH).equals(true)){
                 buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), 
-                                                        NetworkField.INCFIRSTNEISEARCH, false);
+                                                        NetworkField.INCFIRSTNEISEARCH, true);
             }
             else if(parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)){
                 buildParams = NetworkSearch.buildSearch(terms, (String) parameters.get(NetworkField.SPECIES), 

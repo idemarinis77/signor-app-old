@@ -94,10 +94,10 @@ public class PresentationManager implements
     public void handleEvent (SignorNetworkCreatedEvent e){
         manager.utils.info(e.getNewNetwork().toString());
         Network signornet = e.getNewNetwork();
-        if (signornet.parameters.containsKey(NetworkField.SINGLESEARCH)){
-            if (signornet.parameters.get(NetworkField.SINGLESEARCH).equals(true))
-                signornet.setCyNodeRoot(searched_query);
-        }
+//        if (signornet.parameters.containsKey(NetworkField.SINGLESEARCH)){
+//            if (signornet.parameters.get(NetworkField.SINGLESEARCH).equals(true))
+//                signornet.setCyNodeRoot(searched_query);
+//        }
     }
     
     @Override

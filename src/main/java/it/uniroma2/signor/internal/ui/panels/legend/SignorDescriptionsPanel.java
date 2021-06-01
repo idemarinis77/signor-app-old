@@ -41,7 +41,7 @@ import org.cytoscape.model.CyTableUtil;
 public class SignorDescriptionsPanel extends JPanel {
     private SignorManager manager;
     private JPanel descPanel;
-
+    private static Font iconFont;
     private EasyGBC gbc=new EasyGBC();
     //public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
@@ -88,11 +88,11 @@ public class SignorDescriptionsPanel extends JPanel {
             ArrayList<String> pathInfo = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).getPathwayInfo();
             String[] header_pth = pathInfo.get(0).split("\t");
             String[] path_info_packed=pathInfo.get(1).split("\t");
-            JPanel separator  = new JPanel();
-            separator.setLayout(new GridBagLayout());
-            separator.add(new SignorLabelStyledBold(">> Pathway info "), gbc.down().anchor("west"));
-            separator.setBackground(new Color(82, 166, 119));
-            descPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
+//            JPanel separator  = new JPanel();
+//            separator.setLayout(new GridBagLayout());
+//            separator.add(new SignorLabelStyledBold(">> Pathway info "), gbc.down().anchor("west"));
+//            separator.setBackground(new Color(82, 166, 119));
+//            descPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
             JPanel pathinfo = new JPanel();
             pathinfo.setLayout(new GridBagLayout());
             
@@ -109,7 +109,9 @@ public class SignorDescriptionsPanel extends JPanel {
                 else pathinfo.add(new JLabel(""), gbc.right());
 
             }      
-            descPanel.add(pathinfo, gbc.down());
+            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Pathway INFO", pathinfo, false );
+            descPanel.add(collapsableINFO, gbc.down().anchor("north"));
+//            descPanel.add(pathinfo, gbc.down());
         }        
         catch (Exception e){
             manager.utils.error("SignorDescriptionPanel CreateContent()"+e.toString());

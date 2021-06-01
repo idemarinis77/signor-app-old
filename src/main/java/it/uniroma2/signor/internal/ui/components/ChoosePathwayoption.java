@@ -25,8 +25,6 @@ import java.awt.event.ActionEvent;
 import java.util.stream.Collectors;
 import javax.swing.event.ChangeListener;
 import org.cytoscape.work.TaskFactory;
-//import it.uniroma2.signor.internal.event.SignorNetworkPathCreatedListener;
-//import it.uniroma2.signor.internal.event.SignorNetworkPathToCreateEvent;
 
         
 /**
@@ -34,17 +32,11 @@ import org.cytoscape.work.TaskFactory;
  * @author amministratore
  */
 public class ChoosePathwayoption extends JPanel {
-    private SignorManager manager;
-    
+    private SignorManager manager;    
     private EasyGBC egb=new EasyGBC();
-
-    //private JLabel specie = new JLabel("Choose specie");
-    
     private JComboBox pathway;
     private JComboBox disease;
-    //= new JComboBox(ConfigPathway.PathwayDiseaseList.values().toArray());
     private JComboBox tumor;
-    //= new JComboBox(ConfigPathway.PathwayTumorList.values().toArray());
     private JButton clear= new JButton("Clear");
     private JButton select= new JButton("Select");
     
@@ -65,14 +57,14 @@ public class ChoosePathwayoption extends JPanel {
         Object[] pathdeslist2 = Arrays.copyOf(pathdeslist, pathdeslist.length + 1);
         pathdeslist2[0]= (Object) "Select Disease below";
         System.arraycopy(pathdeslist, 0, pathdeslist2, 1, pathdeslist.length);
-        tumor = new JComboBox(pathdeslist2);
+        disease = new JComboBox(pathdeslist2);
         
         Object[] pathtumlist = ConfigPathway.PathwayTumorList.values().toArray();
         Arrays.sort(pathtumlist);
         Object[] pathtumlist2 = Arrays.copyOf(pathtumlist, pathtumlist.length + 1);
         pathtumlist2[0]= (Object) "Select Tumor below";
         System.arraycopy(pathtumlist, 0, pathtumlist2, 1, pathtumlist.length);
-        disease = new JComboBox(pathtumlist2);       
+        tumor = new JComboBox(pathtumlist2);       
         
         Box pathway_box = Box.createVerticalBox();
         pathway_box.add(pathway);
@@ -98,10 +90,7 @@ public class ChoosePathwayoption extends JPanel {
                 }}); 
         add(select,layoutHelper.right());       
         select.addActionListener(e -> buildNetworkPathFromSelection());
-        
         this.manager=manager; 
-
-        
         pathway.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent e)
                     {  disease.setEnabled(false);
@@ -117,20 +106,8 @@ public class ChoosePathwayoption extends JPanel {
                     {  tumor.setEnabled(false);
                        pathway.setEnabled(false);                     
                 }});  
-        //initSelect();
-    }
-    
-//    @Override
-//    public void actionPerformed(ActionEvent e){
-//        
-//    }
-//    public void addListener(Runnable listener) {
-//        select.addChangeListener((changeEvent) -> listener.run());
-//    }
-//    public void stateChanged (ChangeEvent e) {
-//        if(isReady()){
-            
-            
+     }
+          
     public HashMap<String, Object> getParameter(){
         if(tumor.isEnabled()){
             HashMap<String, Object> formvalues = new HashMap<>() {
@@ -160,20 +137,20 @@ public class ChoosePathwayoption extends JPanel {
         if(tumor.getSelectedItem()!= null && !pathway.isEnabled() && !disease.isEnabled()) return true;
         if(pathway.getSelectedItem()!= null && !tumor.isEnabled() && !disease.isEnabled()) return true;
         if(disease.getSelectedItem()!= null && !tumor.isEnabled() && !pathway.isEnabled()) return true;
-
-//        if(pathway.getSelectedItem()!= null) return true;
-//        if(disease.getSelectedItem()!= null) return true;
         return false;
     }
 
     private void buildNetworkPathFromSelection(){
           if(this.isReady()) {
-            manager.utils.info("Index selezionato "+tumor.getSelectedIndex());
             SignorPathwayQueryFactory spq = new SignorPathwayQueryFactory(this.manager);
             spq.parameters_shift = this.getParameter();
             spq.param_shift = true;
             manager.utils.execute(spq.createTaskIterator());
-          }//       
+            //Re-enable all pathway lists
+            disease.setEnabled(true);
+            pathway.setEnabled(true);
+            tumor.setEnabled(true);  
+          }      
     }    
    
 }

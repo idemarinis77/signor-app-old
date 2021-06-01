@@ -150,13 +150,13 @@ public class SignorSummaryPanel extends JPanel {
         }       
     }
     private void buildPathWay(String pathid){
-            SignorPathwayQueryFactory spq = new SignorPathwayQueryFactory(this.manager);
-            HashMap<String, Object> formvalues = new HashMap<>() {
-                {put ("PATHWAYID", pathid);}                 
-            };
-            spq.parameters_shift = formvalues;
-            spq.param_shift = true;
-            manager.utils.execute(spq.createTaskIterator());
+        SignorPathwayQueryFactory spq = new SignorPathwayQueryFactory(this.manager);
+        HashMap<String, Object> formvalues = new HashMap<>() {
+            {put ("PATHWAYID", pathid);}                 
+        };
+        spq.parameters_shift = formvalues;
+        spq.param_shift = true;
+        manager.utils.execute(spq.createTaskIterator());
     }   
     public void recreateContent(){
         if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){

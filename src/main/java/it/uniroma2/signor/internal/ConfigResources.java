@@ -102,6 +102,6 @@ public class ConfigResources {
     
     //Style
     public static String FILESTYLE = "/style/styles-signor_in_cytoscape_namespace.xml";
-    public static String SIGNOR_VER_STYLE="SIGNOR_NS_0.1";   
+    public static String SIGNOR_VER_STYLE="SIGNOR_NS_0.2";   
     
 }

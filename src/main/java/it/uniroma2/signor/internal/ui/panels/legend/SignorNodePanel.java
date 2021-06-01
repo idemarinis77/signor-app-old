@@ -19,6 +19,8 @@ import java.time.Instant;
 import java.util.Collection;
 import javax.swing.*;
 
+import it.uniroma2.signor.internal.utils.TimeUtils;
+
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
@@ -45,7 +47,7 @@ import org.cytoscape.util.swing.OpenBrowser;
 public class SignorNodePanel extends JPanel {
     private SignorManager manager;
     private JPanel nodesPanel;
-
+    private static Font iconFont;
     private EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
@@ -80,15 +82,19 @@ public class SignorNodePanel extends JPanel {
         Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true); 
         if(selectedNodes.size()>0){
             nodesPanel.removeAll();
-            JPanel separator  = new JPanel();
-            separator.setLayout(new GridBagLayout());
-            separator.add(new SignorLabelStyledBold(">> Node info "), gbc.down().anchor("west"));
-            separator.setBackground(new Color(82, 166, 119));
-            nodesPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
+//            JPanel separator  = new JPanel();
+//            separator.setLayout(new GridBagLayout());
+//            separator.add(new SignorLabelStyledBold(">> Node info "), gbc.down().anchor("west"));
+//            separator.setBackground(new Color(82, 166, 119));
+//            nodesPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
         }
+        
         Iterator iter_sel_nodes = selectedNodes.iterator();
-        while(iter_sel_nodes.hasNext()){            
+        while(iter_sel_nodes.hasNext()){          
+            
+         
             CyNode node_current = (CyNode) iter_sel_nodes.next();
+        
             Node node = network.getNodes().get(node_current);            
             HashMap <String,String> summary = node.getSummary();
             String entity_id = summary.get(NodeField.ID);
@@ -97,7 +103,7 @@ public class SignorNodePanel extends JPanel {
             Iterator iterv = summary.values().iterator();
             JPanel nodeinfo = new JPanel();
             nodeinfo.setLayout(new GridBagLayout());
-            
+    
             while(iter.hasNext()){
                 String key = iter.next().toString();
                 String value = iterv.next().toString();
@@ -107,6 +113,7 @@ public class SignorNodePanel extends JPanel {
                 if(key!= NodeField.DATABASE){
                     nodeinfo.add(new JLabel(value), gbc.right());
                 }
+                
                 else {
                     //nodeinfo.add(new JLabel(value), gbc.right());
                     String db_value_norm = value.toLowerCase();
@@ -125,11 +132,25 @@ public class SignorNodePanel extends JPanel {
                     }    
                 }     
             }
-            SignorButton searchID =  new SignorButton("Search "+entity_name);
+//            SignorButton searchID =  new SignorButton("Search "+entity_name);
+            SignorButton searchID =  new SignorButton("causal networks");
             searchID.addActionListener(e-> buildSingleSearch(entity_id, network));
-            nodesPanel.add(nodeinfo, gbc.down());
-            nodesPanel.add(searchID, gbc.down());
-        }       
+            nodeinfo.add(new SignorLabelStyledBold("Search in SIGNOR"), gbc.down());
+            nodeinfo.add(searchID, gbc.right());
+//            JPanel button  = new JPanel();
+//            button.setLayout(new GridBagLayout());
+//            button.add(searchID, gbc.down());
+//            JPanel general_info  = new JPanel();
+//            general_info.setLayout(new GridBagLayout());
+//            general_info.add(nodeinfo, gbc.down());
+//            general_info.add(button, gbc.down());
+//            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Nodes INFO", general_info, false );
+            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Nodes INFO", nodeinfo, false );
+            nodesPanel.add(collapsableINFO, gbc.down().anchor("north"));
+//            nodesPanel.add(nodeinfo, gbc.down());
+//            nodesPanel.add(searchID, gbc.down());
+            
+        }   
     }
     
     private void buildSingleSearch(String id, Network network){

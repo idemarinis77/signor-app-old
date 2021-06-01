@@ -37,12 +37,13 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
     }
     
     public TaskIterator createTaskIterator() {
+        network.manager.utils.info("I parametri sono questi "+network.parameters.toString());
         String netName = Config.NTWPREFIX+terms;
-        String URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms); 
+        String URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms);                 
         if(includefirstneighbor)
             URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "2");
         else if(search == NetworkField.CONNECTSEARCH)
-            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "1");       
+            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "1"); 
         else if(search == NetworkField.ALLSEARCH)
             URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "3");           
         this.network.manager.utils.info("SignorGenericRetrieveResultFactory createTaskIterator(), retrieving info from"+URL+netName);

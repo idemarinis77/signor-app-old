@@ -16,8 +16,7 @@ import org.cytoscape.work.TaskObserver;
 import org.cytoscape.application.CyUserLog;
 import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
-/*import uk.ac.ebi.intact.app.internal.tasks.details.factories.ShowDetailPanelTaskFactory;
-import uk.ac.ebi.intact.app.internal.ui.panels.detail.DetailPanel;*/
+
 
 import javax.swing.*;
 import java.util.Map;

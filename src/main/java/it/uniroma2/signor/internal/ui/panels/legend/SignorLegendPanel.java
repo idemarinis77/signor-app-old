@@ -160,13 +160,12 @@ public class SignorLegendPanel extends JPanel implements
     private Instant lastSelection = Instant.now();
 
     public void handleEvent(SelectedNodesAndEdgesEvent event) {        
-        if (Instant.now().minusMillis(200).isAfter(lastSelection)) {
-
-            if (snp.selectionRunning || sep.selectionRunning) {
-                snp.selectionRunning = false;
-                sep.selectionRunning = false;
-                TimeUtils.sleep(200);
-            }
+//        if (Instant.now().minusMillis(200).isAfter(lastSelection)) {
+//            if (snp.selectionRunning || sep.selectionRunning) {
+//                snp.selectionRunning = false;
+//                sep.selectionRunning = false;
+//                TimeUtils.sleep(200);
+//            }
             lastSelection = Instant.now();
             Collection<CyNode> selectedNodes = event.getSelectedNodes();
             Collection<CyEdge> selectedEdges = event.getSelectedEdges();
@@ -181,7 +180,7 @@ public class SignorLegendPanel extends JPanel implements
             }
             new Thread(() -> snp.selectedNodes()).start();
             new Thread(() -> sep.selectedEdges()).start();
-        }
+//        }
     }      
   
     public void showCytoPanel() {
@@ -193,7 +192,10 @@ public class SignorLegendPanel extends JPanel implements
         }
         if (cytoPanel.getState() == CytoPanelState.HIDE)
             cytoPanel.setState(CytoPanelState.DOCK);
-
+//        Network currentNetwork = manager.presentationManager.getCurrentNetwork();
+//        if (currentNetwork != null) {
+//            manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, currentNetwork));
+//        }
 //        // Tell tabs
 //        Network currentNetwork = manager.data.getCurrentNetwork();
 //        if (currentNetwork != null) {

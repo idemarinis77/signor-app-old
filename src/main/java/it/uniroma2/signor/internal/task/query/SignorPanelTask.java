@@ -26,6 +26,7 @@ import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.application.swing.CytoPanelState;
 
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
 /**
  *
  * @author amministratore
@@ -62,6 +63,10 @@ public class SignorPanelTask extends AbstractTask {
             if (cytoPanel.getState() == CytoPanelState.HIDE){                
                 cytoPanel.setState(CytoPanelState.DOCK);
             }
+//            Network currentNetwork = manager.presentationManager.getCurrentNetwork();
+//            if (currentNetwork != null) {
+//                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, currentNetwork));
+//            }
         } else if (!show && cytoPanel.indexOfComponent(Config.identifier_panel) >= 0) {
             int compIndex = cytoPanel.indexOfComponent(Config.identifier_panel);
             Component panel = cytoPanel.getComponentAt(compIndex);

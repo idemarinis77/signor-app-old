@@ -68,7 +68,7 @@ public class ConfigPathway {
                      put("SIGNOR-AD", "Alzheimer");
                      put("SIGNOR-FSGS", "Focal segmental glomerulosclerosis");
                      put("SIGNOR-MSP", "Multiple sclerosis");
-                     put("SIGNOR-NS", "Noonan sundrome");
+                     put("SIGNOR-NS", "Noonan syndrome");
                      put("SIGNOR-PD", "Parkinson");
             }
         };
@@ -136,7 +136,7 @@ public class ConfigPathway {
                      put("Alzheimer", "SIGNOR-AD");
                      put("Focal segmental glomerulosclerosis", "SIGNOR-FSGS");
                      put("Multiple sclerosis", "SIGNOR-MSP");
-                     put("Noonan sundrome", "SIGNOR-NS");
+                     put("Noonan syndrome", "SIGNOR-NS");
                      put("Parkinson", "SIGNOR-PD");            
                      put("Acute Myeloid Leukemia", "SIGNOR-AML-MiniPathway");
                      put("Colorectal Carcinoma", "SIGNOR-CRC");

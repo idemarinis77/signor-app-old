@@ -44,6 +44,7 @@ public class SearchPTHQueryComponent extends JTextField {
         requestFocusInWindow();
     }
 
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);

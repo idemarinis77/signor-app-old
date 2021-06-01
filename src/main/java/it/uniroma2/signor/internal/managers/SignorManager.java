@@ -151,7 +151,7 @@ public class SignorManager {
                       this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[Config.node_target_positions[a]]+" "+e.toString());
                   }
             } 
-            CyEdge edge = signornet.addEdge(nodeSource, nodeTarget, false);
+            CyEdge edge = signornet.addEdge(nodeSource, nodeTarget, true);
             String shared_name_edge=attributes[Config.source_entity_position]+" ("+attributes[Config.interaction_position]+") "+attributes[Config.target_entity_position];
             String shared_interaction=attributes[Config.interaction_position];
             //Insert Cytoscape attribute
@@ -159,14 +159,20 @@ public class SignorManager {
             signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("shared interaction", shared_interaction);
             signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("name", shared_name_edge);
             signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("interaction", shared_interaction);
-            for (int a = 0; a < Config.edge_positions.length; a++){                
+            int limit = attributes.length -8;
+            //if( attributes.length == 28 ) limit = Config.edge_positions.length - 1;
+            
+//            for (int a = 0; a < Config.edge_positions.length; a++){  
+            for (int a = 0; a < limit; a++){ 
                 String attribute = Config.HEADERSINGLESEARCH[Config.edge_positions[a]];
                 String map_attribute = EdgeField.EDGEFIELDMAP.get(attribute);
                 try {
-                    if((a == Config.edge_positions.length -1) && attributes[Config.edge_positions[a]].startsWith("0.")){
+//                    if((a == Config.edge_positions.length -1) && attributes[Config.edge_positions[a]].startsWith("0.")){
+                     if(attributes[Config.edge_positions[a]].startsWith("0.")){
                         //I'm reading the last field (Score) 
                         //Some lines could have no score, so I double check also the "0." at the beginning of the field
                         signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Double.parseDouble(attributes[Config.edge_positions[a]]));
+                        continue;
                     }
                     else if (Config.edge_positions[a] == 12){
                         //I'm reading TAX_ID blank 
@@ -245,7 +251,7 @@ public class SignorManager {
                       this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[ConfigPathway.node_target_positions[a]]+" "+e.toString());
                   }
             } 
-            CyEdge edge = signornet.addEdge(nodeSource, nodeTarget, false);
+            CyEdge edge = signornet.addEdge(nodeSource, nodeTarget, true);
             String shared_name_edge=attributes[ConfigPathway.source_entity_position]+" ("+attributes[ConfigPathway.interaction_position]+") "+attributes[ConfigPathway.target_entity_position];
             String shared_interaction=attributes[ConfigPathway.interaction_position];
             //Insert Cytoscape attribute

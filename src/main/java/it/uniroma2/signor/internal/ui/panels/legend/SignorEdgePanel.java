@@ -44,6 +44,7 @@ public class SignorEdgePanel extends JPanel {
     private SignorManager manager;
     private JPanel edgesPanel;
     private EasyGBC gbc=new EasyGBC();
+    private static Font iconFont;
     public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
 
@@ -78,12 +79,12 @@ public class SignorEdgePanel extends JPanel {
         Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);   
         if(selectedEdges.size()>0){
             edgesPanel.removeAll();
-
-            JPanel separator  = new JPanel();
-            separator.setLayout(new GridBagLayout());
-            separator.add(new SignorLabelStyledBold(">> Edge info "), gbc.down().anchor("west"));
-            separator.setBackground(new Color(82, 166, 119));
-            edgesPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
+//
+//            JPanel separator  = new JPanel();
+//            separator.setLayout(new GridBagLayout());
+//            separator.add(new SignorLabelStyledBold(">> Edge info "), gbc.down().anchor("west"));
+//            separator.setBackground(new Color(82, 166, 119));
+//            edgesPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
         }
         Iterator iter_sel_edges = selectedEdges.iterator();
         while(iter_sel_edges.hasNext()){
@@ -106,8 +107,12 @@ public class SignorEdgePanel extends JPanel {
                 if(value.length() > 20)
                     edgeinfo.add(new HelpButton(manager, value), gbc.right());
                 else edgeinfo.add(new JLabel(value), gbc.right());
-            }           
-            edgesPanel.add(edgeinfo, gbc.down());
+            }    
+            
+            
+            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Edges INFO", edgeinfo, false );
+            edgesPanel.add(collapsableINFO, gbc.down().anchor("north"));
+//            edgesPanel.add(edgeinfo, gbc.down());
         }              
     }
 }
