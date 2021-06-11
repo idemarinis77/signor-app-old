@@ -9,6 +9,7 @@ import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.Edge;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 /**
@@ -24,6 +25,7 @@ import java.util.Collection;
 import javax.swing.*;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.util.HashMap;
+import java.util.Map;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
@@ -74,17 +76,12 @@ public class SignorRelationsPanel extends JPanel {
     public void createContent(){
         try {                             
             relPanel.setLayout(new GridLayout(0, 2));
-//                Dimension parentSize = relPanel.getParent().getSize();
-//                relPanel.setPreferredSize(new Dimension(parentSize.width-250, parentSize.height));
-            Integer it = 0;
-            for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {
-                CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getSource().getSUID());
-                CyRow cyrow_node_t = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
-                CyRow edge_row= current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
-                    
-                relPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, NodeField.ENTITY, String.class)), gbc.position(0, it));
-                relPanel.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, NodeField.ENTITY, String.class)), gbc.right());                    
-                it ++;                    
+            Network network = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into);
+            Map<CyEdge, Edge> cy_net_ed = network.getEdges();
+            for (CyEdge cyEdge : cy_net_ed.keySet()) {            
+                Edge edge = cy_net_ed.get(cyEdge);
+                relPanel.add(new JLabel(edge.source.toString()), gbc.down());
+                relPanel.add(new JLabel(edge.target.toString()), gbc.right());              
             }                           
         }
         catch (Exception e){

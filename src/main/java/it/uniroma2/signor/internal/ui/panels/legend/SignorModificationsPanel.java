@@ -73,12 +73,12 @@ public class SignorModificationsPanel extends JPanel {
     public void createContent(){
         try {                   
             //SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 2, manager);
-            modPanel.setLayout(new GridLayout(0, 5));
+            modPanel.setLayout(new GridLayout(0, 5));            
             Integer it =0;
             for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {                
                 CyRow cyrow_node = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(signorEdge.getTarget().getSUID());
                 CyRow cyrow_edge = current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(signorEdge.getSUID());
-                if (cyrow_edge.get(Config.NAMESPACE, EdgeField.RESIDUE, String.class)!=null){
+                if (!cyrow_edge.get(Config.NAMESPACE, EdgeField.RESIDUE, String.class).isBlank()){
                     modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, EdgeField.RESIDUE, String.class)), gbc.down());
                     modPanel.add(new JLabel(cyrow_edge.get(Config.NAMESPACE, EdgeField.SEQUENCE, String.class)), gbc.right());
                     modPanel.add(new JLabel(cyrow_node.get(Config.NAMESPACE, NodeField.ENTITY, String.class)), gbc.right());

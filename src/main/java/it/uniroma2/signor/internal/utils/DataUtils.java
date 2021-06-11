@@ -134,7 +134,7 @@ public class DataUtils {
 //                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 20.0);  
 //                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0.0);               
 //                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_LABEL, label);                                       
-                       CyEdge cyEdge = currentnet.addEdge(cyNodeSourceParent, cyNode, false);
+                       CyEdge cyEdge = currentnet.addEdge(cyNodeSourceParent, cyNode, true);
                        if(!ptm_already_loaded){
                            networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, PTMNodeField.RESIDUE, cyrow.get(Config.NAMESPACE, "RESIDUE", String.class));
                            networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, PTMNodeField.TYPE, "residue");
@@ -157,7 +157,7 @@ public class DataUtils {
                            networksignor.PTMedgeTable.getRow(cyEdge.getSUID()).set(Config.NAMESPACEPTM, PTMEdgeField.Interaction, interaction);   
                        }
                        String second_interaction = MappingSecondDirectionInteraction(first_interaction, effect);
-                       CyEdge cyEdge2 = currentnet.addEdge(cyNode, cyNodeTargetParent, false);
+                       CyEdge cyEdge2 = currentnet.addEdge(cyNode, cyNodeTargetParent, true);
                        String edge_second_interaction_sh_name = residue+"("+second_interaction+")"+networksignor.getNodes().get(cyNodeTargetParent).toString();
                        currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set(Config.NAMESPACE, EdgeField.Interaction, second_interaction);
                        currentnet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("shared name", edge_second_interaction_sh_name);

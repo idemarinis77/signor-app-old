@@ -77,18 +77,6 @@ public class CyActivator extends AbstractCyActivator {
                 Properties propsSearch = new Properties();
                 registerService(bc, signorPathwayQuery, NetworkSearchTaskFactory.class, propsSearch);
             }
-            /*if (haveGUI) {
-                CyNetworkManager cyNetworkManagerServiceRef = getService(bc,CyNetworkManager.class);
-                CySwingApplication cytoscapeDesktopService = getService(bc,CySwingApplication.class);
-                
-                //SignorLegendController signorLegendController = new SignorLegendController(registrar, cyNetworkManagerServiceRef);
-                //SignorLegendPanel signorLegendGeneral = new SignorLegendPanel(registrar, signorLegendController, manager);
-                SignorLegendPanel signorLegendGeneral = new SignorLegendPanel(registrar, manager);
-                SignorLegendAction signorLegendAction = new SignorLegendAction(cytoscapeDesktopService,signorLegendGeneral);
-                
-                registerService(bc,signorLegendGeneral,CytoPanelComponent.class);
-                registerService(bc,signorLegendAction,CyAction.class);     
-            }*/
             if (haveGUI) {
               SignorPanelFactory showResults = new SignorPanelFactory(manager);
               showResults.reregister();

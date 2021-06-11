@@ -28,7 +28,7 @@ import org.cytoscape.work.TaskFactory;
 public class SignorPanelFactory extends AbstractTaskFactory{
     final SignorManager manager;
     boolean show = false;
-    
+    boolean showBypanel = true;
     public SignorPanelFactory(SignorManager manager){
         this.manager = manager;
     }
@@ -37,6 +37,9 @@ public class SignorPanelFactory extends AbstractTaskFactory{
         return new TaskIterator(new SignorPanelTask(manager, this, show));
    }  
 
+    public void setShowByPanelAttribute(Boolean showBypanel){
+        this.showBypanel = showBypanel;
+    }
     public void reregister() {
         manager.utils.unregisterService(this, TaskFactory.class);
         Properties props = new Properties();
@@ -49,6 +52,7 @@ public class SignorPanelFactory extends AbstractTaskFactory{
             props.setProperty(TITLE, "Show results panel");
             show = true;
         }
+
         props.setProperty(MENU_GRAVITY, "7.0");
         props.setProperty(IN_MENU_BAR, "true");
         manager.utils.registerService(this, TaskFactory.class, props);

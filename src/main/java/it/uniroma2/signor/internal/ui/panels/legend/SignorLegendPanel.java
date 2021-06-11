@@ -33,6 +33,7 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.task.query.SignorPanelTask;
 import it.uniroma2.signor.internal.ConfigResources;
+import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 
 import java.awt.BorderLayout;
 import java.time.Instant;
@@ -89,6 +90,7 @@ public class SignorLegendPanel extends JPanel implements
 
         this.manager = manager;      
         this.registered = true;
+
         snp = new SignorNodePanel(manager);
         sep = new SignorEdgePanel(manager);
         ssp = new SignorSummaryPanel(manager);
@@ -124,6 +126,7 @@ public class SignorLegendPanel extends JPanel implements
         JPanel ModeView = new JPanel(new GridLayout(1,2)); 
         ModeView.setBorder(BorderFactory.createTitledBorder("Mode View"));
         ButtonGroup group = new ButtonGroup();
+
         
         ptmviewON.addActionListener(listenerPTM);
         defviewON.addActionListener(listenerDEF);       
@@ -157,7 +160,7 @@ public class SignorLegendPanel extends JPanel implements
         return icon;	
     }    
     
-    private Instant lastSelection = Instant.now();
+//    private Instant lastSelection = Instant.now();
 
     public void handleEvent(SelectedNodesAndEdgesEvent event) {        
 //        if (Instant.now().minusMillis(200).isAfter(lastSelection)) {
@@ -166,7 +169,7 @@ public class SignorLegendPanel extends JPanel implements
 //                sep.selectionRunning = false;
 //                TimeUtils.sleep(200);
 //            }
-            lastSelection = Instant.now();
+//            lastSelection = Instant.now();
             Collection<CyNode> selectedNodes = event.getSelectedNodes();
             Collection<CyEdge> selectedEdges = event.getSelectedEdges();
             boolean nodesSelected = !selectedNodes.isEmpty();
@@ -180,34 +183,21 @@ public class SignorLegendPanel extends JPanel implements
             }
             new Thread(() -> snp.selectedNodes()).start();
             new Thread(() -> sep.selectedEdges()).start();
-//        }
     }      
   
     public void showCytoPanel() {
         CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);
         CytoPanel cytoPanel = swingApplication.getCytoPanel(CytoPanelName.EAST);
-//        if (cytoPanel.indexOfComponent(Config.identifier_panel)<=0) {
         if (!registered) {
             manager.utils.registerService(this, CytoPanelComponent.class, new Properties());
         }
-        if (cytoPanel.getState() == CytoPanelState.HIDE)
+        if (cytoPanel.getState() == CytoPanelState.HIDE){
             cytoPanel.setState(CytoPanelState.DOCK);
-//        Network currentNetwork = manager.presentationManager.getCurrentNetwork();
-//        if (currentNetwork != null) {
-//            manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, currentNetwork));
-//        }
-//        // Tell tabs
-//        Network currentNetwork = manager.data.getCurrentNetwork();
-//        if (currentNetwork != null) {
-//            nodePanel.networkChanged(currentNetwork);
-//            edgePanel.networkChanged(currentNetwork);
-//            legendPanel.networkChanged(currentNetwork);
-//        }
-
+        }
     }
     public void hideCytoPanel() {
-        manager.utils.unregisterService(this, CytoPanelComponent.class);
-        this.registered = false;
+        manager.utils.unregisterService(this, CytoPanelComponent.class);        
+        registered = false;
     }
     
     @Override
@@ -221,10 +211,9 @@ public class SignorLegendPanel extends JPanel implements
                     newcynet = k;
                     break;
                 }
-            }                  
-       
+            }      
+    
             if (event.getNewNetwork().isPathwayNetwork.equals(true)){
-                //sdp.current_cynetwork_to_serch_into=manager.presentationManager.event.getNewNetwork();
                 this.current_cynetwork_to_serch_into = newcynet;
                 snp.current_cynetwork_to_serch_into = newcynet;
                 sep.current_cynetwork_to_serch_into = newcynet;
@@ -232,23 +221,13 @@ public class SignorLegendPanel extends JPanel implements
                 tabs.removeAll();
                 tabs.add("NODES", snp); 
                 tabs.add("EDGES", sep);
-                tabs.add("DESCRIPTIONS", sdp);
-//                tabs.remove(smp);
-//                tabs.remove(ssp);
-//                tabs.remove(srp);                
+                tabs.add("DESCRIPTIONS", sdp);           
 
                 sdp.recreateContent();
                 tabs.setSelectedComponent(sdp); 
                 manager.utils.info("New SIGNOR network PATHWAY "+newcynet); 
-//                ptmviewON.setSelected(false);
-//                ptmviewON.setEnabled(true);
-//                defviewON.setSelected(true);
-//                defviewON.setEnabled(false);
-//                return;
+
             }
-            
-            //if (DataUtils.isSignorNetwork(manager.lastCyNetwork) && this.manager.lastNetwork.parameters.get("SINGLESEARCH").equals(true)
-//            if (event.getNewNetwork().parameters.containsKey(Config.SINGLESEARCH)){
             else if(event.getNewNetwork().parameters.get(NetworkField.SINGLESEARCH).equals(true)){  
                 this.current_cynetwork_to_serch_into = newcynet;
                 ssp.current_cynetwork_to_serch_into = newcynet;
@@ -268,7 +247,6 @@ public class SignorLegendPanel extends JPanel implements
                 tabs.setSelectedComponent(ssp);       
                 manager.utils.info("New SIGNOR network SINGLE SEARCH"+newcynet);                    
             }
-            
             else if(event.getNewNetwork().parameters.get(NetworkField.ALLSEARCH).equals(true) || 
                event.getNewNetwork().parameters.get(NetworkField.CONNECTSEARCH).equals(true)){                       
                 tabs.removeAll();

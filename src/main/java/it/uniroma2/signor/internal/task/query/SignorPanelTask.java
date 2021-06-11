@@ -45,29 +45,33 @@ public class SignorPanelTask extends AbstractTask {
     public static boolean isPanelRegistered(SignorManager manager) {
         CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);
         CytoPanel cytoPanel = swingApplication.getCytoPanel(CytoPanelName.EAST);
+        manager.utils.info("POSIZIONE "+cytoPanel.indexOfComponent(Config.identifier_panel));
         return cytoPanel.indexOfComponent(Config.identifier_panel) >= 0;
     }
     
     @Override
     public void run(TaskMonitor monitor) {
          if (show)
-            monitor.setTitle("Show results panel");
+            monitor.setTitle("Show  results panel");
         else
             monitor.setTitle("Hide results panel");          
         CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);
         CytoPanel cytoPanel = swingApplication.getCytoPanel(CytoPanelName.EAST);
         if (show && cytoPanel.indexOfComponent(Config.identifier_panel) < 0) {
+  
             CytoPanelComponent2 signorpanel = new SignorLegendPanel(manager);
            // Register it
             manager.utils.registerService(signorpanel, CytoPanelComponent.class, new Properties());
             if (cytoPanel.getState() == CytoPanelState.HIDE){                
                 cytoPanel.setState(CytoPanelState.DOCK);
+                
             }
-//            Network currentNetwork = manager.presentationManager.getCurrentNetwork();
-//            if (currentNetwork != null) {
-//                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, currentNetwork));
-//            }
-        } else if (!show && cytoPanel.indexOfComponent(Config.identifier_panel) >= 0) {
+            Network currentNetwork = manager.presentationManager.getCurrentNetwork();
+            if (currentNetwork != null) {
+                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, currentNetwork));                
+            }
+       } else if (!show && cytoPanel.indexOfComponent(Config.identifier_panel) >= 0) {
+        
             int compIndex = cytoPanel.indexOfComponent(Config.identifier_panel);
             Component panel = cytoPanel.getComponentAt(compIndex);
             if (panel instanceof CytoPanelComponent2) {
