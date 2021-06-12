@@ -49,10 +49,11 @@ public class SignorInteractomeTask extends AbstractTask {
     SignorManager manager;
     Network network;
     String URL = ConfigResources.INTERACTOMEDWLD;
-    
-    public SignorInteractomeTask(Network network){
+    Boolean ptm_interactome;
+    public SignorInteractomeTask(Network network, Boolean ptm_interactome){
         this.manager = network.manager;
         this.network = network;
+        this.ptm_interactome = ptm_interactome;
     }
     public void run(TaskMonitor monitor) {        
         monitor.setTitle("Loading all Signor Interactome ....  please wait");    
@@ -70,19 +71,11 @@ public class SignorInteractomeTask extends AbstractTask {
             else {
                 if (cancelled) return;
 
-//                InputStream inputStream = new URL(ConfigResources.INTERACTOMEDWLD).openStream();
-//                Scanner sc = new Scanner(inputStream, "UTF-8");
-//                int j =0;
-//                while(sc.hasNext()) {
-//                       String line = sc.nextLine();
-//                       if(j<10)
-//                            manager.utils.info(line);
-//                       j++;
-//                    }
-//                inputStream.close();
-
+                String suffix = "";
                 monitor.showMessage(TaskMonitor.Level.INFO, "Creating Interactome of "+results.size()+" interactors");
-                CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+Config.INTERACTOMENAME);
+                
+                if(ptm_interactome.equals(true)) suffix = " - PTM";
+                CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+Config.INTERACTOMENAME+suffix);                
                 manager.presentationManager.updateSignorNetworkCreated(cynet, network);
                 manager.presentationManager.updateSignorViewCreated(network, NetworkView.Type.DEFAULT);
                 monitor.showMessage(TaskMonitor.Level.INFO, "Created network Interactome "+network.toString());
@@ -94,7 +87,7 @@ public class SignorInteractomeTask extends AbstractTask {
 
                 //Populate tables and create MyNetwork
                 CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
-                cynet = manager.createNetworkFromLine(results);
+                cynet = manager.createNetworkFromLine(results, ptm_interactome);
                 network.setNetwork(cynet);
                 
                 netMan.addNetwork(cynet);            
@@ -125,8 +118,8 @@ public class SignorInteractomeTask extends AbstractTask {
 //                    return;
 //                }
 
-                manager.utils.showResultsPanel();            
-                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));
+//                manager.utils.showResultsPanel();            
+//                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));
             }
         }
             catch (Exception e){

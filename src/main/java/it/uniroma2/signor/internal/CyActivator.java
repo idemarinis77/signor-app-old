@@ -57,15 +57,24 @@ public class CyActivator extends AbstractCyActivator {
                 propsSettings.setProperty(PREFERRED_MENU, "Apps.Signor");
                 propsSettings.setProperty(TITLE, "Download Signor INTERACTOME (11Mb)");
                 propsSettings.setProperty(MENU_GRAVITY, "6.0");
-                propsSettings.setProperty(IN_MENU_BAR, "true");
-                propsSettings.setProperty(INSERT_SEPARATOR_AFTER, "true");
-                
+                propsSettings.setProperty(IN_MENU_BAR, "true");                
 
                 propsSettings.setProperty(COMMAND_NAMESPACE, "signor");
                 propsSettings.setProperty(COMMAND, "download interactome");
                 propsSettings.setProperty(COMMAND_DESCRIPTION, "This query download the complete database of Signor");
                 
-                registerService(bc, new SignorInteractomeFactory(manager), TaskFactory.class, propsSettings);
+                registerService(bc, new SignorInteractomeFactory(manager, false), TaskFactory.class, propsSettings);
+            }
+            {
+                Properties propsSettings = new Properties();
+                propsSettings.setProperty(PREFERRED_MENU, "Apps.Signor");
+                propsSettings.setProperty(TITLE, "Download Signor INTERACTOME PTM (11Mb)");
+                propsSettings.setProperty(MENU_GRAVITY, "7.0");
+                propsSettings.setProperty(IN_MENU_BAR, "true");
+                propsSettings.setProperty(INSERT_SEPARATOR_AFTER, "true");
+                
+               
+                registerService(bc, new SignorInteractomeFactory(manager, true), TaskFactory.class, propsSettings);
             }
             {
                 SignorGenericQueryFactory signorQuery = new SignorGenericQueryFactory(manager);

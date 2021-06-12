@@ -27,6 +27,8 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.NodeField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
+import it.uniroma2.signor.internal.utils.DataUtils;
+import static it.uniroma2.signor.internal.utils.DataUtils.MappingSecondDirectionInteraction;
 import java.util.Properties;
 import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.CyApplicationManager;
@@ -99,7 +101,7 @@ public class SignorManager {
         this.lastNetwork = network;
     }
    
-    public CyNetwork createNetworkFromLine(ArrayList<String> results){
+    public CyNetwork createNetworkFromLine(ArrayList<String> results, Boolean ptm_interactome){
         CyNetwork signornet = this.lastCyNetwork;
         HashMap<String, CyNode> entity_read = new HashMap <String, CyNode>();
         
@@ -162,7 +164,43 @@ public class SignorManager {
             int limit = attributes.length -8;
             //if( attributes.length == 28 ) limit = Config.edge_positions.length - 1;
             
-//            for (int a = 0; a < Config.edge_positions.length; a++){  
+//            for (int a = 0; a < Config.edge_positions.length; a++){ 
+            if(ptm_interactome.equals(true)){
+                String effect = attributes[8];
+                String mechanism = attributes[9];
+                String mechanism_orig = mechanism;
+                if(mechanism.startsWith("de")) mechanism = mechanism.substring(2);
+                
+                String residue = attributes[10];
+                String label = attributes[0]+"_"+residue+"_"+mechanism;
+
+                if(!residue.isBlank()){
+                    CyNode ptm = signornet.addNode();
+                    CyEdge cyEdge = signornet.addEdge(nodeSource, ptm, true);
+                    CyEdge cyEdge2 = signornet.addEdge(ptm, nodeTarget, true);
+                    String sequence = attributes[11];
+                    signornet.getDefaultNodeTable().getRow(ptm.getSUID()).set("shared name", label);
+                    signornet.getDefaultNodeTable().getRow(ptm.getSUID()).set("name", label);
+                    signornet.getDefaultNodeTable().getRow(ptm.getSUID()).set(Config.NAMESPACE, NodeField.TYPE, "residue");
+                    signornet.getDefaultNodeTable().getRow(ptm.getSUID()).set(Config.NAMESPACE, NodeField.ID, sequence);
+                    
+                    String first_interaction = DataUtils.MappingFirstDirectionInteraction(mechanism_orig, NodeField.SOURCE);
+                    String edge_first_interaction_sh_name = attributes[0]+"("+first_interaction+")"+residue;
+                    signornet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set(Config.NAMESPACE, EdgeField.Interaction, first_interaction);
+                    signornet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("shared name", edge_first_interaction_sh_name);
+                    signornet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("shared interaction", first_interaction);                       
+                    signornet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("name", shared_name_edge);
+                    signornet.getDefaultEdgeTable().getRow(cyEdge.getSUID()).set("interaction", first_interaction);
+                    
+                    String second_interaction = DataUtils.MappingSecondDirectionInteraction(first_interaction, effect);
+                    String edge_second_interaction_sh_name = residue+"("+second_interaction+")"+attributes[4];
+                    signornet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set(Config.NAMESPACE, EdgeField.Interaction, second_interaction);
+                    signornet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("shared name", edge_second_interaction_sh_name);
+                    signornet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("shared interaction", second_interaction);
+                    signornet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("name", shared_name_edge);
+                    signornet.getDefaultEdgeTable().getRow(cyEdge2.getSUID()).set("interaction", second_interaction);                    
+                }
+            }
             for (int a = 0; a < limit; a++){ 
                 String attribute = Config.HEADERSINGLESEARCH[Config.edge_positions[a]];
                 String map_attribute = EdgeField.EDGEFIELDMAP.get(attribute);

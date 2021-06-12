@@ -237,7 +237,7 @@ public class DataUtils {
         
     }
     
-    private static String MappingFirstDirectionInteraction(String mechanism, String source_or_target){
+    public static String MappingFirstDirectionInteraction(String mechanism, String source_or_target){
         //EFFECT
         //up-regulates*
         //down-regulates*
@@ -246,7 +246,7 @@ public class DataUtils {
             return "down-regulates";
         else return "up-regulates";              
     }
-    private static String MappingSecondDirectionInteraction(String first_interaction, String effect){
+    public static String MappingSecondDirectionInteraction(String first_interaction, String effect){
         //EFFECT
         //up-regulates*
         //down-regulates*

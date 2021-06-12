@@ -45,7 +45,6 @@ public class SignorPanelTask extends AbstractTask {
     public static boolean isPanelRegistered(SignorManager manager) {
         CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);
         CytoPanel cytoPanel = swingApplication.getCytoPanel(CytoPanelName.EAST);
-        manager.utils.info("POSIZIONE "+cytoPanel.indexOfComponent(Config.identifier_panel));
         return cytoPanel.indexOfComponent(Config.identifier_panel) >= 0;
     }
     

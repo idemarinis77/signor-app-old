@@ -16,7 +16,7 @@ import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.swing.CytoPanelName;
 
 import java.awt.Color;
-
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
@@ -90,7 +90,6 @@ public class SignorLegendPanel extends JPanel implements
 
         this.manager = manager;      
         this.registered = true;
-
         snp = new SignorNodePanel(manager);
         sep = new SignorEdgePanel(manager);
         ssp = new SignorSummaryPanel(manager);
@@ -264,7 +263,8 @@ public class SignorLegendPanel extends JPanel implements
             }
             else if (event.getNewNetwork().parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
                 this.current_cynetwork_to_serch_into = newcynet;
-                tabs.removeAll();
+                this.hideCytoPanel();
+                //tabs.removeAll();
             }
             if(manager.sessionLoaderManager.loadingsession.equals(true) && 
                     event.getNewNetwork().parameters.get(NetworkField.ROOTNETWORKPTM).equals(true)){
@@ -343,7 +343,8 @@ public class SignorLegendPanel extends JPanel implements
                             }
                           if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
                               this.current_cynetwork_to_serch_into = newcynet;
-                              tabs.removeAll();
+                              this.hideCytoPanel();
+                              //tabs.removeAll();
                           }
                           else if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
                                 this.current_cynetwork_to_serch_into = newcynet;

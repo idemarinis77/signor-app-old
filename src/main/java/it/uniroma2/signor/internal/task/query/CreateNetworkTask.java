@@ -98,7 +98,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
 
                 //Populate tables and create MyNetwork
                 CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
-                cynet = manager.createNetworkFromLine(results);
+                cynet = manager.createNetworkFromLine(results, false);
                 
                 //Populate my logic netowrk
                 network.setNetwork(cynet);

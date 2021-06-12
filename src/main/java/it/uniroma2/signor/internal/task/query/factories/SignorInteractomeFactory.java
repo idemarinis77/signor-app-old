@@ -27,16 +27,18 @@ public class SignorInteractomeFactory extends AbstractTaskFactory{
     
     SignorManager manager;   
     HashMap <String, Object> parameters = new HashMap();
+    Boolean ptm_interactome;
     
-    public SignorInteractomeFactory(SignorManager manager) {
+    public SignorInteractomeFactory(SignorManager manager, Boolean ptm_interactome) {
          this.manager = manager;        
+         this.ptm_interactome = ptm_interactome;
 //         parameters.put(NetworkField.QUERY, Config.INTERACTOMENAME);
     }
    
 
     public TaskIterator createTaskIterator() {            
             parameters =NetworkSearch.buildSearch(Config.INTERACTOMENAME, "Homo Sapiens", "", false);
-            return new TaskIterator(new SignorInteractomeTask(new Network(manager, parameters))); 
+            return new TaskIterator(new SignorInteractomeTask(new Network(manager, parameters), ptm_interactome)); 
         
     }
 

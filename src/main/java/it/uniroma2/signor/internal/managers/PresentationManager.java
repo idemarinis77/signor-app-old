@@ -44,7 +44,7 @@ import org.cytoscape.view.model.events.NetworkViewAboutToBeDestroyedListener;
  * @author amministratore
  */
 public class PresentationManager implements         
-        SignorNetworkCreatedListener, NetworkAddedListener, NetworkViewAddedListener, 
+        NetworkAddedListener, NetworkViewAddedListener, 
         NetworkViewAboutToBeDestroyedListener, NetworkAboutToBeDestroyedListener{
     
     public HashMap<CyNetwork, Network> signorNetMap = new HashMap();
@@ -91,14 +91,14 @@ public class PresentationManager implements
         signorNetMap.remove(cyNetwork);        
         signorViewMap.remove(network);
     }
-    public void handleEvent (SignorNetworkCreatedEvent e){
-        manager.utils.info(e.getNewNetwork().toString());
-        Network signornet = e.getNewNetwork();
-//        if (signornet.parameters.containsKey(NetworkField.SINGLESEARCH)){
-//            if (signornet.parameters.get(NetworkField.SINGLESEARCH).equals(true))
-//                signornet.setCyNodeRoot(searched_query);
-//        }
-    }
+//    public void handleEvent (SignorNetworkCreatedEvent e){
+//        manager.utils.info(e.getNewNetwork().toString());
+//        Network signornet = e.getNewNetwork();
+////        if (signornet.parameters.containsKey(NetworkField.SINGLESEARCH)){
+////            if (signornet.parameters.get(NetworkField.SINGLESEARCH).equals(true))
+////                signornet.setCyNodeRoot(searched_query);
+////        }
+//    }
     
     @Override
     public void handleEvent(NetworkViewAboutToBeDestroyedEvent e) {
