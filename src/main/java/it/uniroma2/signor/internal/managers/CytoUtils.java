@@ -99,9 +99,7 @@ public class CytoUtils {
     public void setShowDetailPanelTaskFactory(SignorPanelFactory factory) {
         signorPanelFactory = factory;
     }
-//    public void setShowByPanelDetailPanelTaskFactory(Boolean show) {
-//        signorPanelFactory.setShowByPanelAttribute(show);
-//    }
+
     public void setDetailPanel(SignorLegendPanel detailPanel) {
         this.signorLegendPanel = detailPanel;
     }

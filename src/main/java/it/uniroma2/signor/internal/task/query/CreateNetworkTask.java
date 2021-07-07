@@ -142,7 +142,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 manager.utils.execute(algfactory.createTaskIterator());          
                 
                 manager.utils.showResultsPanel();            
-                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));        
+                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));   
             }
         }
         catch (Exception e){

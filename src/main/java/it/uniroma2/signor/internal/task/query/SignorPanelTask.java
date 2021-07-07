@@ -51,7 +51,7 @@ public class SignorPanelTask extends AbstractTask {
     @Override
     public void run(TaskMonitor monitor) {
          if (show)
-            monitor.setTitle("Show  results panel");
+            monitor.setTitle("Show results panel");
         else
             monitor.setTitle("Hide results panel");          
         CySwingApplication swingApplication = manager.utils.getService(CySwingApplication.class);

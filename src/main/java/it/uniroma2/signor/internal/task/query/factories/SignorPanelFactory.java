@@ -37,9 +37,7 @@ public class SignorPanelFactory extends AbstractTaskFactory{
         return new TaskIterator(new SignorPanelTask(manager, this, show));
    }  
 
-    public void setShowByPanelAttribute(Boolean showBypanel){
-        this.showBypanel = showBypanel;
-    }
+
     public void reregister() {
         manager.utils.unregisterService(this, TaskFactory.class);
         Properties props = new Properties();
@@ -56,12 +54,10 @@ public class SignorPanelFactory extends AbstractTaskFactory{
         props.setProperty(MENU_GRAVITY, "7.0");
         props.setProperty(IN_MENU_BAR, "true");
         manager.utils.registerService(this, TaskFactory.class, props);
+
     }
     public boolean isReady() {
-        // We always want to be able to shut it off
         if (!show) return true;
-
-//        return manager.utils.getService(CyApplicationManager.class).getCurrentNetwork() != null;
         return manager.presentationManager.getCurrentNetwork() !=null;
     }
 }
