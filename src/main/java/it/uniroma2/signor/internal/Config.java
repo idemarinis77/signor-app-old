@@ -33,6 +33,13 @@ public class Config {
         }
     };
     
+    public static final HashMap<String,String> SPECIESSHORTESTPATH = new HashMap<>(){
+        {put ("Homo Sapiens", "human");
+         put ("Mus musculus", "mouse");
+         put ("Rattus norvegicus", "rat");
+        }
+    };
+    
     public static final String identifier_panel = "it.uniroma2.signor.app.details";
     public static final String[] HEADERSINGLESEARCH = {"ENTITYA", "TYPEA", "IDA", "DATABASEA", "ENTITYB", "TYPEB", "IDB",
                                                     "DATABASEB", "EFFECT", "MECHANISM", "RESIDUE", "SEQUENCE", "TAX_ID", 

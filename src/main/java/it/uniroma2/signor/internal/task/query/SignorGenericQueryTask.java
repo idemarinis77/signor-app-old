@@ -116,13 +116,14 @@ public class SignorGenericQueryTask extends AbstractTask {
                 }
                 
             }
-            if (search == NetworkField.CONNECTSEARCH || search == NetworkField.ALLSEARCH){                
+            if (search == NetworkField.CONNECTSEARCH || search == NetworkField.ALLSEARCH || search == NetworkField.SHORTESTPATHSEARCH){                
                 String terms_no_space = terms.replace(" ", "%2C").trim();
                 String terms_for_all = terms_no_space.replace("\n", "%2C").trim();
                 manager.utils.info(terms_for_all+" "+search);
                 TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), terms_for_all, network);
                 manager.utils.execute(factory.createTaskIterator());                
             }
+            
         }
         catch (Exception e){
             manager.utils.error("SignorGenericQueryTask run() "+e.toString()+

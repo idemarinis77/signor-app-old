@@ -69,7 +69,9 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
             if (cancelled) return;
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
-            ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH);
+            manager.utils.info(br.toString());
+            ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH, 
+                    (Boolean) network.parameters.get(NetworkField.SHORTESTPATHSEARCH), manager);
             String newterms = terms.replace("%2C", " ");
             if(results.isEmpty()){
                 

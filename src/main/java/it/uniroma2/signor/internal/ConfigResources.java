@@ -61,7 +61,7 @@ public class ConfigResources {
        SINGLEQUERY("SINGLESEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        ALLQUERY("ALLSEARCH", (p, l) -> "https://signor.uniroma2.it/getData.php?type=connect&proteins="+p+"&level="+l),
        CONNECTQUERY("CONNECTSEARCH", (p, l) -> "https://signor.uniroma2.it/getData.php?type=connect&proteins="+p+"&level="+l),
-       SHORTESTQUERY("SHORTESTPATHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
+       SHORTESTQUERY("SHORTESTPATHSEARCH", (s, t) -> "https://signor.uniroma2.it/ShortestPathSIGNOR/getData.php?start_node="+s+"&end_node="+t+"&longer=FALSE&organism="),
        DESEASPTHQUERY("DESEASPTHSEARCH", (o, s) -> "https://signor.uniroma2.it/getData.php?organism="+o+"&id=" +s),
        PATHWAYQUERY("PATHWAYSEARCH", (p, s) -> "https://signor.uniroma2.it/getPathwayData.php?pathway="+p+"&relations="+s),
        ENTITYINFOSEARCH("ENTITYINFOSEARCH", (s, o) -> "https://signor.uniroma2.it/getData.php?entityInfo="+s+"&organism="+o);

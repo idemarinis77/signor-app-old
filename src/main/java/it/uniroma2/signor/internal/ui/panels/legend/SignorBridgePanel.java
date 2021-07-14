@@ -78,7 +78,8 @@ public class SignorBridgePanel extends JPanel {
             Dimension parentSize = connectPanel.getParent().getSize();
             connectPanel.setPreferredSize(new Dimension(parentSize.width-250, parentSize.height));*/
             bridgePanel.setLayout(new GridBagLayout());
-            if(networkCurrent.parameters.get(NetworkField.INCFIRSTNEISEARCH).equals(false)){
+            if(networkCurrent.parameters.get(NetworkField.INCFIRSTNEISEARCH).equals(false)
+                    && networkCurrent.parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(false)){
                SignorButton ifn = new SignorButton("Include first neighbor");
                ifn.addActionListener(e-> buildIfn(networkCurrent));
                JPanel buttonPanel = new JPanel();
@@ -103,13 +104,13 @@ public class SignorBridgePanel extends JPanel {
             for (Map.Entry<CyNode, Node> entry : signorNodes.entrySet()) {              
                 HashMap<String,String> summary = entry.getValue().getSummary();
                 Iterator iter = summary.keySet().iterator();
-                Iterator iterv = summary.values().iterator();              
+                Iterator iterv = summary.values().iterator(); 
+                entity_info.add(new SignorLabelStyledBold("-----"), gbc.down());
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
                     entity_info.add(new SignorLabelStyledBold(key), gbc.down());
                     entity_info.add(new JLabel(value), gbc.right());
-
                 }
 //                connectPanel.add(new JLabel(entry.getValue().summary.get("")cyrow_node.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.position(0, it));
 //                connectPanel.add(new JLabel(cyrow_node_t.get(Config.NAMESPACE, "ENTITY", String.class)), gbc.right());

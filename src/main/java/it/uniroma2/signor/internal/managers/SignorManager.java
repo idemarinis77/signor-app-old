@@ -105,7 +105,7 @@ public class SignorManager {
         CyNetwork signornet = this.lastCyNetwork;
         HashMap<String, CyNode> entity_read = new HashMap <String, CyNode>();
         
-        for (int i = 0; i < results.size(); i++) {            
+        for (int i = 0; i < results.size(); i++) {  
             String[] attributes = results.get(i).split("\t");
             CyNode nodeSource;
             CyNode nodeTarget;         
@@ -200,6 +200,7 @@ public class SignorManager {
             signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set("interaction", shared_interaction);
             int limit = attributes.length -8;
             for (int a = 0; a < limit; a++){ 
+                
                 String attribute = Config.HEADERSINGLESEARCH[Config.edge_positions[a]];
                 String map_attribute = EdgeField.EDGEFIELDMAP.get(attribute);
                 try {
@@ -338,7 +339,7 @@ public class SignorManager {
         utils.flushEvents();
         return signornet;
     }
-    
+
     public CyNetwork getCurrentCyNetwork() {
         return utils.getService(CyApplicationManager.class).getCurrentNetwork();
     }

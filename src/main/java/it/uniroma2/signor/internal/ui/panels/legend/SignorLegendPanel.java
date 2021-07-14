@@ -78,6 +78,7 @@ public class SignorLegendPanel extends JPanel implements
     private SignorModificationsPanel smp;
     private SignorDescriptionsPanel sdp;
     private SignorBridgePanel sbp;
+    private SignorShortestPathPanel spp;
     private SignorManager manager;
     private CyNetwork current_cynetwork_to_serch_into;
 //    private boolean tabSingleSearchAdded = false;
@@ -97,6 +98,7 @@ public class SignorLegendPanel extends JPanel implements
       	smp = new SignorModificationsPanel(manager);
         sdp = new SignorDescriptionsPanel(manager);
         sbp = new SignorBridgePanel(manager);
+        spp = new SignorShortestPathPanel(manager);
         ActionListener listenerPTM = new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
@@ -247,7 +249,8 @@ public class SignorLegendPanel extends JPanel implements
                 manager.utils.info("New SIGNOR network SINGLE SEARCH"+newcynet);                    
             }
             else if(event.getNewNetwork().parameters.get(NetworkField.ALLSEARCH).equals(true) || 
-               event.getNewNetwork().parameters.get(NetworkField.CONNECTSEARCH).equals(true)){                       
+               event.getNewNetwork().parameters.get(NetworkField.CONNECTSEARCH).equals(true)|| 
+               event.getNewNetwork().parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)) {                       
                 tabs.removeAll();
                 this.current_cynetwork_to_serch_into = newcynet;
                 sbp.current_cynetwork_to_serch_into = newcynet; 
@@ -261,6 +264,15 @@ public class SignorLegendPanel extends JPanel implements
                 manager.utils.info("New SIGNOR the rest of search"+newcynet); 
                
             }
+//            else if(event.getNewNetwork().parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)){
+//                tabs.removeAll();
+//                this.current_cynetwork_to_serch_into = newcynet;
+//                tabs.add("NODES", snp); 
+//                tabs.add("EDGES", sep); 
+//                tabs.add("SHORTEST PATH", spp);
+//                spp.recreateContent();
+//                tabs.setSelectedComponent(spp);                
+//            }
             else if (event.getNewNetwork().parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
                 this.current_cynetwork_to_serch_into = newcynet;
                 this.hideCytoPanel();
@@ -378,7 +390,8 @@ public class SignorLegendPanel extends JPanel implements
                                    tabs.setSelectedComponent(ssp);
                             }   
                             else if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.ALLSEARCH).equals(true) ||
-                                manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.CONNECTSEARCH).equals(true)){
+                                manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.CONNECTSEARCH).equals(true)||
+                                manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)){
                                    tabs.removeAll();                               
                                    this.current_cynetwork_to_serch_into = newcynet;
                                    sbp.current_cynetwork_to_serch_into = newcynet;   
@@ -390,6 +403,15 @@ public class SignorLegendPanel extends JPanel implements
                                    sbp.recreateContent();
                                    tabs.setSelectedComponent(sbp);
                             }
+//                            else if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)){
+//                                tabs.removeAll();
+//                                this.current_cynetwork_to_serch_into = newcynet;
+//                                tabs.add("NODES", snp); 
+//                                tabs.add("EDGES", sep); 
+//                                tabs.add("SHORTEST PATH", spp);
+//                                spp.recreateContent();
+//                                tabs.setSelectedComponent(spp);                
+//                            }
                             else if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
                                this.current_cynetwork_to_serch_into = newcynet;
                             }

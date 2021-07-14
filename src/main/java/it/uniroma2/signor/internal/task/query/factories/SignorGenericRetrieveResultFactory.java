@@ -46,6 +46,15 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
             URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "1"); 
         else if(search == NetworkField.ALLSEARCH)
             URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms, "3");           
+        else if(search == NetworkField.SHORTESTPATHSEARCH){
+            String terms_no_space = terms.replace("%2C", " ").trim();
+            String start = terms_no_space.split(" ")[0];
+            String end = terms_no_space.split(" ")[1];
+            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(start, end);
+            URL = URL + Config.SPECIESSHORTESTPATH.get(network.parameters.get(NetworkField.SPECIES));
+            this.network.manager.utils.info("SPECIESSHORTESTPATH "+network.parameters.get(NetworkField.SPECIES)+
+                    Config.SPECIESSHORTESTPATH.get(network.parameters.get(NetworkField.SPECIES)));
+        }
         this.network.manager.utils.info("SignorGenericRetrieveResultFactory createTaskIterator(), retrieving info from"+URL+netName);
         return new TaskIterator(new CreateNetworkTask(network, terms, URL, netName, parameters)); 
    }  

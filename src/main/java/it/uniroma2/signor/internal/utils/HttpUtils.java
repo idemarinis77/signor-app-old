@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import org.cytoscape.model.CyNetwork;
@@ -64,7 +65,7 @@ public class HttpUtils {
         return s != null ? s.toString() : "";
     }
 
-    public static ArrayList<String> parseWS(BufferedReader br, String[] header){
+    public static ArrayList<String> parseWS(BufferedReader br, String[] header, Boolean shortestpath, SignorManager manager){
         
         //Pare buffered streaming obtained by getHTTPSignor
         //Read streming until I find header
@@ -78,12 +79,26 @@ public class HttpUtils {
         Boolean header_found = true;
         try {
             while ((strCurrentLine = br.readLine()) != null) {
-                if (header_found){                    
+//                if (header_found){          
+                    //If shortest path search is requested, remove some fields
+                    if(shortestpath.equals(true)){
+                        String[] fields = strCurrentLine.split("\t");
+                        manager.utils.info(strCurrentLine);
+                        int fields_length = fields.length;
+                        String newfields = "";
+                        for (int i=0; i< fields_length; i++){
+                            if((i != (fields_length -1)) &&  (i!= (fields_length -3)) && (i!= (fields_length -4) ) && (i!= (fields_length -5) )){
+                                newfields = newfields+fields[i]+"\t";
+                            }
+                        }
+                        results.add(newfields);
+                        continue;
+                    }
                     results.add(strCurrentLine);
-                }
-                else if (br.equals(newheader)) {
-                    header_found = true;       
-                }
+//                }
+//                else if (br.equals(newheader)) {
+//                    header_found = true;       
+//                }
 
             }
         }
