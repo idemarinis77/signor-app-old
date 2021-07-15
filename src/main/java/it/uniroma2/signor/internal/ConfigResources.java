@@ -50,6 +50,7 @@ public class ConfigResources {
     }
     
     //URL and SIGNOR WS
+    public static String PATHLIST = "https://signor.uniroma2.it/getPathwayType.php";
     public static String PATHALLRELATIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?relations";
     public static String PATHALLDESCRIPTIONSQUERY = "https://signor.uniroma2.it/getPathwayData.php?description";
     public static String PATHSINGLEDESCRIPTIONSQUERY= "https://signor.uniroma2.it/getPathwayData.php?pathway=";

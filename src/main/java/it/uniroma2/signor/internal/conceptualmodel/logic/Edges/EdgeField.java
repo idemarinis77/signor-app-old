@@ -63,7 +63,7 @@ public class EdgeField {
            put(MECHANISM, String.class);           
            put(MODIFICATIONA, String.class);           
            put(PMID, String.class);
-           put(ANNOTATOR, String.class);
+//           put(ANNOTATOR, String.class);
            put(SENTENCE, String.class);
         }
     };

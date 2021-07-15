@@ -69,26 +69,27 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
         HashMap<String, Object> parameters = choosePathwayoption.getParameter();
         //I'm calling the task from option panel
         if (this.param_shift == true) parameters = parameters_shift;
-        String pathway= (String) parameters.entrySet().iterator().next().getValue();
-        String pathwayid = "";
-        if(ConfigPathway.PathwayDiseaseList.containsValue(pathway))
-                pathwayid = ConfigPathway.PathwayDiseaseList.entrySet().stream()
-                            .filter(entry -> entry.getValue().equals(pathway))
-                            .map(entry-> entry.getKey())
-                            .collect(Collectors.joining());
-            
-            else if (ConfigPathway.PathwayList.containsValue(pathway))
-                pathwayid = ConfigPathway.PathwayList.entrySet().stream()
-                            .filter(entry -> entry.getValue().equals(pathway))
-                            .map(entry-> entry.getKey())
-                            .collect(Collectors.joining());
-            
-            else if (ConfigPathway.PathwayTumorList.containsValue(pathway))
-                pathwayid = ConfigPathway.PathwayTumorList.entrySet().stream()
-                            .filter(entry -> entry.getValue().equals(pathway))
-                            .map(entry-> entry.getKey())
-                            .collect(Collectors.joining());
-        parameters.clear();
+//        String pathway= (String) parameters.entrySet().iterator().next().getValue();
+        String pathwayid = (String) parameters.get(PathwayField.PATHWAYID);
+//        String pathwayid = "";
+//        if(ConfigPathway.PathwayDiseaseList.containsValue(pathway))
+//                pathwayid = ConfigPathway.PathwayDiseaseList.entrySet().stream()
+//                            .filter(entry -> entry.getValue().equals(pathway))
+//                            .map(entry-> entry.getKey())
+//                            .collect(Collectors.joining());
+//            
+//            else if (ConfigPathway.PathwayList.containsValue(pathway))
+//                pathwayid = ConfigPathway.PathwayList.entrySet().stream()
+//                            .filter(entry -> entry.getValue().equals(pathway))
+//                            .map(entry-> entry.getKey())
+//                            .collect(Collectors.joining());
+//            
+//            else if (ConfigPathway.PathwayTumorList.containsValue(pathway))
+//                pathwayid = ConfigPathway.PathwayTumorList.entrySet().stream()
+//                            .filter(entry -> entry.getValue().equals(pathway))
+//                            .map(entry-> entry.getKey())
+//                            .collect(Collectors.joining());
+//        parameters.clear();
         parameters.put(PathwayField.PATHWAYID, pathwayid);
         manager.utils.info(parameters.toString());
         HashMap <String, Object> buildParams = NetworkSearch.buildSearch(pathwayid, (String) parameters.get(NetworkField.SPECIES), 

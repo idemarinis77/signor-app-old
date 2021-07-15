@@ -145,7 +145,7 @@ public class SignorNodePanel extends JPanel {
 //            general_info.add(nodeinfo, gbc.down());
 //            general_info.add(button, gbc.down());
 //            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Nodes INFO", general_info, false );
-            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Nodes INFO", nodeinfo, false );
+            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Node INFO", nodeinfo, false );
             nodesPanel.add(collapsableINFO, gbc.down().anchor("north"));
 //            nodesPanel.add(nodeinfo, gbc.down());
 //            nodesPanel.add(searchID, gbc.down());

@@ -73,11 +73,14 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             String URL = ConfigResources.WSSearchoptionMAP.get("PATHWAYSEARCH").queryFunction.apply(pathwayid, "only"); 
             monitor.setTitle("Querying Signor Network");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);   
-            String pathway_description  = ConfigPathway.MapPathwayDescID.entrySet().stream()
-                            .filter(entry -> entry.getValue().equals(pathwayid))
-                            .map(entry-> entry.getKey())
-                            .collect(Collectors.joining());
+//            String pathway_description  = ConfigPathway.MapPathwayDescID.entrySet().stream()
+//                            .filter(entry -> entry.getValue().equals(pathwayid))
+//                            .map(entry-> entry.getKey())
+//                            .collect(Collectors.joining());
             //CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathwayid);
+            ArrayList<String> pathway_info = HttpUtils.parseWSNoheader(
+                    HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+network.parameters.get("PATHWAYID"), manager));
+            String pathway_description = pathway_info.get(1).split("\t")[1];
             CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathway_description);
             manager.presentationManager.updateSignorNetworkCreated(cynet, network);
             network.isPathwayNetwork = true;
@@ -85,8 +88,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             
             ArrayList<String> results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(URL, manager));
             if (cancelled) return;
-            ArrayList<String> pathway_info = HttpUtils.parseWSNoheader(
-                    HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+network.parameters.get("PATHWAYID"), manager));
+            
             network.SetPathwayInfo(pathway_info);
             network.parameters.replace(NetworkField.PATHWAYINFO, pathway_info.toString());
             Table PthTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);

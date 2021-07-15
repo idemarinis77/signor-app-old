@@ -11,11 +11,14 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigPathway;
+import it.uniroma2.signor.internal.ConfigResources;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import it.uniroma2.signor.internal.ui.components.SignorButton;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
 import it.uniroma2.signor.internal.ui.components.HelpButton;
+import it.uniroma2.signor.internal.utils.HttpUtils;
 /**
  *
  * @author amministratore
@@ -28,6 +31,7 @@ import java.time.Instant;
 import java.util.Collection;
 import javax.swing.*;
 import static java.awt.Component.LEFT_ALIGNMENT;
+import java.io.BufferedReader;
 import java.util.HashMap;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
@@ -114,14 +118,15 @@ public class SignorSummaryPanel extends JPanel {
                     listpath.setLayout(new GridBagLayout());
                     String[] pathlist = value.split(" , ");                    
                     for (Integer i=0; i<pathlist.length; i++){
-                       if(ConfigPathway.MapPathwayDescID.containsKey(pathlist[i])){
-                          if (!ConfigPathway.MapPathwayDescID.get(pathlist[i]).isEmpty()){
-                            SignorButton pathwayID =  new SignorButton(pathlist[i]);                         
-                            listpath.add(pathwayID, gbc.down());
-                            final String path_code = pathlist[i];
-                            pathwayID.addActionListener(e-> buildPathWay(path_code));
-                          }
-                       }
+//                       if(ConfigPathway.MapPathwayDescID.containsKey(pathlist[i])){
+//                          if (!ConfigPathway.MapPathwayDescID.get(pathlist[i]).isEmpty()){
+                            if(!pathlist[i].isBlank()){
+                                SignorButton pathwayID =  new SignorButton(pathlist[i]);                         
+                                listpath.add(pathwayID, gbc.down());
+                                final String path_code = pathlist[i];
+                                pathwayID.addActionListener(e-> buildPathWay(path_code));
+                            }
+//                       }
                     }
                     
                     //summPanel.add(new SignorLabelStyledBold(key), gbc.position(0, it).anchor("north"));
@@ -150,9 +155,17 @@ public class SignorSummaryPanel extends JPanel {
         }       
     }
     private void buildPathWay(String pathid){
+        BufferedReader brp = HttpUtils.getHTTPSignor(ConfigResources.PATHLIST, manager);
+        ArrayList<String> results = HttpUtils.parseWS(brp, Config.HEADERSINGLESEARCH, false, manager);
+        HashMap<String,String> pathid_desc = new HashMap();
+        for (int i = 0; i < results.size(); i++) {  
+            String[] attributes = results.get(i).split("\t");
+            pathid_desc.put(attributes[1], attributes[0]);
+        }  
+        
         SignorPathwayQueryFactory spq = new SignorPathwayQueryFactory(this.manager);
         HashMap<String, Object> formvalues = new HashMap<>() {
-            {put ("PATHWAYID", pathid);}                 
+            {put (PathwayField.PATHWAYID, (String) pathid_desc.get(pathid));}                 
         };
         spq.parameters_shift = formvalues;
         spq.param_shift = true;

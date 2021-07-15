@@ -102,7 +102,7 @@ public class SignorEdgePanel extends JPanel {
             while(iter.hasNext()){
                 String key = iter.next().toString();
                 String value = iterv.next().toString();
-                SignorLabelStyledBold id = new SignorLabelStyledBold(key);
+                SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
                 edgeinfo.add(id, gbc.down());
                 if(value.length() > 20)
                     edgeinfo.add(new HelpButton(manager, value), gbc.right());
@@ -110,7 +110,7 @@ public class SignorEdgePanel extends JPanel {
             }    
             
             
-            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Edges INFO", edgeinfo, false );
+            CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Edge INFO", edgeinfo, false );
             edgesPanel.add(collapsableINFO, gbc.down().anchor("north"));
 //            edgesPanel.add(edgeinfo, gbc.down());
         }              
