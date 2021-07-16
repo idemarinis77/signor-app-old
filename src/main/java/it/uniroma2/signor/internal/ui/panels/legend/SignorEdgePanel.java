@@ -79,23 +79,18 @@ public class SignorEdgePanel extends JPanel {
         Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);   
         if(selectedEdges.size()>0){
             edgesPanel.removeAll();
-//
-//            JPanel separator  = new JPanel();
-//            separator.setLayout(new GridBagLayout());
-//            separator.add(new SignorLabelStyledBold(">> Edge info "), gbc.down().anchor("west"));
-//            separator.setBackground(new Color(82, 166, 119));
-//            edgesPanel.add(separator, gbc.down().anchor("west").insets(2,0,2,0));
+
         }
         Iterator iter_sel_edges = selectedEdges.iterator();
         while(iter_sel_edges.hasNext()){
-            
+            JPanel edgeinfo = new JPanel();
             CyEdge edge_current = (CyEdge) iter_sel_edges.next();
             Edge edge = network.getEdges().get(edge_current);            
             HashMap <String,String> summary = edge.getSummary();         
            
             Iterator iter = summary.keySet().iterator();
             Iterator iterv = summary.values().iterator();
-            JPanel edgeinfo = new JPanel();
+            
             edgeinfo.setLayout(new GridBagLayout());
             edgeinfo.add(new SignorLabelStyledBold("SOURCE - TARGET"), gbc.down());
             edgeinfo.add(new JLabel(edge.source.toString()+"-"+edge.target.toString()), gbc.right());

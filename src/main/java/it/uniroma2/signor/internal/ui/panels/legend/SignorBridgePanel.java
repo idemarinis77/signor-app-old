@@ -100,7 +100,8 @@ public class SignorBridgePanel extends JPanel {
             
             JPanel entity_info=new JPanel();
             entity_info.setLayout(new GridBagLayout());
-            Map<CyNode, Node> signorNodes = networkCurrent.getNodes();
+            //Map<CyNode, Node> signorNodes = networkCurrent.getNodes();
+            Map<CyNode, Node> signorNodes = networkCurrent.getSearchedNodes();
             for (Map.Entry<CyNode, Node> entry : signorNodes.entrySet()) {              
                 HashMap<String,String> summary = entry.getValue().getSummary();
                 Iterator iter = summary.keySet().iterator();

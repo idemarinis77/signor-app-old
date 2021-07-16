@@ -35,6 +35,7 @@ public class Network {
     public CyTable PTMedgeTable;  
 
     private final Map<CyNode, Node> nodes = new HashMap<>();
+    private final Map<CyNode, Node> searched_nodes = new HashMap<>();
     private final Map<CyEdge, Edge> edges = new HashMap<>();
 
     private final Map<NodeCouple, List<CyEdge>> coupleToDefaultEdges = new HashMap<>();
@@ -119,6 +120,10 @@ public class Network {
         return nodes;
     }
     
+    public Map<CyNode, Node> getSearchedNodes(){
+        return searched_nodes;
+    }
+    
     public Map<CyEdge, Edge> getEdges(){
         return edges;
     }
@@ -129,7 +134,16 @@ public class Network {
     public void setNetwork(CyNetwork cyNetwork) {
         this.cyNetwork = cyNetwork;
         
-        cyNetwork.getNodeList().forEach(node -> nodes.put(node, new Node(this, node)));
+//        cyNetwork.getNodeList().forEach(node -> nodes.put(node, new Node(this, node)));
+        String searched_query = (String) this.parameters.get(NetworkField.QUERY);
+        List<String> searched_entities = Arrays.asList(searched_query.split(" "));
+        
+        for (CyNode node: cyNetwork.getNodeList()){
+            nodes.put(node, new Node(this, node));
+            if(searched_entities.contains(this.cyNetwork.getDefaultNodeTable().getRow(node.getSUID()).get(Config.NAMESPACE, NodeField.ENTITY, String.class))){
+                searched_nodes.put(node, new Node(this, node));
+            }
+        }
 
         edgeTable = cyNetwork.getDefaultEdgeTable();
         nodeTable = cyNetwork.getDefaultNodeTable();
