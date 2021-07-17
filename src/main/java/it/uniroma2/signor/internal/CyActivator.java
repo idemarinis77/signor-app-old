@@ -22,6 +22,9 @@ import it.uniroma2.signor.internal.task.query.factories.SignorGenericQueryFactor
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorInteractomeFactory;
+
+import it.uniroma2.signor.internal.task.query.factories.SignorInteractomeQueryFactory;
+import it.uniroma2.signor.internal.task.query.factories.SignorInteractomePTMQueryFactory;
 import it.uniroma2.signor.internal.Config;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.view.vizmap.VisualMappingManager;
@@ -85,6 +88,16 @@ public class CyActivator extends AbstractCyActivator {
                 SignorPathwayQueryFactory signorPathwayQuery = new SignorPathwayQueryFactory(manager);
                 Properties propsSearch = new Properties();
                 registerService(bc, signorPathwayQuery, NetworkSearchTaskFactory.class, propsSearch);
+            }
+            {
+                SignorInteractomeQueryFactory signorInteractomeQueryFactory = new SignorInteractomeQueryFactory(manager, false);
+                Properties propsSearch = new Properties();
+                registerService(bc, signorInteractomeQueryFactory, NetworkSearchTaskFactory.class, propsSearch);
+            }
+            {
+                SignorInteractomePTMQueryFactory signorInteractomePTMQueryFactory = new SignorInteractomePTMQueryFactory(manager, true);
+                Properties propsSearch = new Properties();
+                registerService(bc, signorInteractomePTMQueryFactory, NetworkSearchTaskFactory.class, propsSearch);
             }
             if (haveGUI) {
               SignorPanelFactory showResults = new SignorPanelFactory(manager);

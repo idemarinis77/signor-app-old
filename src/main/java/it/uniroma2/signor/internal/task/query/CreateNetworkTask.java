@@ -73,13 +73,18 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH, 
                     (Boolean) network.parameters.get(NetworkField.SHORTESTPATHSEARCH), manager);
             String newterms = terms.replace("%2C", " ");
-            if(results.isEmpty()){
-                
+            if(results.isEmpty()){                
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
                 return;
             }
             if (results.get(0).equals("No result found.")) {
+                //https://signor.uniroma2.it/getData.php?organism=9606&id=Q96Q05
+                //after having choosen with multiple results of RAF
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
+                    "No results", JOptionPane.ERROR_MESSAGE));
+            }
+            if (results.get(0).startsWith("Warning: The following proteins were not found")) {
                 //https://signor.uniroma2.it/getData.php?organism=9606&id=Q96Q05
                 //after having choosen with multiple results of RAF
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,

@@ -56,7 +56,9 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
                     Config.SPECIESSHORTESTPATH.get(network.parameters.get(NetworkField.SPECIES)));
         }
         this.network.manager.utils.info("SignorGenericRetrieveResultFactory createTaskIterator(), retrieving info from"+URL+netName);
-        return new TaskIterator(new CreateNetworkTask(network, terms, URL, netName, parameters)); 
+        //Bridged proteins searched, shortest path and all provides result only with uppercase terms
+        //Single protein search provides result with any case
+        return new TaskIterator(new CreateNetworkTask(network, terms.toUpperCase(), URL, netName, parameters)); 
    }  
 
     //public boolean isReady() { return true; }

@@ -79,12 +79,6 @@ public class DataUtils {
         }        
         return subnet;
     }
-//    public static void writeNetworkPTMInfo(SignorManager manager, Network network, Boolean setted){
-//        CyApplicationManager cyApplicationManager = manager.utils.getService(CyApplicationManager.class);
-//        CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
-//        currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, "PTMLOADED", setted);
-//        network.ptm_already_loaded = setted;       
-//    }
     
     public static void PopulatePTMTables(SignorManager manager, Boolean interactome){
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);        
@@ -121,7 +115,8 @@ public class DataUtils {
                        String mechanism_orig = mechanism;
                        String effect = cyrow.get(Config.NAMESPACE, EdgeField.Interaction, String.class);
                        if(mechanism.startsWith("de")) mechanism = mechanism.substring(2);
-                       String label = networksignor.getNodes().get(cyNodeTargetParent).toString()+"_"+residue+"_"+mechanism;
+                       String ptmprefix = Config.PTMprefix.get(mechanism);
+                       String label = networksignor.getNodes().get(cyNodeTargetParent).toString()+"_"+ptmprefix+residue+"_"+mechanism;
 
                        currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set("shared name", label);
                        currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set("name", label);
@@ -129,11 +124,7 @@ public class DataUtils {
                        currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set(Config.NAMESPACE, NodeField.ID, sequence);
 
                        manager.utils.flushEvents();
-//                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_FILL_COLOR, Color.MAGENTA);
-//                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_WIDTH, 20.0);    
-//                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_HEIGHT, 20.0);  
-//                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_BORDER_WIDTH, 0.0);               
-//                       networkView.getNodeView(cyNode).setLockedValue(BasicVisualLexicon.NODE_LABEL, label);                                       
+                                    
                        CyEdge cyEdge = currentnet.addEdge(cyNodeSourceParent, cyNode, true);
                        if(!ptm_already_loaded){
                            networksignor.PTMnodeTable.getRow(cyNode.getSUID()).set(Config.NAMESPACEPTM, PTMNodeField.RESIDUE, cyrow.get(Config.NAMESPACE, "RESIDUE", String.class));

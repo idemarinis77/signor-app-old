@@ -55,4 +55,18 @@ public class Config {
     public static int edge_positions[]= {8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27};
     
     
+    public static final HashMap<String,String> PTMprefix = new HashMap<>(){
+        {put ("acetylation", "ac");
+         put ("carboxylation", "car");
+         put ("cleavage", "cle");
+         put ("glycosylation", "gli");
+         put ("hydroxylation", "had");
+         put ("methylation", "met");
+         put ("neddylation", "ned");
+         put ("palmitoylation", "pal");
+         put ("phosphorylation", "ph");
+         put ("sumoylation", "sum");
+         put ("ubiquitination", "ub");
+        }
+    };
 }
