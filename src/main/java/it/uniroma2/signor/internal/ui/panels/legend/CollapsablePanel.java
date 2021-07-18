@@ -1,5 +1,6 @@
 
 package it.uniroma2.signor.internal.ui.panels.legend;
+import it.uniroma2.signor.internal.utils.IconUtils;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -28,10 +29,18 @@ import javax.swing.JPanel;
 import org.cytoscape.util.swing.IconManager;
 
 import it.uniroma2.signor.internal.utils.EasyGBC;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public class CollapsablePanel extends JPanel {
-	private static String RIGHT_ARROW = "\uF0DA";
-	private static String DOWN_ARROW = "\uF0D7";
+//	private static String RIGHT_ARROW = "\uF0DA";
+//      private static String RIGHT_ARROW = "+";
+//	private static String DOWN_ARROW = "-";
+//      private static String DOWN_ARROW = "\uF0D7";
+        
+        private static final ImageIcon RIGHT_ARROW = IconUtils.createImageIcon("/images/right_arrow.png");
+        private static final ImageIcon DOWN_ARROW = IconUtils.createImageIcon("/images/down_arrow.png");
+
 	Font awesomeFont;
 
 	JPanel contentPanel_;
@@ -59,6 +68,7 @@ public class CollapsablePanel extends JPanel {
 			expandButton.setBorderPainted(false);
 			expandButton.setContentAreaFilled(false);
 			expandButton.setOpaque(false);
+                        expandButton.setBackground(Color.DARK_GRAY);
 			expandButton.setFocusPainted(false);
 			expandButton.setFont(iconFont);
 			this.add(expandButton, c.anchor("west").noExpand());
@@ -81,8 +91,9 @@ public class CollapsablePanel extends JPanel {
 			toggleSelection();
 		}
 
-		public void setButton(String buttonState) {
-			expandButton.setText(buttonState);
+		public void setButton(Icon buttonState) {
+			//expandButton.setText(buttonState);
+                        expandButton.setIcon(buttonState);
 		}
 
 	}

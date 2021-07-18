@@ -106,7 +106,7 @@ public class SignorBridgePanel extends JPanel {
                 HashMap<String,String> summary = entry.getValue().getSummary();
                 Iterator iter = summary.keySet().iterator();
                 Iterator iterv = summary.values().iterator(); 
-                entity_info.add(new SignorLabelStyledBold("-----"), gbc.down());
+                entity_info.add(new SignorLabelStyledBold("-----"), gbc.down().expandHoriz());
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();

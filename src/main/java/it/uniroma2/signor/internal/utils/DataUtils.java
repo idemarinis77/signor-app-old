@@ -175,8 +175,9 @@ public class DataUtils {
                networksignor.ptm_already_loaded = false;
                if(!interactome)
                   networksignor.parameters.replace(NetworkField.PTMLOADED, true); 
-               networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.PTM.name());
+               networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.PTM.toString());
                manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.PTM);
+               currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, NetworkField.VIEW, NetworkView.Type.PTM.toString());
             }              
         }
         catch (Exception e) {
@@ -216,8 +217,9 @@ public class DataUtils {
                 UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
                 manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
 //            }
-            networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.DEFAULT.name());
+            networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.DEFAULT.toString());
             manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.DEFAULT);   
+            currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, NetworkField.VIEW, NetworkView.Type.DEFAULT.toString());
             networksignor.PTMnodes.clear();
             networksignor.PTMedges.clear();
 //            writeNetworkPTMInfo(manager, networksignor, false);

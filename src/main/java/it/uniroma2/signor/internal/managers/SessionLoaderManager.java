@@ -69,8 +69,11 @@ public class SessionLoaderManager implements SessionLoadedListener  {
                     Network signornet = new Network(manager, params);
                     manager.presentationManager.updateSignorNetworkCreated(cyNetwork, signornet);
                     String view_type = (String) params.get(NetworkField.VIEW);
-                    if(view_type == NetworkView.Type.DEFAULT.name()){
+                    
+
+                    if(view_type.equals(NetworkView.Type.DEFAULT.toString())){
                         manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.DEFAULT);
+                        manager.utils.info("Il type e "+view_type+" "+signornet.toString()+" "+NetworkView.Type.DEFAULT);
                     }
                     else manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.PTM);
                     String searched_query = (String) params.get(NetworkField.QUERY);
