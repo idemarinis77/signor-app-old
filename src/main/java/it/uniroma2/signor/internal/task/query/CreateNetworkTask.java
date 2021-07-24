@@ -102,7 +102,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 NodeTable.buildDefaultTable(manager, "Node", cynet);
                 Table EdgeTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 EdgeTable.buildDefaultTable(manager, "Edge", cynet);
-
+                
                 //Populate tables and create MyNetwork
                 CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
                 cynet = manager.createNetworkFromLine(results, false);

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.managers;
+import it.uniroma2.signor.internal.utils.TableUtil;
 import java.util.HashMap;
 
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
@@ -39,6 +40,7 @@ import org.cytoscape.model.subnetwork.CyRootNetworkManager;
 import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.model.events.NetworkViewAboutToBeDestroyedEvent;
 import org.cytoscape.view.model.events.NetworkViewAboutToBeDestroyedListener;
+
 /**
  *
  * @author amministratore
@@ -90,15 +92,13 @@ public class PresentationManager implements
         if (cyNetwork == null) return;
         signorNetMap.remove(cyNetwork);        
         signorViewMap.remove(network);
+        CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
+        CyTable ptmNodeTable = network.PTMnodeTable;
+        if (ptmNodeTable != null) tableManager.deleteTable(ptmNodeTable.getSUID());
+        CyTable ptmEdgeTable = network.PTMedgeTable;
+        if (ptmEdgeTable != null) tableManager.deleteTable(ptmEdgeTable.getSUID());
     }
-//    public void handleEvent (SignorNetworkCreatedEvent e){
-//        manager.utils.info(e.getNewNetwork().toString());
-//        Network signornet = e.getNewNetwork();
-////        if (signornet.parameters.containsKey(NetworkField.SINGLESEARCH)){
-////            if (signornet.parameters.get(NetworkField.SINGLESEARCH).equals(true))
-////                signornet.setCyNodeRoot(searched_query);
-////        }
-//    }
+
     
     @Override
     public void handleEvent(NetworkViewAboutToBeDestroyedEvent e) {
@@ -127,7 +127,6 @@ public class PresentationManager implements
     public void handleEvent (NetworkViewAddedEvent e){
         if(manager.sessionLoaderManager.loadingsession.equals(false)){
             CyNetworkView cyNetworkView = e.getNetworkView();
-            manager.utils.info("NetworkView Created "+e.getNetworkView().toString()+"***"+cyNetworkView.getModel().toString());
             CyNetwork cyNetwork = cyNetworkView.getModel();
             try {
                 if (signorNetMap.containsKey(cyNetwork)) {

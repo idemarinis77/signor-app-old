@@ -6,7 +6,7 @@
 package it.uniroma2.signor.internal.conceptualmodel.logic.Pathway;
 
 import java.util.HashMap;
-
+import java.util.LinkedHashMap;
 /**
  *
  * @author amministratore
@@ -59,7 +59,34 @@ public class PathwayField {
         
         
 
-        
+        public static final LinkedHashMap<String,Class<?>> ORDEREDEDGEFIELDPTH= new LinkedHashMap(){
+            {
+               put(PATHWAY_ID, String.class);
+               put(PATHWAYNAME, String.class);
+               put(REGULATOR_LOCATION, String.class);
+               put(TARGET_LOCATION, String.class);
+               put(Interaction, String.class); 
+               put(MECHANISM, String.class);
+               put(RESIDUE, String.class);
+               put(SEQUENCE, String.class);
+               put(TAX_ID, Integer.class);
+               put(CELL_DATA, String.class);
+               put(TISSUE_DATA, String.class);
+               put(MODULATOR_COMPLEX, String.class); 
+               put(TARGET_COMPLEX, String.class);
+               put(MODIFICATIONA, String.class);
+               put(MODASEQ, String.class);
+               put(MODIFICATIONB, String.class);
+               put(MODBSEQ, String.class);
+               put(PMID, String.class);
+               put(DIRECT, String.class);
+               put(NOTES, String.class);
+               put(ANNOTATOR, String.class);
+               put(SENTENCE, String.class);
+               put(SIGNOR_ID, String.class);
+               put(SCORE, Double.class);                        
+            }
+        };
         
         public static final HashMap<String,Class<?>> EDGEFIELDPTH= new HashMap(){
             {

@@ -6,6 +6,7 @@
 package it.uniroma2.signor.internal.conceptualmodel.logic.Edges;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -56,6 +57,31 @@ public class EdgeField {
            put(SENTENCE, String.class);
            put(SCORE, Double.class);
            put(SIGNOR_ID, String.class);           
+        }
+    };
+
+        public static final LinkedHashMap<String,Class<?>> ORDEREDEDGEFIELD = new LinkedHashMap(){
+        {
+           put(Interaction, String.class);
+           put(MECHANISM, String.class);
+           put(RESIDUE, String.class);
+           put(SEQUENCE, String.class);
+           put(TAX_ID, Integer.class);
+           put(CELL_DATA, String.class);
+           put(TISSUE_DATA, String.class);
+           put(MODULATOR_COMPLEX, String.class);
+           put(TARGET_COMPLEX, String.class);
+           put(MODIFICATIONA, String.class);
+           put(MODASEQ, String.class);
+           put(MODIFICATIONB, String.class);
+           put(MODBSEQ, String.class);
+           put(PMID, String.class);
+           put(DIRECT, String.class);
+           put(NOTES, String.class);
+           put(ANNOTATOR, String.class);
+           put(SENTENCE, String.class);           
+           put(SIGNOR_ID, String.class);     
+           put(SCORE, Double.class);
         }
     };
     public static final HashMap<String,Class<?>> EDGESUMMARY = new HashMap(){

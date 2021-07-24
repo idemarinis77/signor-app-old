@@ -30,9 +30,9 @@ import java.util.HashMap;
 public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory {
 
     static URL SIGNOR_URL;
-    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
+    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path_search);
     public static final String SIGNOR_ID = "SIGNOR_ID_SEARCH_FACTORY";
-    public static final String SIGNOR_NAME = "Signor single/include bridge proteins query";
+    public static final String SIGNOR_NAME = "SIGNOR entity query and connect";
     public static final String SIGNOR_DESC = "Query SIGNOR Database to create your casual network";
     static {
         try {

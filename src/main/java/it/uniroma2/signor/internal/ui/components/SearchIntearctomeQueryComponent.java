@@ -21,7 +21,7 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 
 public class SearchIntearctomeQueryComponent extends JTextField {
     private static final long serialVersionUID = 1L;
-    private String DEF_SEARCH_TEXT = "Press button to get interactome →";    
+    private String DEF_SEARCH_TEXT = "Press search symbol on the right to download the complete interactome →";    
     final int vgap = 1;
     final int hgap = 5;    
     Color msgColor;       

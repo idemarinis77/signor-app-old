@@ -83,7 +83,7 @@ public class ChoosePathwayoption extends JPanel {
         Object[] pathlist = pathway_list.values().toArray();
         Arrays.sort(pathlist);
         Object[] pathlist2 = Arrays.copyOf(pathlist, pathlist.length + 1);
-        pathlist2[0]= (Object) "Select Pathway Below";
+        pathlist2[0]= (Object) "Select Pathway";
         System.arraycopy(pathlist, 0, pathlist2, 1, pathlist.length);
         pathway = new JComboBox(pathlist2);
         
@@ -91,7 +91,7 @@ public class ChoosePathwayoption extends JPanel {
         Object[] pathdeslist = disease_list.values().toArray();
         Arrays.sort(pathdeslist);
         Object[] pathdeslist2 = Arrays.copyOf(pathdeslist, pathdeslist.length + 1);
-        pathdeslist2[0]= (Object) "Select Disease below";
+        pathdeslist2[0]= (Object) "Select Disease pathway";
         System.arraycopy(pathdeslist, 0, pathdeslist2, 1, pathdeslist.length);
         disease = new JComboBox(pathdeslist2);
         
@@ -99,14 +99,14 @@ public class ChoosePathwayoption extends JPanel {
         Object[] pathtumlist = tumor_list.values().toArray();
         Arrays.sort(pathtumlist);
         Object[] pathtumlist2 = Arrays.copyOf(pathtumlist, pathtumlist.length + 1);
-        pathtumlist2[0]= (Object) "Select Tumor below";
+        pathtumlist2[0]= (Object) "Select Tumor pathway";
         System.arraycopy(pathtumlist, 0, pathtumlist2, 1, pathtumlist.length);
         tumor = new JComboBox(pathtumlist2);       
         
         Object[] covidlist = covid_list.values().toArray();
         Arrays.sort(covidlist);
         Object[] covidlist2 = Arrays.copyOf(covidlist, covidlist.length + 1);
-        covidlist2[0]= (Object) "Select COVID below";
+        covidlist2[0]= (Object) "Select COVID pathway";
         System.arraycopy(covidlist, 0, covidlist2, 1, covidlist.length);
         covid = new JComboBox(covidlist2);   
         

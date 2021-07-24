@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory {
 
     static URL SIGNOR_URL;
-    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
-    public static final String SIGNORPTH_NAME = "Signor pathway query";
+    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path_pathway);
+    public static final String SIGNORPTH_NAME = "SIGNOR pathway query";
     public static final String SIGNORPTH_DESC = "Query SIGNOR Database to visualize pathway";
     public static final String SIGNORPTH_ID = "SIGNOR_PTH_ID_SEARCH_FACTORY"; 
     static {

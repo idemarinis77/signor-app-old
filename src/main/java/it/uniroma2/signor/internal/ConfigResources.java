@@ -84,6 +84,10 @@ public class ConfigResources {
     }   
     //Images and logos
     public static String icon_path = "/images/signor_logo.png";
+    public static String icon_path_search = "/images/Signor_Logo_orange.png";
+    public static String icon_path_interactome = "/images/Signor_Logo_blue.png";
+    public static String icon_path_interactome_ptm = "/images/Signor_Logo_fucsia.png";
+    public static String icon_path_pathway = "/images/Signor_Logo_green.png";
     public static String iconpth_path = "/images/button_path.png";
     public static String images_path = "/images/";
     public static final HashMap<String,String> DBLOGOS= new HashMap(){

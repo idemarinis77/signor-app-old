@@ -18,9 +18,7 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.task.query.SignorInteractomeTask;
 import it.uniroma2.signor.internal.ui.components.SearchIntearctomeQueryComponent;
 import static it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory.SIGNORPTH_DESC;
-//import static it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory.SIGNORPTH_ID;
-//import static it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory.SIGNORPTH_NAME;
-//import static it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory.SIGNOR_URL;
+
 import it.uniroma2.signor.internal.utils.IconUtils;
 import java.util.HashMap;
 import org.cytoscape.work.AbstractTaskFactory;
@@ -32,8 +30,8 @@ import org.cytoscape.work.AbstractTaskFactory;
 public class SignorInteractomeQueryFactory extends AbstractNetworkSearchTaskFactory{
 
     static URL SIGNOR_URL;
-    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path);
-    public static final String SIGNORINT_NAME = "Signor interactome query";
+    private static final Icon SIGNOR_ICON=IconUtils.createImageIcon(ConfigResources.icon_path_interactome);
+    public static final String SIGNORINT_NAME = "SIGNOR download interactome";
     public static final String SIGNORINT_DESC = "Query SIGNOR Database to retrieve complete interactome";
     public static final String SIGNORINT_ID = "SIGNOR_INT_ID_SEARCH_FACTORY"; 
     static {

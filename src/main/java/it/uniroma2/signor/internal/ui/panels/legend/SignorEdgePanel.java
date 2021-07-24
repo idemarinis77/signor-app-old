@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.Edge;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 
 /**
@@ -39,6 +39,7 @@ import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableUtil;
 import org.cytoscape.util.swing.OpenBrowser;
+import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 
 public class SignorEdgePanel extends JPanel {
     private SignorManager manager;
@@ -98,11 +99,22 @@ public class SignorEdgePanel extends JPanel {
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
-                    SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
-                    edgeinfo.add(id, gbc.down());
-                    if(value.length() > 20)
-                        edgeinfo.add(new HelpButton(manager, value), gbc.right());
-                    else edgeinfo.add(new JLabel(value), gbc.right());
+                    if(key.equals(EdgeField.PMID)){
+                        OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
+                        String label = value;
+                        String link_to_db = ConfigResources.DBLINKSMAP.get("pubmed").queryFunction.apply(value);
+                        SignorLabelStyledBold link_to_pmid = new SignorLabelStyledBold(label, link_to_db, openBrowser, false);
+                        SignorLabelStyledBold id = new SignorLabelStyledBold(key);
+                        edgeinfo.add(id, gbc.down());
+                        edgeinfo.add(link_to_pmid, gbc.right());
+                    }
+                    else{
+                        SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
+                        edgeinfo.add(id, gbc.down());
+                        if(value.length() > 20 && !key.equals(EdgeField.MECHANISM))
+                            edgeinfo.add(new HelpButton(manager, value), gbc.right());
+                        else edgeinfo.add(new JLabel(value), gbc.right());
+                    }
                 }    
                 CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Edge INFO", edgeinfo, false );
                 edgesPanel.add(collapsableINFO, gbc.down().anchor("north"));
