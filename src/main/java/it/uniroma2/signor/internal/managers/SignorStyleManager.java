@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.managers;
-import it.uniroma2.signor.internal.style.SignorPTMStyle;
+
 
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;

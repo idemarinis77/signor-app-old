@@ -61,7 +61,7 @@ public class Network {
     public CyNetwork getCyNetwork() {
         return cyNetwork;
     }
-    public Integer numberOfEdes(){
+    public Integer numberOfEdges(){
         return edges.size();
     }
     public void SetPTMNodeTable (CyTable cytable){

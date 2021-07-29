@@ -94,38 +94,57 @@ public class SignorNodePanel extends JPanel {
                     get(Config.NAMESPACE, NodeField.TYPE, String.class).equals("residue")){
                 Node node = network.getNodes().get(node_current);            
                 HashMap <String,String> summary = node.getSummary();
-                String entity_id = summary.get(NodeField.ID);
+                
                 String entity_name = summary.get(NodeField.ENTITY);
+                String entity_id = summary.get(NodeField.ID);
+//                String database = summary.get(NodeField.DATABASE).toLowerCase();
+//                String link_to_db = ConfigResources.DBLINKSMAP.get(database).queryFunction.apply(entity_id);
+//                OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
+//                SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(database, link_to_db, openBrowser, false);
+//                String type = summary.get(NodeField.TYPE);
+//                
+//                nodeinfo.add(new SignorLabelStyledBold(NodeField.ENTITY), gbc.down());
+//                nodeinfo.add(new JLabel(entity_name), gbc.right());
+//                nodeinfo.add(new SignorLabelStyledBold(NodeField.DATABASE), gbc.down());
+//                nodeinfo.add(dbLabel, gbc.right());
+//                nodeinfo.add(new SignorLabelStyledBold(NodeField.TYPE), gbc.down());
+//                nodeinfo.add(new JLabel(type), gbc.right());
+                
                 Iterator iter = summary.keySet().iterator();
                 Iterator iterv = summary.values().iterator();
     
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
-                    SignorLabelStyledBold id = new SignorLabelStyledBold(key);
-                    nodeinfo.add(id, gbc.down());
-    //                if(key!= Config.NODEFIELDMAP.get("DATABASEA")){ 
-                    if(key!= NodeField.DATABASE){
-                        nodeinfo.add(new JLabel(value), gbc.right());
-                    }
-
-                    else {
-                        //nodeinfo.add(new JLabel(value), gbc.right());
-                        String db_value_norm = value.toLowerCase();
-                        String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
-                        OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
-                        SignorLabelStyledBold dbLabel;
-                        try{
-                            BufferedImage dblogo = ImageIO.read(getClass().getResource(ConfigResources.DBLOGOS.get(db_value_norm)));
-                            dbLabel = new SignorLabelStyledBold(new ImageIcon(dblogo), link_to_db, openBrowser, false);
-                            nodeinfo.add(dbLabel, gbc.right().anchor("east"));
+                        SignorLabelStyledBold id = new SignorLabelStyledBold(key);
+                        nodeinfo.add(id, gbc.down());
+                        if(key!= NodeField.DATABASE){
+                            nodeinfo.add(new JLabel(value), gbc.right());
                         }
-                        catch (Exception e){
-                            manager.utils.warn("SignorNodePanel selectedNodes(): warning with renderning image database "+e.toString());
-                            manager.utils.info("SignorNodePanel selectedNodes(): valore del db "+value);
-                            nodesPanel.add(nodeinfo, gbc.down());
-                        }    
-                    }     
+                        else {
+                            String db_value_norm = value.toLowerCase();
+                            String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
+                            OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
+                            SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(db_value_norm, link_to_db, openBrowser, false);
+                            nodeinfo.add(dbLabel, gbc.right());
+                        }
+//                        else {
+//                            //nodeinfo.add(new JLabel(value), gbc.right());
+//                            String db_value_norm = value.toLowerCase();
+//                            String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
+//                            OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
+//                            SignorLabelStyledBold dbLabel;
+//                            try{
+//                                BufferedImage dblogo = ImageIO.read(getClass().getResource(ConfigResources.DBLOGOS.get(db_value_norm)));
+//                                dbLabel = new SignorLabelStyledBold(new ImageIcon(dblogo), link_to_db, openBrowser, false);
+//                                nodeinfo.add(dbLabel, gbc.right().anchor("west"));
+//                            }
+//                            catch (Exception e){
+//                                manager.utils.warn("SignorNodePanel selectedNodes(): warning with renderning image database "+e.toString());
+//                                manager.utils.info("SignorNodePanel selectedNodes(): valore del db "+value);
+//                                nodesPanel.add(nodeinfo, gbc.down());
+//                            }    
+//                        } 
                 }         
                 SignorButton searchID =  new SignorButton("causal networks");
                 searchID.addActionListener(e-> buildSingleSearch(entity_id, network));

@@ -80,7 +80,6 @@ public class SignorEdgePanel extends JPanel {
         Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);   
         if(selectedEdges.size()>0){
             edgesPanel.removeAll();
-
         }
         Iterator iter_sel_edges = selectedEdges.iterator();
         while(iter_sel_edges.hasNext()){
@@ -112,7 +111,8 @@ public class SignorEdgePanel extends JPanel {
                         SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
                         edgeinfo.add(id, gbc.down());
                         if(value.length() > 20 && !key.equals(EdgeField.MECHANISM))
-                            edgeinfo.add(new HelpButton(manager, value), gbc.right());
+//                            edgeinfo.add(new HelpButton(manager, value), gbc.right());
+                              edgeinfo.add(new JLabel(value.substring(0, 10)), gbc.right());
                         else edgeinfo.add(new JLabel(value), gbc.right());
                     }
                 }    

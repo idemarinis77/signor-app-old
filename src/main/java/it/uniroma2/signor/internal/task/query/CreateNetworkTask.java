@@ -73,6 +73,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH, 
                     (Boolean) network.parameters.get(NetworkField.SHORTESTPATHSEARCH), manager);
             String newterms = terms.replace("%2C", " ");
+            String new_for_warning = newterms.replace("%2C", ",");
             if(results.isEmpty()){                
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
@@ -84,9 +85,12 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
             }
-            if (results.get(0).startsWith("Warning: The following proteins were not found")) {
+            if (results.get(0).startsWith("Warning: The following proteins were not found") &&
+                    results.get(0).endsWith(new_for_warning)) {
                 //https://signor.uniroma2.it/getData.php?organism=9606&id=Q96Q05
                 //after having choosen with multiple results of RAF
+                //If you look for https://signor.uniroma2.it/getData.php?type=connect&proteins=EGFT%2CEGFR&level=3
+                //you receive "Warning: The following proteins were not found: EGFT"
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
             }

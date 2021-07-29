@@ -105,7 +105,13 @@ public class SignorManager {
         CyNetwork signornet = this.lastCyNetwork;
         HashMap<String, CyNode> entity_read = new HashMap <String, CyNode>();
         
-        for (int i = 0; i < results.size(); i++) {  
+        for (int i = 0; i < results.size(); i++) { 
+            if(results.get(i).startsWith("Warning: The following proteins were not found")){
+                continue;
+            }
+            if(results.get(i).isBlank()){
+                continue;
+            }
             String[] attributes = results.get(i).split("\t");
             CyNode nodeSource;
             CyNode nodeTarget;         
@@ -205,7 +211,7 @@ public class SignorManager {
                 String map_attribute = EdgeField.EDGEFIELDMAP.get(attribute);
                 try {
 //                    if((a == Config.edge_positions.length -1) && attributes[Config.edge_positions[a]].startsWith("0.")){
-                     if(attributes[Config.edge_positions[a]].startsWith("0.")){
+                     if(attributes[Config.edge_positions[a]].startsWith("0.") || Config.edge_positions[a] == 27){
                         //I'm reading the last field (Score) 
                         //Some lines could have no score, so I double check also the "0." at the beginning of the field
                         signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Double.parseDouble(attributes[Config.edge_positions[a]]));
@@ -224,6 +230,7 @@ public class SignorManager {
                     }
                 }
                 catch (Exception e){
+                    this.utils.error(results.get(i).toString());
                     this.utils.error(Config.NAMESPACE+" "+map_attribute+" "+attribute+" "+attributes[Config.edge_positions[a]]+" "+e.toString());
                 }
             }  
