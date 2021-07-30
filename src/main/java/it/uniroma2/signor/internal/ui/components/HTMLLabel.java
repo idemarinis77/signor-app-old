@@ -9,7 +9,6 @@ import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 
 public class HTMLLabel extends JEditorPane implements HyperlinkListener {
-    private SignorManager manager;
     private OpenBrowser openBrowser;
     private static final Font DEFAULT_FONT;
 
@@ -32,7 +31,6 @@ public class HTMLLabel extends JEditorPane implements HyperlinkListener {
     }
 
     public void enableHyperlinks(SignorManager manager) {
-        this.manager = manager;
         this.openBrowser = manager.utils.getService(OpenBrowser.class);
     }
 

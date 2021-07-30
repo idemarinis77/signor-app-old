@@ -18,10 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.UIManager;
 import org.cytoscape.util.swing.OpenBrowser;
 
-/**
- *
- * @author amministratore
- */
+
 public class SignorLabelStyledBold extends JLabel{
      
     private final OpenBrowser openBrowser;
@@ -44,8 +41,6 @@ public class SignorLabelStyledBold extends JLabel{
     }
     public SignorLabelStyledBold (String label){
           this(label, "", null, true);
-//        super(label);        
-//        this.setFont(new Font(label, Font.BOLD, 11));
     }
 
     public SignorLabelStyledBold(String label, String link, final OpenBrowser openBrowser) {
@@ -66,7 +61,6 @@ public class SignorLabelStyledBold extends JLabel{
         super(icon);
         this.openBrowser = openBrowser;
         this.link = URI.create(link);
-        //if (bold) this.setFont(new Font(label, Font.BOLD, 11));
         if (openBrowser != null) setuplistener();
     }
     
@@ -75,7 +69,6 @@ public class SignorLabelStyledBold extends JLabel{
         link = u;
         setText(t);
         setToolTipText(link.toString());
-
         setBackground(null);
         setOpaque(false);
         setBorder(null);

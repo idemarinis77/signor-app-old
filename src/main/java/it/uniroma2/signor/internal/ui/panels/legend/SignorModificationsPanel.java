@@ -8,36 +8,19 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
-import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
-/**
- *
- * @author amministratore
- */
-import java.util.Properties;
-import java.util.Iterator;
-import java.util.ArrayList;
 import java.awt.*;
-import java.time.Instant;
-import java.util.Collection;
 import javax.swing.*;
 import static java.awt.Component.LEFT_ALIGNMENT;
-import java.util.HashMap;
 import org.cytoscape.model.CyEdge;
-import org.cytoscape.model.CyNode;
-import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
-import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyRow;
-import org.cytoscape.model.CyTableUtil;
 
 public class SignorModificationsPanel extends JPanel {
-    private SignorManager manager;
-    private JPanel modPanel;
+    private final SignorManager manager;
+    private final JPanel modPanel;
 
-    private EasyGBC gbc=new EasyGBC();
+    private final EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
 
@@ -48,7 +31,6 @@ public class SignorModificationsPanel extends JPanel {
         current_cynetwork_to_serch_into = manager.lastCyNetwork;
         JPanel ModificationInfo = new JPanel();
         ModificationInfo.setLayout(new GridBagLayout());
-        //ModificationInfo.setLayout(new BorderLayout());
         ModificationInfo.setBackground(Color.WHITE);
         {
             EasyGBC gbc1=new EasyGBC();
@@ -56,9 +38,6 @@ public class SignorModificationsPanel extends JPanel {
             modPanel.setBackground(Color.WHITE);
             ModificationInfo.add(modPanel, gbc1.down().anchor("north").expandHoriz());
             ModificationInfo.add(Box.createVerticalGlue(), gbc1.down().down().expandVert());
-            //modPanel.setLayout(new GridBagLayout());
-            //ModificationInfo.add(modPanel, BorderLayout.NORTH);
-            //NodeInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
         }
         JScrollPane scrollPane = new JScrollPane(ModificationInfo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -67,12 +46,10 @@ public class SignorModificationsPanel extends JPanel {
         add(scrollPane, gbc.down().anchor("east").expandBoth());
         revalidate();
         repaint();   
-        //createContent();
     }
     
     public void createContent(){
         try {                   
-            //SignorPanelRow listresults = new SignorPanelRow(current_cynetwork_to_serch_into.getEdgeList().size(), 2, manager);
             modPanel.setLayout(new GridLayout(0, 5));            
             Integer it =0;
             for (CyEdge signorEdge : current_cynetwork_to_serch_into.getEdgeList()) {                

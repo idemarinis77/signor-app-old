@@ -5,10 +5,6 @@
  */
 package it.uniroma2.signor.internal.ui.components;
 
-/**
- *
- * @author amministratore
- */
 import javax.swing.*;
 import java.awt.*;
 

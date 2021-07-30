@@ -1,66 +1,40 @@
 package it.uniroma2.signor.internal.ui.panels.legend;
-
+import java.awt.*;  
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.*;
 import javax.swing.JRadioButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.swing.CytoPanelName;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.utils.IconUtils;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.event.*;
-import it.uniroma2.signor.internal.utils.TimeUtils;
 import it.uniroma2.signor.internal.utils.DataUtils;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
-
 import it.uniroma2.signor.internal.view.NetworkView;
-import it.uniroma2.signor.internal.task.query.SignorPanelTask;
 import it.uniroma2.signor.internal.ConfigResources;
-import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
-
 import java.awt.BorderLayout;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Properties;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
 import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
 import org.cytoscape.model.CyNetwork;
-import java.util.stream.Collectors;
 import org.cytoscape.application.CyApplicationManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import org.cytoscape.application.events.SetCurrentNetworkEvent;
 import org.cytoscape.application.events.SetCurrentNetworkListener;
-import org.cytoscape.application.events.SetCurrentNetworkViewListener;
-import org.cytoscape.application.events.SetCurrentNetworkViewEvent;
 import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.application.swing.CytoPanel;
 import org.cytoscape.application.swing.CytoPanelState;
-import org.cytoscape.model.events.NetworkAddedEvent;
-import org.cytoscape.model.events.NetworkAddedListener;
 import org.cytoscape.model.subnetwork.CySubNetwork;
-import org.cytoscape.view.model.CyNetworkView;
 
 public class SignorLegendPanel extends JPanel implements 
         CytoPanelComponent, 
@@ -71,18 +45,16 @@ public class SignorLegendPanel extends JPanel implements
 
     private final JTabbedPane tabs = new JTabbedPane(JTabbedPane.BOTTOM);
     private static final Icon icon = IconUtils.createImageIcon(ConfigResources.icon_path);
-    private SignorNodePanel snp;
-    private SignorEdgePanel sep;
-    private SignorSummaryPanel ssp;
-    private SignorRelationsPanel srp;
-    private SignorModificationsPanel smp;
-    private SignorDescriptionsPanel sdp;
-    private SignorBridgePanel sbp;
-    private SignorShortestPathPanel spp;
-    private SignorManager manager;
+    private final SignorNodePanel snp;
+    private final SignorEdgePanel sep;
+    private final SignorSummaryPanel ssp;
+    private final SignorRelationsPanel srp;
+    private final SignorModificationsPanel smp;
+    private final SignorDescriptionsPanel sdp;
+    private final SignorBridgePanel sbp;
+    private final SignorManager manager;
     private CyNetwork current_cynetwork_to_serch_into;
-//    private boolean tabSingleSearchAdded = false;
-//    private boolean tabPathwayAdded = false;
+
     JRadioButton ptmviewON= new JRadioButton("PTM View");
     JRadioButton defviewON = new JRadioButton("Default View");
     Boolean registered;
@@ -98,7 +70,6 @@ public class SignorLegendPanel extends JPanel implements
       	smp = new SignorModificationsPanel(manager);
         sdp = new SignorDescriptionsPanel(manager);
         sbp = new SignorBridgePanel(manager);
-        spp = new SignorShortestPathPanel(manager);
         ActionListener listenerPTM = new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
@@ -120,7 +91,6 @@ public class SignorLegendPanel extends JPanel implements
             }
         };       
 
-        EasyGBC gbc=new EasyGBC();
         this.setLayout(new BorderLayout());
 
         JPanel ModeView = new JPanel(new GridLayout(1,2)); 
@@ -144,18 +114,23 @@ public class SignorLegendPanel extends JPanel implements
         manager.utils.registerAllServices(this, new Properties());
         manager.utils.setDetailPanel(this);
     }
+    @Override
     public Component getComponent() {		
         return this;
     }
+    @Override    
     public CytoPanelName getCytoPanelName() {		
         return CytoPanelName.EAST;
     }
+    @Override
     public String getTitle() {		
         return "SIGNOR";	
     }
+    @Override
     public String getIdentifier() {
         return Config.identifier_panel;
     }
+    @Override
     public Icon getIcon() {		
         return icon;	
     }    
@@ -163,13 +138,6 @@ public class SignorLegendPanel extends JPanel implements
 //    private Instant lastSelection = Instant.now();
 
     public void handleEvent(SelectedNodesAndEdgesEvent event) {        
-//        if (Instant.now().minusMillis(200).isAfter(lastSelection)) {
-//            if (snp.selectionRunning || sep.selectionRunning) {
-//                snp.selectionRunning = false;
-//                sep.selectionRunning = false;
-//                TimeUtils.sleep(200);
-//            }
-//            lastSelection = Instant.now();
             Collection<CyNode> selectedNodes = event.getSelectedNodes();
             Collection<CyEdge> selectedEdges = event.getSelectedEdges();
             boolean nodesSelected = !selectedNodes.isEmpty();
@@ -263,15 +231,6 @@ public class SignorLegendPanel extends JPanel implements
                 manager.utils.info("New SIGNOR the rest of search"+newcynet); 
                
             }
-//            else if(event.getNewNetwork().parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)){
-//                tabs.removeAll();
-//                this.current_cynetwork_to_serch_into = newcynet;
-//                tabs.add("NODES", snp); 
-//                tabs.add("EDGES", sep); 
-//                tabs.add("SHORTEST PATH", spp);
-//                spp.recreateContent();
-//                tabs.setSelectedComponent(spp);                
-//            }
             else if (event.getNewNetwork().parameters.get(NetworkField.QUERY).equals(Config.INTERACTOMENAME)){
                 this.current_cynetwork_to_serch_into = newcynet;
                 this.hideCytoPanel();
@@ -300,17 +259,10 @@ public class SignorLegendPanel extends JPanel implements
         try {
             CyNetwork newcynet = e.getNetwork();
             if (newcynet != null && DataUtils.isSignorNetwork(e.getNetwork())){
-//                hideCytoPanel();
-//            }                    
-//            else{
                 showCytoPanel();
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
                     if (manager.presentationManager.signorNetMap.containsKey(newcynet)){                           
-                           
-//                          CyNetwork cyNetwork = e.getNetwork();
                            CySubNetwork subCynetowrk = (CySubNetwork) newcynet;
-                           // If this is a subnetwork with ptm setted I disable the option to switch from Default and PTM
-                            
                             {
                                Network network = manager.presentationManager.signorNetMap.get(newcynet);
                                NetworkView.Type netviewtype = manager.presentationManager.signorViewMap.get(network);
@@ -328,16 +280,8 @@ public class SignorLegendPanel extends JPanel implements
                                }
                           }
                             if(subCynetowrk.getRootNetwork().getBaseNetwork() != newcynet){
-//                                CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
-//                                Network parentNetwork = manager.presentationManager.signorNetMap.get(parentCyNetwork);
                                 manager.utils.info("Sono in set network "+newcynet.toString());
                                 Network subNetwork = manager.presentationManager.signorNetMap.get(newcynet);
-//                                if(subNetwork.isPTMNetwork()){
-//                                    defviewON.setEnabled(false);
-//                                    defviewON.setSelected(false);
-//                                    ptmviewON.setSelected(true);
-//                                    ptmviewON.setEnabled(false);                                    
-//                                }
                                 if(manager.presentationManager.signorViewMap.get(subNetwork)==NetworkView.Type.PTM){
                                     defviewON.setEnabled(false);
                                     defviewON.setSelected(false);
@@ -355,7 +299,6 @@ public class SignorLegendPanel extends JPanel implements
                               this.current_cynetwork_to_serch_into = newcynet;
                               this.hideCytoPanel();
                               manager.utils.info("set current interactome loaded session");
-                              //tabs.removeAll();
                           }
                           else if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
                                 this.current_cynetwork_to_serch_into = newcynet;
@@ -402,18 +345,6 @@ public class SignorLegendPanel extends JPanel implements
                                    sbp.recreateContent();
                                    tabs.setSelectedComponent(sbp);
                             }
-//                            else if(manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)){
-//                                tabs.removeAll();
-//                                this.current_cynetwork_to_serch_into = newcynet;
-//                                tabs.add("NODES", snp); 
-//                                tabs.add("EDGES", sep); 
-//                                tabs.add("SHORTEST PATH", spp);
-//                                spp.recreateContent();
-//                                tabs.setSelectedComponent(spp);                
-//                            }
-//                            else if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME){
-//                               this.current_cynetwork_to_serch_into = newcynet;
-//                            }
                         }                            
                     }
             }

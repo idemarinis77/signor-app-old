@@ -7,34 +7,24 @@ package it.uniroma2.signor.internal.task.query;
 import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
-import java.util.HashMap;
-import org.cytoscape.work.TaskFactory;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.ui.panels.result.SignorResultPanel;
-import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
-import javax.swing.*;
 import java.awt.*;
 import java.util.Properties;
 import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.application.swing.CytoPanel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelComponent2;
-
 import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.application.swing.CytoPanelState;
-
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
-/**
- *
- * @author amministratore
- */
+
 public class SignorPanelTask extends AbstractTask {
         private final SignorManager manager;
         private final SignorPanelFactory factory;
-        private Boolean show;           
+        private final Boolean show;           
     
     public SignorPanelTask(SignorManager manager,SignorPanelFactory factory, Boolean show ){
         this.manager=manager;

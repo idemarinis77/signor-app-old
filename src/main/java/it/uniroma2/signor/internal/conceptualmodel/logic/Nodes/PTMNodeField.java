@@ -5,10 +5,7 @@
  */
 package it.uniroma2.signor.internal.conceptualmodel.logic.Nodes;
 import java.util.HashMap;
-/**
- *
- * @author amministratore
- */
+
 public class PTMNodeField {
     public static final String RESIDUE = "RESIDUE";
     public static final String TYPE = "TYPE";

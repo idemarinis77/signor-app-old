@@ -8,10 +8,7 @@ package it.uniroma2.signor.internal.conceptualmodel.logic.Edges;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-/**
- *
- * @author amministratore
- */
+
 public class EdgeField {
     public static final String Interaction = "Interaction";
     public static final String EFFECT = "EFFECT";
@@ -89,7 +86,6 @@ public class EdgeField {
            put(MECHANISM, String.class);           
            put(MODIFICATIONA, String.class);           
            put(PMID, String.class);
-//           put(ANNOTATOR, String.class);
            put(SENTENCE, String.class);
         }
     };

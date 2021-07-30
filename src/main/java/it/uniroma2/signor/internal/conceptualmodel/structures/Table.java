@@ -7,15 +7,9 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import java.util.*;
-import java.util.stream.Collectors;
-import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
-import static org.cytoscape.model.CyTableFactory.InitialTableSize.SMALL;
 import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ConfigPathway;
 import it.uniroma2.signor.internal.utils.TableUtil;
-import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyEdge;
 
 public class Table {
     public final String primaryKey;

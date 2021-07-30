@@ -4,43 +4,20 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.task.query;
-import it.uniroma2.signor.internal.task.query.*;
-import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
-import java.util.HashMap;
-import org.cytoscape.work.TaskFactory;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
-import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.ui.panels.result.SignorResultPanel;
-import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
-import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.task.query.factories.AlgorithmFactory;
-import it.uniroma2.signor.internal.task.query.AlgorithmTask;
-import javax.swing.*;
-import java.awt.*;
-
-import java.util.Properties;
-import org.cytoscape.application.swing.CySwingApplication;
-import org.cytoscape.application.swing.CytoPanel;
-import org.cytoscape.application.swing.CytoPanelComponent;
-import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.model.*;
-import org.cytoscape.application.swing.CytoPanelName;
-import org.cytoscape.application.swing.CytoPanelState;
 import org.cytoscape.model.CyNetwork;
 import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ConfigPathway;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
-import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.view.NetworkView;
-import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import org.cytoscape.model.CyTableFactory;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
@@ -48,14 +25,11 @@ import org.cytoscape.work.FinishStatus;
 import org.cytoscape.work.ObservableTask;
 import org.cytoscape.work.ProvidesTitle;
 import org.cytoscape.work.TaskObserver;
-/**
- *
- * @author amministratore
- */
+
 public class SignorPathwayResultTask extends AbstractTask implements TaskObserver{
         private final SignorManager manager;
         private final String pathwayid; 
-        private Network network;           
+        private final Network network;           
     
     public SignorPathwayResultTask(Network network, String pathwayid ){
         this.manager=network.manager;
@@ -73,11 +47,6 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             String URL = ConfigResources.WSSearchoptionMAP.get("PATHWAYSEARCH").queryFunction.apply(pathwayid, "only"); 
             monitor.setTitle("Querying Signor Network");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);   
-//            String pathway_description  = ConfigPathway.MapPathwayDescID.entrySet().stream()
-//                            .filter(entry -> entry.getValue().equals(pathwayid))
-//                            .map(entry-> entry.getKey())
-//                            .collect(Collectors.joining());
-            //CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathwayid);
             ArrayList<String> pathway_info = HttpUtils.parseWSNoheader(
                     HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+network.parameters.get("PATHWAYID"), manager));
             String pathway_description = pathway_info.get(1).split("\t")[1];
@@ -103,17 +72,11 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             netMan.addNetwork(cynet);   
             CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
             CyNetworkView ntwView = cnvf.createNetworkView(cynet);  
-//            ViewUtils.registerView(manager, ntwView);
             if (cancelled) return;
             //Apply style
             manager.signorStyleManager.applyStyle(ntwView);
             manager.signorStyleManager.installView(ntwView);            
-            
-//            network.setNetwork(cynet);
-//            manager.setCurrentNetwork(network);
-//            network.isPathwayNetwork = true; 
-//            manager.presentationManager.updateSignorNetworkCreated(cynet, network);
-            
+           
             Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             PTMTableNode.buildPTMTable(manager, "PTMNode", cynet);                
             Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);

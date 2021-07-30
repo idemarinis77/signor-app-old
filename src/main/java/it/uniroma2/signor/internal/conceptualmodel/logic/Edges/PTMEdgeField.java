@@ -6,10 +6,6 @@
 package it.uniroma2.signor.internal.conceptualmodel.logic.Edges;
 import java.util.HashMap;
 
-/**
- *
- * @author amministratore
- */
 public class PTMEdgeField {
     public static final String EdgeParent = "EdgeParent";
     public static final String NodeSourceSUID = "NodeSourceSUID";

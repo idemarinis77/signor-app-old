@@ -10,23 +10,15 @@ import javax.swing.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.Icon;
-
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.task.query.SignorInteractomeTask;
 import it.uniroma2.signor.internal.ui.components.SearchIntearctomeQueryComponent;
-import static it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory.SIGNORPTH_DESC;
-
 import it.uniroma2.signor.internal.utils.IconUtils;
 import java.util.HashMap;
-import org.cytoscape.work.AbstractTaskFactory;
 
-/**
- *
- * @author amministratore
- */
 public class SignorInteractomeQueryFactory extends AbstractNetworkSearchTaskFactory{
 
     static URL SIGNOR_URL;
@@ -44,7 +36,7 @@ public class SignorInteractomeQueryFactory extends AbstractNetworkSearchTaskFact
     SignorManager manager;
     Boolean ptm_interactome;
     HashMap <String, Object> parameters = new HashMap();
-    private SearchIntearctomeQueryComponent searchIntearctomeQueryComponent;
+    private final SearchIntearctomeQueryComponent searchIntearctomeQueryComponent;
     
     public SignorInteractomeQueryFactory(SignorManager manager, Boolean ptm_interactome) {
          super(SIGNORINT_ID, SIGNORINT_NAME, SIGNORINT_DESC, SIGNOR_ICON, SIGNOR_URL);
@@ -53,16 +45,19 @@ public class SignorInteractomeQueryFactory extends AbstractNetworkSearchTaskFact
          this.searchIntearctomeQueryComponent = new SearchIntearctomeQueryComponent(manager);
     }
     
+    @Override
     public boolean isReady() {
 
         return true;        
     }
+    
+    @Override
     public TaskIterator createTaskIterator() {            
             parameters =NetworkSearch.buildSearch(Config.INTERACTOMENAME, "Homo Sapiens", "", false);
             return new TaskIterator(new SignorInteractomeTask(new Network(manager, parameters), ptm_interactome)); 
         
     }
-
+    @Override
     public JComponent getQueryComponent() {
         return searchIntearctomeQueryComponent;
     }    

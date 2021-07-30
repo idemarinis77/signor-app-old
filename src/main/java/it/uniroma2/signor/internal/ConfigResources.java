@@ -9,11 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
- 
-/**
- *
- * @author amministratore
- */
 
 /*Master file configuration for URL, DB, FILES, IMAGES*/
 public class ConfigResources {

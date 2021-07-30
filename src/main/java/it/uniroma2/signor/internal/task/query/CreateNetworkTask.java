@@ -7,8 +7,6 @@ package it.uniroma2.signor.internal.task.query;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.task.query.SignorPanelTask;
-import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.event.*;
 import org.cytoscape.model.*;
@@ -18,34 +16,17 @@ import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import it.uniroma2.signor.internal.task.query.factories.AlgorithmFactory;
-import static org.cytoscape.model.CyTableFactory.InitialTableSize.MEDIUM;
 import java.io.*;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import org.cytoscape.view.layout.CyLayoutAlgorithm;
-import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
-import it.uniroma2.signor.internal.task.view.factories.ZoomNetworkViewTaskFactory;
-import it.uniroma2.signor.internal.task.view.ZoomNetworkViewTask;
-import static org.cytoscape.view.presentation.property.BasicVisualLexicon.NETWORK_SCALE_FACTOR;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
-import org.cytoscape.view.model.CyNetworkViewManager;
-import org.cytoscape.view.model.View;
 import org.cytoscape.work.FinishStatus;
 import org.cytoscape.work.ObservableTask;
 import org.cytoscape.work.ProvidesTitle;
-import org.cytoscape.work.TaskIterator;
 import org.cytoscape.work.TaskObserver;
-import org.cytoscape.work.TunableSetter;
-import org.cytoscape.view.model.*;
 
-/**
- *
- * @author amministratore
- */
 public class CreateNetworkTask extends AbstractTask implements TaskObserver{
     Network network;
     String terms;
@@ -60,6 +41,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
         this.URL=URL;
         this.netname=netname;
     }
+    @Override
     public void run(TaskMonitor monitor) {
         //SignorManager manager = network.manager;
         manager = network.manager;
@@ -121,15 +103,11 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 netMan.addNetwork(cynet);            
                 CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
                 CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
-//                manager.presentationManager.updateSignorViewCreated(ntwView, network);
                 //Apply style
                 manager.signorStyleManager.applyStyle(ntwView);
                 manager.signorStyleManager.installView(ntwView);            
 
-//                network.setNetwork(cynet);
                 manager.setCurrentNetwork(network);
-                //manager.presentationManager.updateSignorNetworkCreated(cynet, network);
-
                 Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableNode.buildPTMTable(manager, "PTMNode", cynet);
 
@@ -137,7 +115,6 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
                 Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 NetworkTable.buildDefaultTable(manager, "Network", cynet);           
-
 
                 network.writeSearchNetwork();     
                 if (cancelled) {

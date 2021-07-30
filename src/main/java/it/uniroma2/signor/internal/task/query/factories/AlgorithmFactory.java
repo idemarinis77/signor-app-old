@@ -5,7 +5,6 @@
  */
 package it.uniroma2.signor.internal.task.query.factories;
 
-import java.util.List;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.AbstractTaskFactory;
 import org.cytoscape.work.TaskIterator;
@@ -13,10 +12,6 @@ import org.cytoscape.work.TaskIterator;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.task.query.AlgorithmTask;
 
-/**
- *
- * @author amministratore
- */
 public class AlgorithmFactory extends AbstractTaskFactory {
      CyNetworkView ntwView;
      SignorManager manager;

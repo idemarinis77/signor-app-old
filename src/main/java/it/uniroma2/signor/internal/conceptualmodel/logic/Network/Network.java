@@ -1,32 +1,15 @@
 package it.uniroma2.signor.internal.conceptualmodel.logic.Network;
 
-import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.model.*;
-import org.cytoscape.model.events.*;
-import org.cytoscape.task.hide.HideTaskFactory;
-import org.cytoscape.view.model.CyNetworkView;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.NodeCouple;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
-
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.utils.HttpUtils;
-
-import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ConfigResources;
-//import static uk.ac.ebi.intact.app.internal.utils.ModelUtils.Position;
 
-public class Network {
-    //implements AddedEdgesListener, AboutToRemoveEdgesListener, RemovedEdgesListener {
-    //ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
+public class Network {    
     public final SignorManager manager;
     CyNetwork cyNetwork;
     CyTable edgeTable;
@@ -46,7 +29,6 @@ public class Network {
    
     public Boolean isPathwayNetwork = false;
     public Boolean isDeasesNetwork = false;
-//    public Boolean isPTMNetwork = false;
     public Boolean ptm_already_loaded = false;
     public CyNode rootNode;
     private Node networkRootNode;
@@ -76,7 +58,6 @@ public class Network {
     public void writeSearchNetwork(){
         for (String key: parameters.keySet()){
             this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).set(Config.NAMESPACE, key, parameters.get(key));
-            //this.cyNetwork.getDefaultNetworkTable().getRowCount()
          }
     }
     public boolean isPTMNetwork(){
@@ -91,9 +72,6 @@ public class Network {
         return false;
     }    
     public boolean isSingleSearch(){
-//        if (this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class)!=null)
-//            return this.cyNetwork.getDefaultNetworkTable().getRow(this.cyNetwork.getSUID()).get(Config.NAMESPACE, NetworkField.SINGLESEARCH, Boolean.class);
-//        return false;
           return (Boolean) this.parameters.get(NetworkField.SINGLESEARCH);
     }
     
@@ -133,8 +111,6 @@ public class Network {
     }
     public void setNetwork(CyNetwork cyNetwork) {
         this.cyNetwork = cyNetwork;
-        
-//        cyNetwork.getNodeList().forEach(node -> nodes.put(node, new Node(this, node)));
         String searched_query = (String) this.parameters.get(NetworkField.QUERY);
         List<String> searched_entities = Arrays.asList(searched_query.split(" "));
         
@@ -146,10 +122,8 @@ public class Network {
         }
 
         edgeTable = cyNetwork.getDefaultEdgeTable();
-        nodeTable = cyNetwork.getDefaultNodeTable();
-            
-        //TableUtil.NullAndNonNullEdges identifiedOrNotEdges = TableUtils.splitNullAndNonNullEdges(cyNetwork, EdgeFields.SIGNOR_ID);
-        
+        nodeTable = cyNetwork.getDefaultNodeTable();         
+       
         for (CyEdge signorEdge : cyNetwork.getEdgeList()) {
             
             edges.put(signorEdge, (Edge) Edge.createEdge(this, signorEdge));

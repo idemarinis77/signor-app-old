@@ -4,47 +4,30 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.managers;
-import it.uniroma2.signor.internal.utils.TableUtil;
 import java.util.HashMap;
-
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
-import it.uniroma2.signor.internal.event.*;
 import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.utils.DataUtils;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.model.events.NetworkAddedEvent;
 import org.cytoscape.model.events.NetworkAddedListener;
-import org.cytoscape.session.events.SessionLoadedEvent;
 import org.cytoscape.view.model.events.NetworkViewAddedEvent;
 import org.cytoscape.view.model.events.NetworkViewAddedListener;
-import org.cytoscape.session.events.SessionLoadedEvent;
-import org.cytoscape.session.events.SessionLoadedListener;
-
 import java.util.*;
-import java.util.UUID;
 import org.cytoscape.application.CyApplicationManager;
-import org.cytoscape.model.CyEdge;
-import org.cytoscape.model.CyNetworkManager;
-import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableFactory;
 import org.cytoscape.model.CyTableManager;
 import org.cytoscape.model.events.NetworkAboutToBeDestroyedEvent;
 import org.cytoscape.model.events.NetworkAboutToBeDestroyedListener;
 import org.cytoscape.model.subnetwork.CySubNetwork;
-import org.cytoscape.model.subnetwork.CyRootNetwork;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
-import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.model.events.NetworkViewAboutToBeDestroyedEvent;
 import org.cytoscape.view.model.events.NetworkViewAboutToBeDestroyedListener;
 
-/**
- *
- * @author amministratore
- */
 public class PresentationManager implements         
         NetworkAddedListener, NetworkViewAddedListener, 
         NetworkViewAboutToBeDestroyedListener, NetworkAboutToBeDestroyedListener{
@@ -112,16 +95,13 @@ public class PresentationManager implements
         CyTableManager tableManager = manager.utils.getService(CyTableManager.class);
         Network network = signorNetMap.get(cyNetwork);
         if (network != null && DataUtils.isSignorNetwork(cyNetwork)) {
-//            if (rootNetworkManager.getRootNetwork(cyNetwork).getSubNetworkList().size() == 1) {
-                CyTable ptmNode = network.PTMnodeTable;
-                if (ptmNode != null) tableManager.deleteTable(ptmNode.getSUID());
-                CyTable ptmEdge = network.PTMedgeTable;
-                if (ptmEdge != null) tableManager.deleteTable(ptmEdge.getSUID());
-//            }
+            CyTable ptmNode = network.PTMnodeTable;
+            if (ptmNode != null) tableManager.deleteTable(ptmNode.getSUID());
+            CyTable ptmEdge = network.PTMedgeTable;
+            if (ptmEdge != null) tableManager.deleteTable(ptmEdge.getSUID());
             signorNetMap.remove(cyNetwork);
         }
-    }   
-    
+    }       
     
     @Override
     public void handleEvent (NetworkViewAddedEvent e){
@@ -144,11 +124,7 @@ public class PresentationManager implements
                         //apply SIGNOR STYLE
                         List<CyNetwork> nets = new ArrayList<CyNetwork>();  
                         nets.add(cyNetwork);
-    //                    manager.utils.getService(CyApplicationManager.class).setCurrentNetwork(cyNetwork);
-    //                    manager.utils.getService(CyApplicationManager.class).setSelectedNetworks(nets);
                         manager.signorStyleManager.applyStyle(cyNetworkView);                        
-    //                  manager.utils.getService(CyApplicationManager.class).setCurrentNetworkView(cyNetworkView);
-    //                  manager.signorStyleManager.installView(cyNetworkView);             
                     }
                 }
             }

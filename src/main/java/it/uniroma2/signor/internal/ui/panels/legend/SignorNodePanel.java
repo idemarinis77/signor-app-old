@@ -6,25 +6,12 @@
 package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.utils.EasyGBC;
-
-/**
- *
- * @author amministratore
- */
-import java.util.Properties;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.awt.*;
-import java.time.Instant;
 import java.util.Collection;
 import javax.swing.*;
-
-import it.uniroma2.signor.internal.utils.TimeUtils;
-
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 import org.cytoscape.model.CyNode;
-import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
-import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
@@ -34,22 +21,18 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.ui.components.SignorButton;
-import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
 import static java.awt.Component.LEFT_ALIGNMENT;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import javax.imageio.ImageIO;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableUtil;
 import org.cytoscape.util.swing.OpenBrowser;
 
 public class SignorNodePanel extends JPanel {
-    private SignorManager manager;
-    private JPanel nodesPanel;
+    private final SignorManager manager;
+    private final JPanel nodesPanel;
     private static Font iconFont;
-    private EasyGBC gbc=new EasyGBC();
+    private final EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
     
@@ -61,12 +44,10 @@ public class SignorNodePanel extends JPanel {
         NodeInfo.setLayout(new BorderLayout());
         NodeInfo.setBackground(Color.WHITE);
         {
-//            EasyGBC gbc1=new EasyGBC();
             nodesPanel = new JPanel();
             nodesPanel.setBackground(Color.WHITE);
             nodesPanel.setLayout(new GridBagLayout());
             NodeInfo.add(nodesPanel, BorderLayout.NORTH);
-            //NodeInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
         }
         JScrollPane scrollPane = new JScrollPane(NodeInfo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -93,64 +74,31 @@ public class SignorNodePanel extends JPanel {
             if(!current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
                     get(Config.NAMESPACE, NodeField.TYPE, String.class).equals("residue")){
                 Node node = network.getNodes().get(node_current);            
-                HashMap <String,String> summary = node.getSummary();
-                
+                HashMap <String,String> summary = node.getSummary();                
                 String entity_name = summary.get(NodeField.ENTITY);
-                String entity_id = summary.get(NodeField.ID);
-//                String database = summary.get(NodeField.DATABASE).toLowerCase();
-//                String link_to_db = ConfigResources.DBLINKSMAP.get(database).queryFunction.apply(entity_id);
-//                OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
-//                SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(database, link_to_db, openBrowser, false);
-//                String type = summary.get(NodeField.TYPE);
-//                
-//                nodeinfo.add(new SignorLabelStyledBold(NodeField.ENTITY), gbc.down());
-//                nodeinfo.add(new JLabel(entity_name), gbc.right());
-//                nodeinfo.add(new SignorLabelStyledBold(NodeField.DATABASE), gbc.down());
-//                nodeinfo.add(dbLabel, gbc.right());
-//                nodeinfo.add(new SignorLabelStyledBold(NodeField.TYPE), gbc.down());
-//                nodeinfo.add(new JLabel(type), gbc.right());
-                
+                String entity_id = summary.get(NodeField.ID);              
                 Iterator iter = summary.keySet().iterator();
-                Iterator iterv = summary.values().iterator();
-    
+                Iterator iterv = summary.values().iterator();    
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
-                        SignorLabelStyledBold id = new SignorLabelStyledBold(key);
-                        nodeinfo.add(id, gbc.down());
-                        if(key!= NodeField.DATABASE){
-                            nodeinfo.add(new JLabel(value), gbc.right());
-                        }
-                        else {
-                            String db_value_norm = value.toLowerCase();
-                            String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
-                            OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
-                            SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(db_value_norm, link_to_db, openBrowser, false);
-                            nodeinfo.add(dbLabel, gbc.right());
-                        }
-//                        else {
-//                            //nodeinfo.add(new JLabel(value), gbc.right());
-//                            String db_value_norm = value.toLowerCase();
-//                            String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
-//                            OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
-//                            SignorLabelStyledBold dbLabel;
-//                            try{
-//                                BufferedImage dblogo = ImageIO.read(getClass().getResource(ConfigResources.DBLOGOS.get(db_value_norm)));
-//                                dbLabel = new SignorLabelStyledBold(new ImageIcon(dblogo), link_to_db, openBrowser, false);
-//                                nodeinfo.add(dbLabel, gbc.right().anchor("west"));
-//                            }
-//                            catch (Exception e){
-//                                manager.utils.warn("SignorNodePanel selectedNodes(): warning with renderning image database "+e.toString());
-//                                manager.utils.info("SignorNodePanel selectedNodes(): valore del db "+value);
-//                                nodesPanel.add(nodeinfo, gbc.down());
-//                            }    
-//                        } 
+                    SignorLabelStyledBold id = new SignorLabelStyledBold(key);
+                    nodeinfo.add(id, gbc.down());
+                    if(key!= NodeField.DATABASE){
+                        nodeinfo.add(new JLabel(value), gbc.right());
+                    }
+                    else {
+                        String db_value_norm = value.toLowerCase();
+                        String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
+                        OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
+                        SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(db_value_norm, link_to_db, openBrowser, false);
+                        nodeinfo.add(dbLabel, gbc.right());
+                    }
                 }         
                 SignorButton searchID =  new SignorButton("causal networks");
                 searchID.addActionListener(e-> buildSingleSearch(entity_id, network));
                 nodeinfo.add(new SignorLabelStyledBold("Search in SIGNOR"), gbc.down());
-                nodeinfo.add(searchID, gbc.right());                
-
+                nodeinfo.add(searchID, gbc.right());          
                 CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Node INFO", nodeinfo, false );
                 nodesPanel.add(collapsableINFO, gbc.down().anchor("north").insets(1,1,1,1));   
             }

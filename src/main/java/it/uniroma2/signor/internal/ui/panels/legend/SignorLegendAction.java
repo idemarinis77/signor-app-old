@@ -9,9 +9,9 @@ import org.cytoscape.application.swing.CytoPanelState;
 
 public class SignorLegendAction extends AbstractCyAction {
 	private static final long serialVersionUID = 1L;
-	private CySwingApplication desktopApp;
+	private final CySwingApplication desktopApp;
 	private final CytoPanel cytoPanelEast;
-	private SignorLegendPanel legendPanel;
+	private final SignorLegendPanel legendPanel;
 	
 	public SignorLegendAction(CySwingApplication desktop, SignorLegendPanel myPanel){
 		super("Signor PANEL");

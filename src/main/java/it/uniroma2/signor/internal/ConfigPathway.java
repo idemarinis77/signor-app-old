@@ -7,10 +7,6 @@ package it.uniroma2.signor.internal;
 
 import java.util.HashMap;
 
-/**
- *
- * @author amministratore
- */
 /*Master file configuration for PATHWAY MODEL*/
 public class ConfigPathway {
     

@@ -10,29 +10,18 @@ import javax.swing.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.Icon;
-
-import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ConfigPathway;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.IconUtils;
-import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.ui.components.SearchPTHQueryComponent;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkSearch;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
-import it.uniroma2.signor.internal.task.query.SignorGenericQueryTask;
 import it.uniroma2.signor.internal.task.query.SignorPathwayResultTask;
 import it.uniroma2.signor.internal.ui.components.ChoosePathwayoption;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
-/**
- *
- * @author amministratore
- */
 public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory {
 
     static URL SIGNOR_URL;
@@ -48,8 +37,8 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
         }
     }
     SignorManager manager;
-    private ChoosePathwayoption choosePathwayoption;
-    private SearchPTHQueryComponent searchPTHQueryComponent; 
+    private final ChoosePathwayoption choosePathwayoption;
+    private final SearchPTHQueryComponent searchPTHQueryComponent; 
     public HashMap<String, Object> parameters_shift;
     public boolean param_shift = false;
     
@@ -60,44 +49,24 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
          choosePathwayoption = new ChoosePathwayoption(manager);
          searchPTHQueryComponent = new SearchPTHQueryComponent(manager); 
     }
+    
+    @Override
     public boolean isReady() {
 
         return choosePathwayoption.isReady();        
     }
-
+    @Override
     public TaskIterator createTaskIterator() {            
         HashMap<String, Object> parameters = choosePathwayoption.getParameter();
         //I'm calling the task from option panel
         if (this.param_shift == true) parameters = parameters_shift;
-//        String pathway= (String) parameters.entrySet().iterator().next().getValue();
         String pathwayid = (String) parameters.get(PathwayField.PATHWAYID);
-//        String pathwayid = "";
-//        if(ConfigPathway.PathwayDiseaseList.containsValue(pathway))
-//                pathwayid = ConfigPathway.PathwayDiseaseList.entrySet().stream()
-//                            .filter(entry -> entry.getValue().equals(pathway))
-//                            .map(entry-> entry.getKey())
-//                            .collect(Collectors.joining());
-//            
-//            else if (ConfigPathway.PathwayList.containsValue(pathway))
-//                pathwayid = ConfigPathway.PathwayList.entrySet().stream()
-//                            .filter(entry -> entry.getValue().equals(pathway))
-//                            .map(entry-> entry.getKey())
-//                            .collect(Collectors.joining());
-//            
-//            else if (ConfigPathway.PathwayTumorList.containsValue(pathway))
-//                pathwayid = ConfigPathway.PathwayTumorList.entrySet().stream()
-//                            .filter(entry -> entry.getValue().equals(pathway))
-//                            .map(entry-> entry.getKey())
-//                            .collect(Collectors.joining());
-//        parameters.clear();
         parameters.put(PathwayField.PATHWAYID, pathwayid);
         manager.utils.info(parameters.toString());
         HashMap <String, Object> buildParams = NetworkSearch.buildSearch(pathwayid, (String) parameters.get(NetworkField.SPECIES), 
                                                         NetworkField.PATHWAYSEARCH, false);
         manager.utils.info("nuovo array "+buildParams.toString());
         try { 
-            /*parameters = chooseSearchoption.getParameter();
-            parameters.put("QUERY", pathway);*/
             manager.utils.info("Performing SIGNOR PTH search for "+parameters.toString()); 
             return new TaskIterator(new SignorPathwayResultTask(new Network(manager, buildParams), pathwayid)); 
         }
@@ -107,6 +76,7 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
         return null;
     }
 
+    @Override
     public JComponent getQueryComponent() {
         return searchPTHQueryComponent;
     }    

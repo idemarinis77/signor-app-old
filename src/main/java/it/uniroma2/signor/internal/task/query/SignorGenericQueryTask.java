@@ -16,18 +16,13 @@ import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.ui.panels.result.SignorResultPanel;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
 import it.uniroma2.signor.internal.utils.HttpUtils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.cytoscape.work.ProvidesTitle;
-/**
- *
- * @author amministratore
- */
+
 public class SignorGenericQueryTask extends AbstractTask {
         private final SignorManager manager;
         private final Network network;
@@ -64,6 +59,11 @@ public class SignorGenericQueryTask extends AbstractTask {
                 final String finalsearch = search;
                 final String terms_trimmed = terms.trim();
                 Integer position_of_primary_id=0;
+                if (terms_trimmed.indexOf(" ")>0){             
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Please type only one of these terms:"+terms_trimmed,
+                        "No results", JOptionPane.ERROR_MESSAGE));
+                    return;                    
+                }
                 //Retrieve number of result
                 //Config.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms);
                 manager.utils.info(ConfigResources.WSSearchoptionMAP.
@@ -71,10 +71,7 @@ public class SignorGenericQueryTask extends AbstractTask {
                 BufferedReader br = HttpUtils.getHTTPSignor(ConfigResources.WSSearchoptionMAP.
                                               get("ENTITYINFOSEARCH").queryFunction.apply(terms_trimmed,Config.SPECIESLIST.get(species)), manager);
 
-                ArrayList<String> results= HttpUtils.parseWSNoheader(br);
-//                if(Config.SPECIESLIST.get(species) != "9606")
-//                    results.remove(0);
-//                
+                ArrayList<String> results= HttpUtils.parseWSNoheader(br);            
                 if (results.size() == 0){             
                     SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+terms_trimmed,
                         "No results", JOptionPane.ERROR_MESSAGE));

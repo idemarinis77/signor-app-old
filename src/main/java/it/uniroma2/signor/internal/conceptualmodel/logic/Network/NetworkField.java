@@ -7,10 +7,6 @@ package it.uniroma2.signor.internal.conceptualmodel.logic.Network;
 
 import java.util.HashMap;
 
-/**
- *
- * @author amministratore
- */
 public class NetworkField {
     public static String QUERY = "QUERY";
     public static String SINGLESEARCH = "SINGLESEARCH";

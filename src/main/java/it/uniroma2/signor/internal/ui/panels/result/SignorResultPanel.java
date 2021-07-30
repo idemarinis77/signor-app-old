@@ -4,9 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.ui.panels.result;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemListener;
 import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.Color;
@@ -20,31 +18,21 @@ import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import java.awt.Window;
-import java.awt.event.ItemEvent;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.Iterator;
-import static java.util.stream.Collectors.toList;
 import org.cytoscape.work.TaskFactory;
 import it.uniroma2.signor.internal.Config;
-import java.util.Arrays;
-/**
- *
- * @author amministratore
- */
 
 public class SignorResultPanel extends JPanel {
     private JPanel descriptionPanel;
     final EasyGBC layoutHelper = new EasyGBC();
-    private String species;
-    private String search;
-    private String terms;
-    private Boolean includefirstneighbor;
-    private Network network;
-    private SignorManager manager;
-    private ArrayList<String> results;
+    private final String species;
+    private final String search;
+    private final String terms;
+    private final Boolean includefirstneighbor;
+    private final Network network;
+    private final SignorManager manager;
+    private final ArrayList<String> results;
     
     public SignorResultPanel(Integer numberresutls, ArrayList<String> results, String species, String search, Boolean includefirstneighbor, String terms, Network network){ 
         super(new GridBagLayout());
@@ -60,15 +48,7 @@ public class SignorResultPanel extends JPanel {
         this.results = results;
         init(numberresutls, species);     
     }
-    
-    private int getPreferredHeight(JComponent component) {
-        return component.getPreferredSize().height;
-    }
-
-    private int getPreferredWidth(JComponent component) {
-        return component.getPreferredSize().width;
-    }
-    
+   
     private void init(Integer numberresutls, String species) {             
         
         descriptionPanel = new VerticalPanel();
@@ -117,15 +97,8 @@ public class SignorResultPanel extends JPanel {
             //*******************************************
             //ATTENTION TO VERIFY THE RESULTS WITH THE NEW HEADER
             final int j = i+1;
-//            if(Config.SPECIESLIST.get(species)=="9606")
-               link.addActionListener(e -> buildNetworkFromSelection(fields[j]));
-//            else 
-//               link.addActionListener(e -> buildNetworkFromSelection(fields[2]));
-            //add(listresults, layoutHelper.down());
-            
-//            listresults.add(primaentity, layoutHelper.insets(2,2,2,2));
-//            listresults.add(primaid);
-//            listresults.add(primatype);
+            link.addActionListener(e -> buildNetworkFromSelection(fields[j]));
+
             listresults.add(link);  
             table_of_result_to_scroll.add(listresults, layoutHelper.down());
         }
@@ -135,14 +108,10 @@ public class SignorResultPanel extends JPanel {
         scrollPane.setAlignmentX(LEFT_ALIGNMENT);
         scrollPane.getVerticalScrollBar().setBlockIncrement(10);
         add(scrollPane, layoutHelper.down().anchor("east").expandBoth());
-        
-        
-        //add(cancelButton, layoutHelper.down().anchor("east"));
-    }
+     }
     
      private void buildNetworkFromSelection(String primaryID) {      
         new Thread(() -> {
-            //if (addAdditionalInteractors().isCanceled()) return;
             TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, species, primaryID ,network);
             manager.utils.execute(factory.createTaskIterator());
             close();

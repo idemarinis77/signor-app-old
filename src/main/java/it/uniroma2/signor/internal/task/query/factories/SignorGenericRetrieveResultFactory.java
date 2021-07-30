@@ -11,20 +11,16 @@ import org.cytoscape.work.TaskIterator;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.Config;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 import java.util.HashMap;
 
-/**
- *
- * @author amministratore
- */
+
 public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
-    private String search;
-    private Boolean includefirstneighbor;
-    private String species;
-    private String terms;
-    private Network network;
+    private final String search;
+    private final Boolean includefirstneighbor;
+    private final String species;
+    private final String terms;
+    private final Network network;
     private HashMap<String, ?> parameters;
     
     public SignorGenericRetrieveResultFactory(String search, Boolean includefirstneighbor, String species, 
@@ -36,6 +32,7 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
         this.network=network;
     }
     
+    @Override
     public TaskIterator createTaskIterator() {
         network.manager.utils.info("I parametri sono questi "+network.parameters.toString());
         String netName = Config.NTWPREFIX+terms;
@@ -60,6 +57,4 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
         //Single protein search provides result with any case
         return new TaskIterator(new CreateNetworkTask(network, terms.toUpperCase(), URL, netName, parameters)); 
    }  
-
-    //public boolean isReady() { return true; }
 }

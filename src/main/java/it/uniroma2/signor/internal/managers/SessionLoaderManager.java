@@ -2,23 +2,13 @@ package it.uniroma2.signor.internal.managers;
 
 import org.cytoscape.model.*;
 import org.cytoscape.session.CySession;
-import org.cytoscape.session.CySessionManager;
 import org.cytoscape.session.events.SessionLoadedEvent;
 import org.cytoscape.session.events.SessionLoadedListener;
-import org.cytoscape.session.events.SessionAboutToBeSavedEvent;
-import org.cytoscape.session.events.SessionAboutToBeSavedListener;
-import org.cytoscape.view.model.CyNetworkView;
-import org.cytoscape.view.vizmap.VisualStyle;
-//import org.cytoscape.work.Tunable;
-
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
-import java.util.Iterator;
 import java.util.HashMap;
 import it.uniroma2.signor.internal.utils.DataUtils;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
-import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
 import it.uniroma2.signor.internal.view.NetworkView;
@@ -31,25 +21,7 @@ public class SessionLoaderManager implements SessionLoadedListener  {
     public SessionLoaderManager(SignorManager manager) {
         this.manager = manager;
     }
-    
-//    @Override
-//    public void handleEvent(SessionAboutToBeSavedEvent event) {
-//        //I want to be sure to write information in the network record
-////        @Tunable (description="choose file to save session")
-//        CySessionManager cysessionManager = manager.utils.getService(CySessionManager.class);
-////        CySession cysession = cysessionManager.getCurrentSession();
-//        manager.utils.info("SessionAboutToBeSavedEvent "+cysessionManager.getCurrentSession().getNetworks().toString());
-////        for (CyNetwork cynetwork : cysessionManager.getCurrentSession().getNetworks()) {
-////        
-////            manager.utils.info("SessionAboutToBeSavedEvent "+cynetwork.toString());
-////            Network network = manager.presentationManager.signorNetMap.get(cynetwork);
-////            
-////            if(network != null && DataUtils.isSignorNetwork(cynetwork)){
-////                network.writeSearchNetwork();
-////                manager.utils.info("SessionAboutToBeSavedEvent "+network.toString());
-////            }
-////        }        
-//    }
+
     @Override
     public void handleEvent(SessionLoadedEvent event) {
 
@@ -119,7 +91,6 @@ public class SessionLoaderManager implements SessionLoadedListener  {
                 String title2 = title.replaceFirst(" - PTM....", "");
                 for (CyNetwork cynet : setCynet) {  
                     if(cynet.getDefaultNetworkTable().getRow(cynet.getSUID()).get("name", String.class).equals(title2)){
-    //                   Network ntw = manager.presentationManager.signorNetMap.get(cynet);
                        if(title.endsWith("PTMEdge")){
                            signornet.PTMedgeTable=table;
                            manager.utils.info(signornet.PTMedgeTable.toString()+"** e rete **"+signornet.toString());

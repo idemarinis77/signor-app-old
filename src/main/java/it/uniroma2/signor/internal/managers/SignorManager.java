@@ -7,14 +7,12 @@ package it.uniroma2.signor.internal.managers;
 
 import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.session.events.SessionLoadedListener;
-import org.cytoscape.session.events.SessionAboutToBeSavedListener;
 import java.util.HashMap;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.ConfigPathway;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Map;
 import java.util.ArrayList;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkFactory;
@@ -22,23 +20,14 @@ import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.subnetwork.CySubNetwork;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.NodeField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.utils.DataUtils;
-import static it.uniroma2.signor.internal.utils.DataUtils.MappingSecondDirectionInteraction;
 import java.util.Properties;
-import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.CyApplicationManager;
-import org.cytoscape.view.model.CyNetworkViewManager;
-import org.cytoscape.view.model.CyNetworkView;
 
-/**
- *
- * @author amministratore
- */
 public class SignorManager {
     public final SignorStyleManager signorStyleManager;
     public final PresentationManager presentationManager;
@@ -46,16 +35,13 @@ public class SignorManager {
     public final CytoUtils utils;
     public CyNetwork lastCyNetwork;
     public Network lastNetwork;
-//    public CyNetworkView lastCyNetworkView;
-    //SignorLegendPanel signorPanel;
-    //public Boolean PTMtableTocreate = false;
+
   
     public SignorManager(CyServiceRegistrar registrar) {        
         utils = new CytoUtils(registrar);        
         sessionLoaderManager = new SessionLoaderManager(this);
         presentationManager = new PresentationManager(this);
         utils.registerService(sessionLoaderManager, SessionLoadedListener.class, new Properties());
-//        utils.registerService(sessionLoaderManager, SessionAboutToBeSavedListener.class, new Properties());
         signorStyleManager = new SignorStyleManager(this, ConfigResources.FILESTYLE);
         signorStyleManager.setupDefaultStyle();
     }
@@ -68,7 +54,6 @@ public class SignorManager {
         for (CyNetwork net : nets) {
             allNets.add(((CySubNetwork) net).getRootNetwork());
         }
-        // See if this name is already taken by a network or a network collection (root network)
         int index = -1;
         boolean match = false;
         for (CyNetwork net : allNets) {
@@ -124,7 +109,6 @@ public class SignorManager {
             }
             for (int a = 0; a < Config.node_source_positions.length; a++){
                   String attribute = Config.HEADERSINGLESEARCH[Config.node_source_positions[a]];
-//                  String map_attribute = Config.NODEFIELDMAP.get(attribute);
                   String map_attribute = NodeField.NODEFIELDMAP.get(attribute);
                   try {
                         signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[Config.node_source_positions[a]]);
@@ -144,7 +128,6 @@ public class SignorManager {
             else {
                 nodeTarget = entity_read.get(attributes[Config.target_entity_position]);
             }
-            //for (int a = 4; a < 8; a++){
             for (int a = 0; a < Config.node_target_positions.length; a++){
                   String attribute = Config.HEADERSINGLESEARCH[Config.node_target_positions[a]];
                   String map_attribute = NodeField.NODEFIELDMAP.get(attribute);
@@ -210,7 +193,6 @@ public class SignorManager {
                 String attribute = Config.HEADERSINGLESEARCH[Config.edge_positions[a]];
                 String map_attribute = EdgeField.EDGEFIELDMAP.get(attribute);
                 try {
-//                    if((a == Config.edge_positions.length -1) && attributes[Config.edge_positions[a]].startsWith("0.")){
                      if(attributes[Config.edge_positions[a]].startsWith("0.") || Config.edge_positions[a] == 27){
                         //I'm reading the last field (Score) 
                         //Some lines could have no score, so I double check also the "0." at the beginning of the field

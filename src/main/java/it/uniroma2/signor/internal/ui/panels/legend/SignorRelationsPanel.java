@@ -4,41 +4,22 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
-import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.Edge;
-import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
-import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
-/**
- *
- * @author amministratore
- */
-import java.util.Properties;
-import java.util.Iterator;
-import java.util.ArrayList;
 import java.awt.*;
-import java.time.Instant;
-import java.util.Collection;
 import javax.swing.*;
 import static java.awt.Component.LEFT_ALIGNMENT;
-import java.util.HashMap;
 import java.util.Map;
 import org.cytoscape.model.CyEdge;
-import org.cytoscape.model.CyNode;
-import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
-import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyRow;
-import org.cytoscape.model.CyTableUtil;
 
 public class SignorRelationsPanel extends JPanel {
-    private SignorManager manager;
-    private JPanel relPanel;
+    private final SignorManager manager;
+    private final JPanel relPanel;
 
-    private EasyGBC gbc=new EasyGBC();
+    private final EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
     JScrollPane scrollPane;
@@ -49,19 +30,13 @@ public class SignorRelationsPanel extends JPanel {
         current_cynetwork_to_serch_into = manager.lastCyNetwork;
         JPanel RelationInfo = new JPanel();
         RelationInfo.setLayout(new GridBagLayout());
-        //RelationInfo.setLayout(new BorderLayout());
         RelationInfo.setBackground(Color.WHITE);
         {
             EasyGBC gbc1=new EasyGBC();
             relPanel = new JPanel();
             relPanel.setBackground(Color.WHITE);
-            //relPanel.setLayout(new GridBagLayout());
             RelationInfo.add(relPanel, gbc1.down().anchor("north").expandHoriz());
             RelationInfo.add(Box.createVerticalGlue(), gbc1.down().down().expandVert());
-            //RelationInfo.add(relPanel, BorderLayout.NORTH);
-//            mainPanel.add(filters, d.down().anchor("north").expandHoriz());
-//            mainPanel.add(createNodesPanel(), d.down().anchor("north").expandHoriz());
-//            mainPanel.add(Box.createVerticalGlue(), d.down().expandVert());
         }
         scrollPane = new JScrollPane(RelationInfo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -70,7 +45,6 @@ public class SignorRelationsPanel extends JPanel {
         add(scrollPane, gbc.down().anchor("east").expandBoth());
         revalidate();
         repaint();   
-        //createContent();
     }
     
     public void createContent(){

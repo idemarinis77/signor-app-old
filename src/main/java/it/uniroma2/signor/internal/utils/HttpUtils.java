@@ -1,35 +1,12 @@
 package it.uniroma2.signor.internal.utils;
-
-
-import org.cytoscape.io.util.StreamUtil;
-/*import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.NullNode;*/
 import java.io.*;
 import java.net.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
-import org.cytoscape.model.CyNetwork;
-
 import it.uniroma2.signor.internal.managers.SignorManager;
-import org.cytoscape.model.CyNode;
-import org.cytoscape.model.CyTable;
-public class HttpUtils {
-    private static final HttpClient httpClient = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
-            .build();
 
+public class HttpUtils {
     public static BufferedReader getHTTPSignor(String url, SignorManager manager) {
         URL trueURL;
         try {
@@ -72,34 +49,24 @@ public class HttpUtils {
         String newheader = String.join("\t", header);
         String strCurrentLine;
         ArrayList<String> results = new ArrayList<String>();
-//        // Create a map to save the nodes
-//        Map<String, CyNode> nodeMap = new HashMap<>();
-//        // Create a map to save the node names        
-//        Map<String, String> nodeNameMap = new HashMap<>();
+
         Boolean header_found = true;
         try {
             while ((strCurrentLine = br.readLine()) != null) {
-//                if (header_found){          
-                    //If shortest path search is requested, remove some fields
-                    if(shortestpath.equals(true)){
-                        String[] fields = strCurrentLine.split("\t");
-                        manager.utils.info(strCurrentLine);
-                        int fields_length = fields.length;
-                        String newfields = "";
-                        for (int i=0; i< fields_length; i++){
-                            if((i != (fields_length -1)) &&  (i!= (fields_length -3)) && (i!= (fields_length -4) ) && (i!= (fields_length -5) )){
-                                newfields = newfields+fields[i]+"\t";
-                            }
+                if(shortestpath.equals(true)){
+                    String[] fields = strCurrentLine.split("\t");
+                    manager.utils.info(strCurrentLine);
+                    int fields_length = fields.length;
+                    String newfields = "";
+                    for (int i=0; i< fields_length; i++){
+                        if((i != (fields_length -1)) &&  (i!= (fields_length -3)) && (i!= (fields_length -4) ) && (i!= (fields_length -5) )){
+                            newfields = newfields+fields[i]+"\t";
                         }
-                        results.add(newfields);
-                        continue;
                     }
-                    results.add(strCurrentLine);
-//                }
-//                else if (br.equals(newheader)) {
-//                    header_found = true;       
-//                }
-
+                    results.add(newfields);
+                    continue;
+                }
+                results.add(strCurrentLine);
             }
         }
         catch (Exception e){

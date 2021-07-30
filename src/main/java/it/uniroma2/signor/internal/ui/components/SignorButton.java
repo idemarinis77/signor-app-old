@@ -11,10 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
-/**
- *
- * @author amministratore
- */
+
 public class SignorButton extends JButton{
     public SignorButton(String label){
         super(label);

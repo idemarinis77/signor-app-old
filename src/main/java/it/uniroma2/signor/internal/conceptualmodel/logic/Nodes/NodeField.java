@@ -5,13 +5,8 @@
  */
 package it.uniroma2.signor.internal.conceptualmodel.logic.Nodes;
 import java.util.HashMap;
-/**
- *
- * @author amministratore
- */
+
 public class NodeField {
-//    public static final String NODEID = "ID";
-//    public static final String NODETYPE = "TYPE";
     public static final String ENTITY = "ENTITY";
     public static final String TYPE ="TYPE";
     public static final String ID = "ID";
@@ -62,19 +57,7 @@ public class NodeField {
     public static final String GENE_NAME = "GENE_NAME";
     public static final String FUNCTION = "FUNCTION";
     public static final String PATHWAYLISTADDINFO = "PATHWAYLIST";
-    //Information to build summary
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_COMPLEX = {"NAME", "SIG_ID", "DESCRIPTION", "FORMEDBY", "COMPLEXPORTAL_ID"};
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_CHEMICAL = {"NAME", "ENTITY_ALIAS", "ENTITY_DB_ID", "ALT_ID", "FORMULA", "IUPAC"};
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_FUSIONPROTEIN = {"NAME", "SIG_ID", "FP_DESCRIPTION", "FP_SEQUENCE", "IDS"};
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_PROTEINFAMILY = {"NAME", "SIG_ID", "PF_DESCRIPTION", "FORMEDBY"};
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_STIMULUS = {"NAME", "SIG_ID", "STIM_DESCRIPTION"};
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_PHENOTYPE = {"NAME", "SIG_ID", "PHE_DESCRIPTION"};
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_MIRNA = {"NAME", "MIRNA_DB_ID", "RNA_CENTRAL"};
-//    public static final String[] HEADER_ROOT_NODE_ADDINFO_PROTEIN = {"NAME", "GENE_NAME", "ENTITY_DB_ID", "FUNCTION", "ENTITY_ALIAS"};
-    
-//    public static final String[] ROOT_NODE_COMMONS_ADDINFO = {"NAME", "FORMEDBY", "DESCRIPTION"};
-    //Add a field to collect the list of PATHWAYS
-    
+
     
     public static final HashMap<String,Class<?>> NODEFIELDADDITIONAL= new HashMap(){
         {

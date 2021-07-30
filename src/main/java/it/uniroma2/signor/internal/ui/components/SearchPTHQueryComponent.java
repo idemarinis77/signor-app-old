@@ -1,31 +1,17 @@
 package it.uniroma2.signor.internal.ui.components;
 
-import org.cytoscape.application.swing.search.NetworkSearchTaskFactory;
 import org.cytoscape.util.swing.LookAndFeelUtil;
-
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-
-import static javax.swing.GroupLayout.Alignment.CENTER;
-import static javax.swing.GroupLayout.DEFAULT_SIZE;
-import static javax.swing.GroupLayout.PREFERRED_SIZE;
-import org.cytoscape.util.swing.IconManager;
-import org.cytoscape.util.swing.TextIcon;
-import it.uniroma2.signor.internal.ConfigResources;
-import it.uniroma2.signor.internal.utils.IconUtils;
 import it.uniroma2.signor.internal.managers.SignorManager;
 
 public class SearchPTHQueryComponent extends JTextField {
     private static final long serialVersionUID = 1L;
-    private String DEF_SEARCH_TEXT = "Select pathway from list →";    
+    private final String DEF_SEARCH_TEXT = "Select pathway from list →";    
     final int vgap = 1;
     final int hgap = 5;    
     Color msgColor;       
-    private SignorManager manager;
+    private final SignorManager manager;
 
     public SearchPTHQueryComponent(SignorManager manager) {
         super();
@@ -39,8 +25,6 @@ public class SearchPTHQueryComponent extends JTextField {
         setMinimumSize(getPreferredSize());
         setBorder(BorderFactory.createEmptyBorder(vgap, hgap, vgap, hgap));
         setFont(getFont().deriveFont(LookAndFeelUtil.getSmallFontSize()));        
- 
-        //setToolTipText(tooltip);
         requestFocusInWindow();
     }
 

@@ -2,47 +2,27 @@ package it.uniroma2.signor.internal;
 
 
 import org.cytoscape.application.swing.search.NetworkSearchTaskFactory;
-import org.cytoscape.model.CyNetworkManager;
-import org.cytoscape.model.CyNetworkFactory;
-import org.cytoscape.view.model.CyNetworkViewManager;
-import org.cytoscape.view.model.CyNetworkViewFactory;
-import org.cytoscape.work.TaskFactory;
 import org.cytoscape.service.util.AbstractCyActivator;
 import org.cytoscape.service.util.CyServiceRegistrar;
-import org.cytoscape.session.CyNetworkNaming;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.BundleContext;
-
-import org.cytoscape.task.read.LoadVizmapFileTaskFactory;
-import org.cytoscape.task.visualize.ApplyVisualStyleTaskFactory;
 import java.util.Properties;
-import static org.cytoscape.work.ServiceProperties.*;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericQueryFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
-import it.uniroma2.signor.internal.task.query.factories.SignorInteractomeFactory;
-
 import it.uniroma2.signor.internal.task.query.factories.SignorInteractomeQueryFactory;
 import it.uniroma2.signor.internal.task.query.factories.SignorInteractomePTMQueryFactory;
-import it.uniroma2.signor.internal.Config;
 import org.cytoscape.application.CyApplicationManager;
-import org.cytoscape.view.vizmap.VisualMappingManager;
-import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
-
 import org.cytoscape.application.swing.CySwingApplication;
-import org.cytoscape.application.swing.CytoPanelComponent;
-import org.cytoscape.application.swing.CyAction;
-import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
-import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendAction;
 import it.uniroma2.signor.internal.utils.DataUtils;
-import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 
 public class CyActivator extends AbstractCyActivator {
 	public CyActivator() {
 		super();
 	}
+        @Override
 	public void start(BundleContext bc) {
             boolean haveGUI = true;
             ServiceReference ref = bc.getServiceReference(CySwingApplication.class.getName());

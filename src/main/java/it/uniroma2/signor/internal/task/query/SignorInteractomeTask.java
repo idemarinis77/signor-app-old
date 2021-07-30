@@ -4,46 +4,24 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.task.query;
-
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
-import it.uniroma2.signor.internal.event.SignorNetworkCreatedEvent;
 import it.uniroma2.signor.internal.utils.HttpUtils;
 import it.uniroma2.signor.internal.view.NetworkView;
 import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.net.URI;
-import java.net.URL;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.File;
-import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkManager;
-
-import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyTableFactory;
 import org.cytoscape.model.CyTableManager;
-import org.cytoscape.view.layout.CyLayoutAlgorithm;
-import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
-import org.cytoscape.view.model.CyNetworkView;
-import org.cytoscape.view.model.CyNetworkViewFactory;
-import org.cytoscape.view.model.View;
 import org.cytoscape.work.AbstractTask;
-import org.cytoscape.work.TaskIterator;
 import org.cytoscape.work.TaskMonitor;
-import org.cytoscape.work.TunableSetter;
 
-/**
- *
- * @author amministratore
- */
 
 public class SignorInteractomeTask extends AbstractTask {
     SignorManager manager;
@@ -55,6 +33,8 @@ public class SignorInteractomeTask extends AbstractTask {
         this.network = network;
         this.ptm_interactome = ptm_interactome;
     }
+    
+    @Override
     public void run(TaskMonitor monitor) {        
         monitor.setTitle("Loading all Signor Interactome ....  please wait");    
         try {
@@ -88,38 +68,15 @@ public class SignorInteractomeTask extends AbstractTask {
                 //Populate tables and create MyNetwork
                 CyNetworkManager netMan = manager.utils.getService(CyNetworkManager.class);
                 cynet = manager.createNetworkFromLine(results, ptm_interactome);
-                network.setNetwork(cynet);
-                
-                netMan.addNetwork(cynet);            
-//                CyNetworkViewFactory cnvf = manager.utils.getService(CyNetworkViewFactory.class);            
-//                CyNetworkView ntwView = cnvf.createNetworkView(cynet);            
-//
-//                //Apply style
-//                manager.signorStyleManager.applyStyle(ntwView);
-//                manager.signorStyleManager.installView(ntwView);         
-                
-                
+                network.setNetwork(cynet);                
+                netMan.addNetwork(cynet);         
                 Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableNode.buildPTMTable(manager, "PTMNode", cynet);
                 Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableEdge.buildPTMTable(manager, "PTMEdge", cynet);
                 Table NetworkTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
-                NetworkTable.buildDefaultTable(manager, "Network", cynet);        
-//                //Populate my logic netowrk
-//                network.setNetwork(cynet);
-//                DAVERIFICARE COME FARE
+                NetworkTable.buildDefaultTable(manager, "Network", cynet);   
                 network.writeSearchNetwork();     
-//                if (cancelled) {
-//                    manager.utils.getService(CyNetworkManager.class).destroyNetwork(cynet);
-//                }
-//
-//                if (cancelled) {
-//                    destroyNetwork(manager, network);
-//                    return;
-//                }
-
-//                manager.utils.showResultsPanel();            
-//                manager.utils.fireEvent(new SignorNetworkCreatedEvent(manager, network));
             }
         }
             catch (Exception e){

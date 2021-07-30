@@ -3,41 +3,21 @@ package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.utils.IconUtils;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
-import java.awt.image.BufferedImage;
-
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.cytoscape.util.swing.IconManager;
-
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-public class CollapsablePanel extends JPanel {
-//	private static String RIGHT_ARROW = "\uF0DA";
-//      private static String RIGHT_ARROW = "+";
-//	private static String DOWN_ARROW = "-";
-//      private static String DOWN_ARROW = "\uF0D7";
-        
+public class CollapsablePanel extends JPanel {        
         private static final ImageIcon RIGHT_ARROW = IconUtils.createImageIcon("/images/right_arrow.png");
         private static final ImageIcon DOWN_ARROW = IconUtils.createImageIcon("/images/down_arrow.png");
 

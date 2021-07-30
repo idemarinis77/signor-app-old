@@ -5,10 +5,6 @@
  */
 package it.uniroma2.signor.internal.view;
 
-/**
- *
- * @author amministratore
- */
 public class NetworkView {
         public enum Type {
         DEFAULT("DEFAULT", "SIGNOR - Default"),

@@ -7,10 +7,7 @@ package it.uniroma2.signor.internal.conceptualmodel.logic.Pathway;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-/**
- *
- * @author amministratore
- */
+
 public class PathwayField {
         public static final String SIGNORPTH_SIG_ID = "sig_id";
         public static final String SIGNORPTH_PATH_NAME = "path_name";

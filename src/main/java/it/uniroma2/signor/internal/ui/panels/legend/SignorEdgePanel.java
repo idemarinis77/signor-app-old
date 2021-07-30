@@ -6,45 +6,26 @@
 package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.utils.EasyGBC;
-
-/**
- *
- * @author amministratore
- */
-import java.util.Properties;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.awt.*;
-import java.time.Instant;
 import java.util.Collection;
 import javax.swing.*;
-
-
 import org.cytoscape.model.CyEdge;
-import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
-import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
-import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
-import it.uniroma2.signor.internal.ui.components.SignorButton;
-import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
-import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import static java.awt.Component.LEFT_ALIGNMENT;
-import java.awt.image.BufferedImage;
-import it.uniroma2.signor.internal.ui.components.HelpButton;
+import it.uniroma2.signor.internal.ui.components.SignorLabelMore;
 import java.util.HashMap;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyNode;
-import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableUtil;
 import org.cytoscape.util.swing.OpenBrowser;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 
 public class SignorEdgePanel extends JPanel {
-    private SignorManager manager;
-    private JPanel edgesPanel;
-    private EasyGBC gbc=new EasyGBC();
+    private final SignorManager manager;
+    private final JPanel edgesPanel;
+    private final EasyGBC gbc=new EasyGBC();
     private static Font iconFont;
     public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
@@ -58,7 +39,6 @@ public class SignorEdgePanel extends JPanel {
         edgeInfo.setLayout(new BorderLayout());
         edgeInfo.setBackground(Color.WHITE);
         {
-            EasyGBC gbc1=new EasyGBC();
             edgesPanel = new JPanel();
             edgesPanel.setBackground(Color.WHITE);
             edgesPanel.setLayout(new GridBagLayout());
@@ -93,7 +73,7 @@ public class SignorEdgePanel extends JPanel {
                 Iterator iterv = summary.values().iterator();
 
                 edgeinfo.setLayout(new GridBagLayout());
-                edgeinfo.add(new SignorLabelStyledBold("SOURCE - TARGET"), gbc.down());
+                edgeinfo.add(new SignorLabelStyledBold("SOURCE - TARGET  "), gbc.down());
                 edgeinfo.add(new JLabel(edge.source.toString()+"-"+edge.target.toString()), gbc.right());
                 while(iter.hasNext()){
                     String key = iter.next().toString();
@@ -111,8 +91,7 @@ public class SignorEdgePanel extends JPanel {
                         SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
                         edgeinfo.add(id, gbc.down());
                         if(value.length() > 20 && !key.equals(EdgeField.MECHANISM))
-//                            edgeinfo.add(new HelpButton(manager, value), gbc.right());
-                              edgeinfo.add(new JLabel(value.substring(0, 10)), gbc.right());
+                              edgeinfo.add(new SignorLabelMore(manager, value.substring(0, 10)+" ... [more]", value), gbc.right());
                         else edgeinfo.add(new JLabel(value), gbc.right());
                     }
                 }    

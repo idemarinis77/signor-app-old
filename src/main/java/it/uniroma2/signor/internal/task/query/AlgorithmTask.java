@@ -20,10 +20,6 @@ import org.cytoscape.work.TaskIterator;
 import org.cytoscape.work.TaskMonitor;
 import org.cytoscape.work.TunableSetter;
 
-/**
- *
- * @author amministratore
- */
 
 public class AlgorithmTask extends AbstractTask {
     SignorManager manager;
@@ -33,16 +29,15 @@ public class AlgorithmTask extends AbstractTask {
         this.manager = manager;
         this.cyview = ntwView;
     }
-    public void run(TaskMonitor monitor) {
-        
-            monitor.setTitle("Algorithm Signor Network");            
-            
-            CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
-           if (layoutManager == null )manager.utils.info("Il layoutManager è nullo");
+    @Override
+    public void run(TaskMonitor monitor) {        
+        monitor.setTitle("Algorithm Signor Network");          
+        CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
+        if (layoutManager == null )manager.utils.info("Il layoutManager è nullo");
             CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
-            if (alg == null) alg = layoutManager.getLayout("force-directed");
+        if (alg == null) alg = layoutManager.getLayout("force-directed");
             Object context = alg.getDefaultLayoutContext();            
-    try {
+        try {
             TunableSetter setter = manager.utils.getService(TunableSetter.class);
             manager.utils.info(setter.toString());
             Map<String, Object> layoutArgs = new HashMap<>();
@@ -53,7 +48,6 @@ public class AlgorithmTask extends AbstractTask {
             manager.utils.info(cyview.toString());
             Set<View<CyNode>> nodeViews = new HashSet<>(cyview.getNodeViews());
             
-            if (nodeViews == null ) monitor.showMessage(TaskMonitor.Level.INFO, "nodeViews nullo");
             TaskIterator taskIterator = alg.createTaskIterator(cyview, context, nodeViews, null);
             insertTasksAfterCurrentTask(taskIterator);  
         }

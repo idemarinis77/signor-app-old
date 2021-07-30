@@ -6,35 +6,23 @@
 package it.uniroma2.signor.internal.ui.components;
 import javax.swing.*;
 import java.awt.*;
-
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.EasyGBC;
-
 import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import java.util.HashMap;
-import java.util.ArrayList;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 
-/**
- *
- * @author amministratore
- */
 public class ChooseSearchoption extends JPanel implements ChangeListener{
-    private SignorManager manager;
-
-    private EasyGBC egb=new EasyGBC();
-    private ButtonGroup btn = new ButtonGroup();
+    private final ButtonGroup btn = new ButtonGroup();
     //private JLabel specie = new JLabel("Choose specie");
-    private JComboBox organism = new JComboBox(Config.SPECIESLIST.keySet().toArray());
-    private JRadioButton singlebutton = new JRadioButton("single", true);
-    private JRadioButton allbutton = new JRadioButton("all", true);
-    private JRadioButton connbutton= new JRadioButton("connect", false);
-    private JRadioButton shortpath= new JRadioButton("shortest path", false);
-    private JRadioButton inclfirstnei = new JRadioButton("include bridge proteins query", false);
+    private final JComboBox organism = new JComboBox(Config.SPECIESLIST.keySet().toArray());
+    private final JRadioButton singlebutton = new JRadioButton("single", true);
+    private final JRadioButton allbutton = new JRadioButton("all", true);
+    private final JRadioButton connbutton= new JRadioButton("connect", false);
+    private final JRadioButton shortpath= new JRadioButton("shortest path", false);
+    private final JRadioButton inclfirstnei = new JRadioButton("include bridge proteins query", false);
     
     public ChooseSearchoption(SignorManager manager){
         super(new GridBagLayout());
@@ -59,9 +47,7 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
         Box species = Box.createVerticalBox();
         species.add(organism);
         species.setBorder(BorderFactory.createTitledBorder("Species"));
-        add(species, layoutHelper.down());
-        
-        this.manager=manager;    
+        add(species, layoutHelper.down());        
     }
     
     public void addListener(Runnable listener) {

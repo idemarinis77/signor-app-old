@@ -5,26 +5,16 @@
  */
 package it.uniroma2.signor.internal.task.query.factories;
 import it.uniroma2.signor.internal.task.query.SignorPanelTask;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import org.cytoscape.work.AbstractTaskFactory;
 import org.cytoscape.work.TaskIterator;
-import it.uniroma2.signor.internal.Config;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Properties;
-import org.cytoscape.application.CyApplicationManager;
 import static org.cytoscape.work.ServiceProperties.IN_MENU_BAR;
 import static org.cytoscape.work.ServiceProperties.MENU_GRAVITY;
 import static org.cytoscape.work.ServiceProperties.PREFERRED_MENU;
 import static org.cytoscape.work.ServiceProperties.TITLE;
 import org.cytoscape.work.TaskFactory;
 
-/**
- *
- * @author amministratore
- */
 public class SignorPanelFactory extends AbstractTaskFactory{
     final SignorManager manager;
     boolean show = false;
@@ -33,9 +23,10 @@ public class SignorPanelFactory extends AbstractTaskFactory{
         this.manager = manager;
     }
     
+    @Override
     public TaskIterator createTaskIterator() {              
         return new TaskIterator(new SignorPanelTask(manager, this, show));
-   }  
+    }  
 
 
     public void reregister() {
@@ -56,6 +47,8 @@ public class SignorPanelFactory extends AbstractTaskFactory{
         manager.utils.registerService(this, TaskFactory.class, props);
 
     }
+    
+    @Override
     public boolean isReady() {
         if (!show) return true;
         return manager.presentationManager.getCurrentNetwork() !=null;

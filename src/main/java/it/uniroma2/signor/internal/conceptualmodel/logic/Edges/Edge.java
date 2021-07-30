@@ -5,11 +5,8 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyRow;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Element;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
-//import it.uniroma2.signor.internal.conceptualmodel.structures.EdgeFields;
-
 import java.lang.ref.WeakReference;
 import java.util.*;
 
@@ -52,7 +49,6 @@ public class Edge implements Element {
        
     }
 
-    //public abstract Map<Node, List<Feature>> getFeatures() ;
     public HashMap<String,String> getSummary(){
         return this.summary;
     }

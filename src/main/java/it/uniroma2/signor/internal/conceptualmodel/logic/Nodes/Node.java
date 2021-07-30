@@ -3,13 +3,10 @@ package it.uniroma2.signor.internal.conceptualmodel.logic.Nodes;
 
 import org.cytoscape.model.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Element;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.Edge;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
-import java.lang.ref.WeakReference;
 import java.util.*;
-import java.util.stream.Collectors;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.ConfigPathway;
@@ -17,14 +14,13 @@ import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import java.io.BufferedReader;
 
 import it.uniroma2.signor.internal.utils.HttpUtils;
-import static java.util.stream.Collectors.toList;
 
 public class Node implements Element {
 
     private final Network network;
     public final CyNode cyNode;
     public final CyRow nodeRow;
-    private HashMap<String,String> summary= new HashMap<String,String>();
+    private final HashMap<String,String> summary= new HashMap<String,String>();
 
     public Node(final Network network, final CyNode cyNode) {
         this(network, cyNode, network.getCyNetwork().getRow(cyNode));
@@ -73,7 +69,6 @@ public class Node implements Element {
                 }
             }
             this.summary.put(NodeField.PATHWAYLISTADDINFO, pathway_found_for_node);     
-            String typeOfNode = this.summary.get(NodeField.TYPE);
             String id = this.summary.get(NodeField.ID);
             //Node rootNodeNet = nodes.get(rootNode);            
 //            ConfigResources.WSSearchoption.ENTITYINFOSEARCH
@@ -120,6 +115,7 @@ public class Node implements Element {
     public boolean isSelected() {
         return nodeRow.get(CyNetwork.SELECTED, Boolean.class);
     } 
+    @Override
     public Network getNetwork() {
         return this.network;
     }

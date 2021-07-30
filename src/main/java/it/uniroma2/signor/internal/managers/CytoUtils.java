@@ -1,10 +1,6 @@
 package it.uniroma2.signor.internal.managers;
 
 import org.apache.log4j.Logger;
-import org.cytoscape.application.CyUserLog;
-
-/*import org.cytoscape.command.AvailableCommands;
-import org.cytoscape.command.CommandExecutorTaskFactory;*/
 import org.cytoscape.event.CyEvent;
 import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.property.CyProperty;
@@ -16,10 +12,7 @@ import org.cytoscape.work.TaskObserver;
 import org.cytoscape.application.CyUserLog;
 import it.uniroma2.signor.internal.ui.panels.legend.SignorLegendPanel;
 import it.uniroma2.signor.internal.task.query.factories.SignorPanelFactory;
-
-
 import javax.swing.*;
-import java.util.Map;
 import java.util.Properties;
 
 public class CytoUtils {
@@ -28,7 +21,6 @@ public class CytoUtils {
     final Logger logger;
     final TaskManager<?, ?> dialogTaskManager;
     final SynchronousTaskManager<?> synchronousTaskManager;
-    //final CommandExecutorTaskFactory commandExecutorTaskFactory;
     SignorPanelFactory signorPanelFactory;
     SignorLegendPanel signorLegendPanel;
 
@@ -38,8 +30,6 @@ public class CytoUtils {
         // Get our task managers
         this.dialogTaskManager = registrar.getService(TaskManager.class);
         this.synchronousTaskManager = registrar.getService(SynchronousTaskManager.class);
-
-       // this.commandExecutorTaskFactory = registrar.getService(CommandExecutorTaskFactory.class);
         this.cyEventHelper = registrar.getService(CyEventHelper.class);
     }
 
@@ -70,12 +60,6 @@ public class CytoUtils {
             dialogTaskManager.execute(iterator, observer);
         }
     }
-
-   /* public void executeCommand(String namespace, String command,
-                               Map<String, Object> args, TaskObserver observer) {
-        TaskIterator ti = commandExecutorTaskFactory.createTaskIterator(namespace, command, args, observer);
-        execute(ti, true);
-    }*/
 
     public void info(String info) {
         logger.info(info);
@@ -119,14 +103,6 @@ public class CytoUtils {
         }
     }
 
- /*   public boolean haveEnhancedGraphics() {
-        return getService(AvailableCommands.class).getNamespaces().contains("enhancedGraphics");
-    }
-
-    public ShowDetailPanelTaskFactory getShowDetailPanelTaskFactory() {
-        return detailPanelTaskFactory;
-    }
-*/
     public <T> T getService(Class<? extends T> clazz) {
         return registrar.getService(clazz);
     }

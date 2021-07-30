@@ -10,17 +10,9 @@ import java.util.*;
 import org.cytoscape.model.CyRow;
 import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.managers.SignorManager;
-/**
- *
- * @author amministratore
- */
+
 public class NetworkSearch {
-//    private String type;
-//    
-//    public NetworkSearch(String type){
-//        this.type = type;        
-//    }
-//    
+ 
     public static HashMap<String, Object> buildSearch(String query, String organism, String type, Boolean include_f_n){
         //SINGLE
         //ALL

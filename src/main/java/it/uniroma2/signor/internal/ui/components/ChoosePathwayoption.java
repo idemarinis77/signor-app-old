@@ -9,44 +9,27 @@ import java.awt.*;
 import java.util.Arrays;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.EasyGBC;
-
 import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ConfigPathway;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.utils.HttpUtils;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
-import it.uniroma2.signor.internal.task.query.SignorPathwayResultTask;
-import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
-import javax.swing.event.ChangeEvent;
-
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
-import java.util.stream.Collectors;
-import javax.swing.event.ChangeListener;
-import org.cytoscape.work.TaskFactory;
 
-        
-/**
- *
- * @author amministratore
- */
 public class ChoosePathwayoption extends JPanel {
-    private SignorManager manager;    
-    private EasyGBC egb=new EasyGBC();
+    private final SignorManager manager;    
     private JComboBox pathway;
     private JComboBox disease;
     private JComboBox tumor;
     private JComboBox covid;
-    private JButton clear= new JButton("Clear");
-    private JButton select= new JButton("Select");
+    private final JButton clear= new JButton("Clear");
+    private final JButton select= new JButton("Select");
     EasyGBC layoutHelper = new EasyGBC().insets(10, 5, 5, 5);
-    private HashMap<String,String> pathid_desc = new HashMap();
+    private final HashMap<String,String> pathid_desc = new HashMap();
     
     public ChoosePathwayoption(SignorManager manager){
         super(new GridBagLayout());        
@@ -79,7 +62,6 @@ public class ChoosePathwayoption extends JPanel {
                 tumor_list.put(attributes[0], attributes[1]);
             }
         }
-        //Object[] pathlist = ConfigPathway.PathwayList.values().toArray();
         Object[] pathlist = pathway_list.values().toArray();
         Arrays.sort(pathlist);
         Object[] pathlist2 = Arrays.copyOf(pathlist, pathlist.length + 1);
@@ -87,7 +69,6 @@ public class ChoosePathwayoption extends JPanel {
         System.arraycopy(pathlist, 0, pathlist2, 1, pathlist.length);
         pathway = new JComboBox(pathlist2);
         
-//        Object[] pathdeslist = ConfigPathway.PathwayDiseaseList.values().toArray();
         Object[] pathdeslist = disease_list.values().toArray();
         Arrays.sort(pathdeslist);
         Object[] pathdeslist2 = Arrays.copyOf(pathdeslist, pathdeslist.length + 1);
@@ -95,7 +76,6 @@ public class ChoosePathwayoption extends JPanel {
         System.arraycopy(pathdeslist, 0, pathdeslist2, 1, pathdeslist.length);
         disease = new JComboBox(pathdeslist2);
         
-//        Object[] pathtumlist = ConfigPathway.PathwayTumorList.values().toArray();
         Object[] pathtumlist = tumor_list.values().toArray();
         Arrays.sort(pathtumlist);
         Object[] pathtumlist2 = Arrays.copyOf(pathtumlist, pathtumlist.length + 1);

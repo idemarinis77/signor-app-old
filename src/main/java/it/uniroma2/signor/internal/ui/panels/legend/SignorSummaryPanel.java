@@ -8,80 +8,51 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.NodeField;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.Config;
-import it.uniroma2.signor.internal.ConfigPathway;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import it.uniroma2.signor.internal.ui.components.SignorButton;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
-import it.uniroma2.signor.internal.ui.components.SignorPanelRow;
 import it.uniroma2.signor.internal.task.query.factories.SignorPathwayQueryFactory;
-import it.uniroma2.signor.internal.ui.components.HelpButton;
+import it.uniroma2.signor.internal.ui.components.SignorLabelMore;
 import it.uniroma2.signor.internal.utils.HttpUtils;
-/**
- *
- * @author amministratore
- */
-import java.util.Properties;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.awt.*;
-import java.time.Instant;
-import java.util.Collection;
 import javax.swing.*;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.io.BufferedReader;
 import java.util.HashMap;
 import org.cytoscape.model.CyNode;
-import org.cytoscape.model.events.SelectedNodesAndEdgesEvent;
-import org.cytoscape.model.events.SelectedNodesAndEdgesListener;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyRow;
-import org.cytoscape.model.CyTableUtil;
 
 
 public class SignorSummaryPanel extends JPanel {
-    private SignorManager manager;
-    private JPanel summPanel;
+    private final SignorManager manager;
+    private final JPanel summPanel;
     private static Font iconFont;
 
-    private EasyGBC gbc=new EasyGBC();
+    private final EasyGBC gbc=new EasyGBC();
     public Boolean selectionRunning= false;
-    public CyNetwork current_cynetwork_to_serch_into;
-    private CyNode rootNode;
-    /*private static final int SIDES = 2;
-    private static final int SIDE_LENGTH = 60;
-    private static final int GAP = 1;
-    private static final Color BG = Color.WHITE;
-    private static final Color CELL_COLOR = Color.WHITE;*/
+    public CyNetwork current_cynetwork_to_serch_into;  
     private HashMap<String,String> summary;
     Node networkRootNode;
-    //Dimension prefSize = new Dimension(SIDE_LENGTH, SIDE_LENGTH);     
     
     public SignorSummaryPanel(SignorManager manager){
         setLayout(new GridBagLayout());
-        this.manager = manager; 
-
-        current_cynetwork_to_serch_into = manager.lastCyNetwork;
-       /* setBackground(BG);
-        setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
-        setLayout(new GridLayout(0, 2, GAP, GAP));*/
-        
+        this.manager = manager;
+        current_cynetwork_to_serch_into = manager.lastCyNetwork; 
         
         JPanel SummaryInfo = new JPanel();
         SummaryInfo.setLayout(new GridBagLayout());
-        //SummaryInfo.setLayout(new BorderLayout());
+
         SummaryInfo.setBackground(Color.WHITE);
         {
             EasyGBC gbc1=new EasyGBC();
             summPanel = new JPanel();
             summPanel.setBackground(Color.WHITE);
             SummaryInfo.add(summPanel, gbc1.down().anchor("north").expandHoriz());
-            SummaryInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
-            //summPanel.setLayout(new GridBagLayout());
-            //SummaryInfo.add(summPanel, BorderLayout.NORTH);
-            //NodeInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());
+            SummaryInfo.add(Box.createVerticalGlue(), gbc1.down().expandVert());           
         }
         JScrollPane scrollPane = new JScrollPane(SummaryInfo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -90,19 +61,14 @@ public class SignorSummaryPanel extends JPanel {
         add(scrollPane, gbc.down().anchor("east").expandBoth());
         revalidate();
         repaint();   
-        //createContent();
     }
     
     public void createContent(){
         try {
             if(manager.presentationManager.signorNetMap.containsKey(current_cynetwork_to_serch_into)){
-               rootNode = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).rootNode;
                networkRootNode = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).getNetworkRootNode();
             }
-            //summary = networkRootNode.Summary();
             summary = networkRootNode.getSummary();
-            //SignorPanelRow listresults = new SignorPanelRow(summary.size()+1, 2, manager);
-//            Integer relations = manager.lastNetwork.numberOfEdges();
             Iterator iter = summary.keySet().iterator();
             Iterator iterv = summary.values().iterator();
             Integer it =0;
@@ -130,7 +96,7 @@ public class SignorSummaryPanel extends JPanel {
                     else {
                         summary_info_but_path.add(new SignorLabelStyledBold(key), gbc.position(0, it));     
                         if ( value.length() > 20 ) 
-                             summary_info_but_path.add(new HelpButton(manager, value), gbc.right());
+                             summary_info_but_path.add(new SignorLabelMore(manager, value.substring(0, 10)+" ... [more]", value), gbc.right());
                         else summary_info_but_path.add(new JLabel(value), gbc.right());
                         it++;
                     }

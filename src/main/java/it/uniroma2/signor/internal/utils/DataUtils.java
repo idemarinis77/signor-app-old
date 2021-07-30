@@ -10,17 +10,11 @@ import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
-import it.uniroma2.signor.internal.utils.TableUtil;
 import it.uniroma2.signor.internal.task.query.factories.AlgorithmFactory;
-import it.uniroma2.signor.internal.task.query.AlgorithmTask;
 import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.PTMEdgeField;
-import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
 import java.util.List;
-import org.cytoscape.event.CyEventHelper;
 import org.cytoscape.model.CyEdge;
-import org.cytoscape.model.CyNetworkTableManager;
-import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTableManager;
@@ -28,24 +22,12 @@ import org.cytoscape.task.hide.HideTaskFactory;
 import org.cytoscape.task.hide.UnHideTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.application.CyApplicationManager;
-import org.cytoscape.view.model.CyNetworkViewManager;
-import org.cytoscape.view.presentation.property.BasicVisualLexicon;
-import java.awt.Color;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.Collection;
 import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyTableFactory;
 import org.cytoscape.model.subnetwork.CySubNetwork;
 
 
-
-/**
- *
- * @author amministratore
- */
 public class DataUtils {
     
     public static Boolean isSignorNetwork(CyNetwork cyNetwork){
@@ -55,7 +37,6 @@ public class DataUtils {
                 Boolean column_connectsearch = TableUtil.ifColumnIfExist(cyNetwork.getDefaultNetworkTable(), Config.NAMESPACE, NetworkField.CONNECTSEARCH);
                 if(name_starts_with && column_connectsearch)
                     return true;
-                    //            return cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(Config.NTWPREFIX);
             }
         }
         catch (Exception e){
@@ -170,8 +151,6 @@ public class DataUtils {
                    AlgorithmFactory algfactory = new AlgorithmFactory(networkView, manager);            
                    manager.utils.execute(algfactory.createTaskIterator());
                }
-//               writeNetworkPTMInfo(manager, networksignor, true);
-//               networksignor.isPTMNetwork= true;
                networksignor.ptm_already_loaded = false;
                if(!interactome)
                   networksignor.parameters.replace(NetworkField.PTMLOADED, true); 
@@ -213,16 +192,13 @@ public class DataUtils {
             
             currentnet.removeNodes(networksignor.PTMnodes.keySet());
             currentnet.removeEdges(networksignor.PTMedges.keySet());
-//            if(!interactome){
-                UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
-                manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
-//            }
+            UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
+            manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
             networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.DEFAULT.toString());
             manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.DEFAULT);   
             currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, NetworkField.VIEW, NetworkView.Type.DEFAULT.toString());
             networksignor.PTMnodes.clear();
             networksignor.PTMedges.clear();
-//            writeNetworkPTMInfo(manager, networksignor, false);
         }
         catch (Exception e) {
             manager.utils.info("DataUtils ShowDefaultView() "+e.toString());            

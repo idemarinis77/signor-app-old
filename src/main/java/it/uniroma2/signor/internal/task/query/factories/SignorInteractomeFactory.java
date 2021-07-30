@@ -4,13 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.task.query.factories;
-import org.cytoscape.application.swing.search.AbstractNetworkSearchTaskFactory;
 import org.cytoscape.work.TaskIterator;
-import javax.swing.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.swing.Icon;
-
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
@@ -18,10 +12,6 @@ import it.uniroma2.signor.internal.task.query.SignorInteractomeTask;
 import java.util.HashMap;
 import org.cytoscape.work.AbstractTaskFactory;
 
-/**
- *
- * @author amministratore
- */
 public class SignorInteractomeFactory extends AbstractTaskFactory{
 
     
@@ -32,16 +22,12 @@ public class SignorInteractomeFactory extends AbstractTaskFactory{
     public SignorInteractomeFactory(SignorManager manager, Boolean ptm_interactome) {
          this.manager = manager;        
          this.ptm_interactome = ptm_interactome;
-//         parameters.put(NetworkField.QUERY, Config.INTERACTOMENAME);
     }
    
-
     public TaskIterator createTaskIterator() {            
             parameters =NetworkSearch.buildSearch(Config.INTERACTOMENAME, "Homo Sapiens", "", false);
             return new TaskIterator(new SignorInteractomeTask(new Network(manager, parameters), ptm_interactome)); 
         
-    }
-
-   
+    }  
 
 }

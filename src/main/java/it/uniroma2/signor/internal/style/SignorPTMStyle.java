@@ -8,10 +8,6 @@ package it.uniroma2.signor.internal.style;
 import it.uniroma2.signor.internal.view.NetworkView;
 import it.uniroma2.signor.internal.managers.SignorManager;
 
-/**
- *
- * @author amministratore
- */
 public class SignorPTMStyle extends Style {
     public final static NetworkView.Type type = NetworkView.Type.DEFAULT;
     private SignorManager manager;

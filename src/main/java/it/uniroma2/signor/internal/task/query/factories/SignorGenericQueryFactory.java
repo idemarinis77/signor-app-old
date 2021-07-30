@@ -11,7 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.Icon;
 
-import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.utils.IconUtils;
@@ -23,10 +22,6 @@ import it.uniroma2.signor.internal.task.query.SignorGenericQueryTask;
 import it.uniroma2.signor.internal.ui.components.ChooseSearchoption;
 import java.util.HashMap;
 
-/**
- *
- * @author amministratore
- */
 public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory {
 
     static URL SIGNOR_URL;
@@ -43,20 +38,21 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
     }
     SignorManager manager;
     private SearchQueryComponent queryComponent = null;
-    private ChooseSearchoption chooseSearchoption = new ChooseSearchoption(manager); 
+    private final ChooseSearchoption chooseSearchoption = new ChooseSearchoption(manager); 
     
     
     public SignorGenericQueryFactory(SignorManager manager) {
          super(SIGNOR_ID, SIGNOR_NAME,SIGNOR_DESC, SIGNOR_ICON, SIGNOR_URL);
          this.manager = manager;
     }
+    
+    @Override
     public boolean isReady() {
         return queryComponent.getQueryText() != null && queryComponent.getQueryText().length() > 0;
     }
 
     public TaskIterator createTaskIterator() {
         String terms = queryComponent.getQueryText();
-//        String terms_no_space = terms.replace(" ", "%2C").trim();
         String terms_for_all = terms.replace("\n", " ").trim();
         
         HashMap<String, Object> parameters;

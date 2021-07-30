@@ -4,21 +4,8 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.function.Function;
-import java.util.function.BiFunction;
-import java.net.URL;
-import java.util.Map;
-import org.w3c.dom.*;
-import javax.xml.parsers.*;
-/**
- *
- * @author amministratore
- */
+
 public class Config {
  
     public static final String NAMESPACE = "SIGNOR";
