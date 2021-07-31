@@ -21,6 +21,7 @@ public class Network {
     private final Map<CyNode, Node> searched_nodes = new HashMap<>();
     private final Map<CyEdge, Edge> edges = new HashMap<>();
 
+    private String entityNotFound="";
     private final Map<NodeCouple, List<CyEdge>> coupleToDefaultEdges = new HashMap<>();
     
     public  Map<CyNode, Long> PTMnodes = new HashMap<>();
@@ -135,4 +136,12 @@ public class Network {
             manager.utils.error(e.toString());
         }
     }    
+    
+    public void setEntityNotFound(String text){
+        this.entityNotFound=text;
+    }
+    
+    public String getEntityNotFound(){
+        return entityNotFound;
+    }
 }

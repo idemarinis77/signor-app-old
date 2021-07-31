@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 
@@ -20,7 +21,7 @@ public class SignorLabelMore extends JLabel{
     public SignorLabelMore(SignorManager manager, String label, String text) {
         super(label);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        this.setForeground(Color.BLUE);
+        this.setForeground(Color.decode("#6600FF"));
         message = new HTMLLabel(text);
         message.setSize(new Dimension(15, 15));
         message.setPreferredSize(new Dimension(300, message.getPreferredSize().height));

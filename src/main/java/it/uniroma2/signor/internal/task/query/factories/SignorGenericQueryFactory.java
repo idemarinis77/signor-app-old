@@ -53,7 +53,8 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
 
     public TaskIterator createTaskIterator() {
         String terms = queryComponent.getQueryText();
-        String terms_for_all = terms.replace("\n", " ").trim();
+        String terms_no_space=terms.replace("\n", " ").trim();
+        String terms_for_all = terms_no_space.toUpperCase();
         
         HashMap<String, Object> parameters;
         HashMap <String, Object> buildParams = new HashMap ();

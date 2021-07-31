@@ -66,6 +66,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 //after having choosen with multiple results of RAF
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
+                return;
             }
             if (results.get(0).startsWith("Warning: The following proteins were not found") &&
                     results.get(0).endsWith(new_for_warning)) {
@@ -75,9 +76,15 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 //you receive "Warning: The following proteins were not found: EGFT"
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
+                return;
             }
             else {
-                
+                if (results.get(0).startsWith("Warning: The following proteins were not found")  &&
+                        !results.get(0).endsWith(new_for_warning)) {
+                    String  begin_substring = "Warning: The following proteins were not found :";
+                    String  substring = results.get(0).substring(begin_substring.length());
+                    network.setEntityNotFound(substring);
+                }
                 if (cancelled) return;
                 CyNetwork cynet = manager.createNetwork(netname);
                 manager.presentationManager.updateSignorNetworkCreated(cynet, network);

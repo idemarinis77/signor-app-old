@@ -91,7 +91,7 @@ public class SignorEdgePanel extends JPanel {
                         SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
                         edgeinfo.add(id, gbc.down());
                         if(value.length() > 20 && !key.equals(EdgeField.MECHANISM))
-                              edgeinfo.add(new SignorLabelMore(manager, value.substring(0, 10)+" ... [more]", value), gbc.right());
+                              edgeinfo.add(new SignorLabelMore(manager, "[read]", value), gbc.right());
                         else edgeinfo.add(new JLabel(value), gbc.right());
                     }
                 }    

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.Node;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Nodes.*;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.ui.components.SignorButton;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
@@ -17,6 +17,7 @@ import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkSearch;
 import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
+import it.uniroma2.signor.internal.ui.components.SignorLabelWarning;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,15 +82,20 @@ public class SignorBridgePanel extends JPanel {
             for (Map.Entry<CyNode, Node> entry : signorNodes.entrySet()) {              
                 HashMap<String,String> summary = entry.getValue().getSummary();
                 Iterator iter = summary.keySet().iterator();
-                Iterator iterv = summary.values().iterator(); 
-                entity_info.add(new SignorLabelStyledBold("-----"), gbc.down().expandHoriz());
+                Iterator iterv = summary.values().iterator();                 
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
                     entity_info.add(new SignorLabelStyledBold(key), gbc.down());
                     entity_info.add(new JLabel(value), gbc.right());
                 }
-           }  
+                entity_info.add(new SignorLabelStyledBold("-----"), gbc.down().expandHoriz());
+            }  
+            if(!networkCurrent.getEntityNotFound().isBlank()){
+                String not_found = networkCurrent.getEntityNotFound();
+                entity_info.add(new SignorLabelWarning(NodeField.ENTITY), gbc.down());
+                entity_info.add(new SignorLabelWarning(not_found+" entity not found in SIGNOR"), gbc.right());
+            }
             bridgePanel.add(entity_info, gbc.anchor("north").down());
         }
         catch (Exception e){

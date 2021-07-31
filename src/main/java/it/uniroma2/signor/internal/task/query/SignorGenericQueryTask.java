@@ -65,7 +65,6 @@ public class SignorGenericQueryTask extends AbstractTask {
                     return;                    
                 }
                 //Retrieve number of result
-                //Config.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms);
                 manager.utils.info(ConfigResources.WSSearchoptionMAP.
                                                get("ENTITYINFOSEARCH").queryFunction.apply(terms_trimmed, Config.SPECIESLIST.get(species)));
                 BufferedReader br = HttpUtils.getHTTPSignor(ConfigResources.WSSearchoptionMAP.
