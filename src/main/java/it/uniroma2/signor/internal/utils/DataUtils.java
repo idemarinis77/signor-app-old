@@ -101,7 +101,7 @@ public class DataUtils {
 
                        currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set("shared name", label);
                        currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set("name", label);
-                       currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set(Config.NAMESPACE, NodeField.TYPE, "residue");
+                       currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set(Config.NAMESPACE, NodeField.TYPE, EdgeField.RESIDUE.toLowerCase());
                        currentnet.getDefaultNodeTable().getRow(cyNode.getSUID()).set(Config.NAMESPACE, NodeField.ID, sequence);
 
                        manager.utils.flushEvents();

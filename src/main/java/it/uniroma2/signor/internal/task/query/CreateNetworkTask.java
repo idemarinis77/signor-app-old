@@ -103,6 +103,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 //Populate my logic netowrk
                 network.setNetwork(cynet);
                 if(network.parameters.get(NetworkField.SINGLESEARCH).equals(true)){
+                    manager.utils.info("Il  nodo summary e "+terms);
                     network.setCyNodeRoot(terms);
                     network.parameters.replace(NetworkField.QUERY, terms);
                 }

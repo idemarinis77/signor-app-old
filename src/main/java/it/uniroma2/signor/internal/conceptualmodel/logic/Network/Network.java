@@ -88,7 +88,7 @@ public class Network {
             }
         }   
         this.networkRootNode = new Node(this, rootNode);
-        networkRootNode.Summary();
+        networkRootNode.Summary(entity);
     }
     
     public Node getNetworkRootNode(){
@@ -138,10 +138,11 @@ public class Network {
     }    
     
     public void setEntityNotFound(String text){
-        this.entityNotFound=text;
+//        this.entityNotFound=text;
+        this.parameters.put(NetworkField.ENTITYNOTFOUND, text);
     }
     
     public String getEntityNotFound(){
-        return entityNotFound;
+        return (String) this.parameters.get(NetworkField.ENTITYNOTFOUND);
     }
 }

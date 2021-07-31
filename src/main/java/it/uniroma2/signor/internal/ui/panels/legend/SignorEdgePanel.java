@@ -25,9 +25,10 @@ import it.uniroma2.signor.internal.ui.components.SignorLabelStyledBold;
 public class SignorEdgePanel extends JPanel {
     private final SignorManager manager;
     private final JPanel edgesPanel;
+    private JPanel edgeInfo = new JPanel();
     private final EasyGBC gbc=new EasyGBC();
     private static Font iconFont;
-    public Boolean selectionRunning= false;
+
     public CyNetwork current_cynetwork_to_serch_into;
 
     
@@ -35,7 +36,7 @@ public class SignorEdgePanel extends JPanel {
         this.manager = manager;
         setLayout(new GridBagLayout());
         current_cynetwork_to_serch_into = manager.lastCyNetwork;        
-        JPanel edgeInfo = new JPanel();
+        
         edgeInfo.setLayout(new BorderLayout());
         edgeInfo.setBackground(Color.WHITE);
         {
@@ -55,57 +56,67 @@ public class SignorEdgePanel extends JPanel {
     
     public void selectedEdges() {
         
-        this.selectionRunning=true;
+
+        long startTime = System.nanoTime();
         Network network = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into);
         Collection<CyEdge> selectedEdges = CyTableUtil.getEdgesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true);   
+        long getNode = System.nanoTime();
         if(selectedEdges.size()>0){
             edgesPanel.removeAll();
+            edgesPanel.revalidate();
+	    
+            Iterator iter_sel_edges = selectedEdges.iterator();
+            for (CyEdge cyedge: selectedEdges){
+    //        while(iter_sel_edges.hasNext()){
+                JPanel edgeinfo = new JPanel();
+    //            CyEdge edge_current = (CyEdge) iter_sel_edges.next();
+                CyEdge edge_current = cyedge;
+                Edge edge = network.getEdges().get(edge_current);    
+                if(edge!=null){
+                    HashMap <String,String> summary = edge.getSummary();         
+
+                    Iterator iter = summary.keySet().iterator();
+                    Iterator iterv = summary.values().iterator();
+                    long primo_attributo= System.nanoTime();
+                    edgeinfo.setLayout(new GridBagLayout());
+                    edgeinfo.add(new SignorLabelStyledBold("SOURCE - TARGET  "), gbc.down());
+                    edgeinfo.add(new JLabel(edge.source.toString()+"-"+edge.target.toString()), gbc.right());
+                    while(iter.hasNext()){
+                        String key = iter.next().toString();
+                        String value = iterv.next().toString();
+                        if(key.equals(EdgeField.PMID)){
+                            OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
+                            String label = value;
+                            String link_to_db = ConfigResources.DBLINKSMAP.get("pubmed").queryFunction.apply(value);
+                            SignorLabelStyledBold link_to_pmid = new SignorLabelStyledBold(label, link_to_db, openBrowser, false);
+                            SignorLabelStyledBold id = new SignorLabelStyledBold(key);
+                            edgeinfo.add(id, gbc.down());
+                            edgeinfo.add(link_to_pmid, gbc.right());
+                        }
+                        else{
+                            SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
+                            edgeinfo.add(id, gbc.down());
+                            if(value.length() > 20 && !key.equals(EdgeField.MECHANISM))
+                                  edgeinfo.add(new SignorLabelMore(manager, "[read]", value), gbc.right());
+                            else edgeinfo.add(new JLabel(value), gbc.right());
+                        }
+
+                    }    
+                    CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Edge INFO", edgeinfo, false );
+                    edgesPanel.add(collapsableINFO, gbc.down().anchor("north"));
+                    long ultimoAttributo = System.nanoTime();
+                }
+                //Is a PTM Edge
+                else {
+                    edgeinfo.add(new SignorLabelStyledBold("INTERACTION"), gbc.down());
+                    edgeinfo.add(new JLabel(current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(edge_current.getSUID()).
+                        get("name", String.class)), gbc.right());
+                    CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "PTM Edge INFO", edgeinfo, false );
+                    edgesPanel.add(collapsableINFO, gbc.down().anchor("north").insets(1,1,1,1));
+                }
+            }  
+            revalidate();
+            repaint();
         }
-        Iterator iter_sel_edges = selectedEdges.iterator();
-        while(iter_sel_edges.hasNext()){
-            JPanel edgeinfo = new JPanel();
-            CyEdge edge_current = (CyEdge) iter_sel_edges.next();
-            Edge edge = network.getEdges().get(edge_current);    
-            if(edge!=null){
-                HashMap <String,String> summary = edge.getSummary();         
-
-                Iterator iter = summary.keySet().iterator();
-                Iterator iterv = summary.values().iterator();
-
-                edgeinfo.setLayout(new GridBagLayout());
-                edgeinfo.add(new SignorLabelStyledBold("SOURCE - TARGET  "), gbc.down());
-                edgeinfo.add(new JLabel(edge.source.toString()+"-"+edge.target.toString()), gbc.right());
-                while(iter.hasNext()){
-                    String key = iter.next().toString();
-                    String value = iterv.next().toString();
-                    if(key.equals(EdgeField.PMID)){
-                        OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
-                        String label = value;
-                        String link_to_db = ConfigResources.DBLINKSMAP.get("pubmed").queryFunction.apply(value);
-                        SignorLabelStyledBold link_to_pmid = new SignorLabelStyledBold(label, link_to_db, openBrowser, false);
-                        SignorLabelStyledBold id = new SignorLabelStyledBold(key);
-                        edgeinfo.add(id, gbc.down());
-                        edgeinfo.add(link_to_pmid, gbc.right());
-                    }
-                    else{
-                        SignorLabelStyledBold id = new SignorLabelStyledBold(key.replaceFirst("MODIFICATIONA", "MODIFICATION"));
-                        edgeinfo.add(id, gbc.down());
-                        if(value.length() > 20 && !key.equals(EdgeField.MECHANISM))
-                              edgeinfo.add(new SignorLabelMore(manager, "[read]", value), gbc.right());
-                        else edgeinfo.add(new JLabel(value), gbc.right());
-                    }
-                }    
-                CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Edge INFO", edgeinfo, false );
-                edgesPanel.add(collapsableINFO, gbc.down().anchor("north"));
-            }
-            //Is a PTM Edge
-            else {
-                edgeinfo.add(new SignorLabelStyledBold("INTERACTION"), gbc.down());
-                edgeinfo.add(new JLabel(current_cynetwork_to_serch_into.getDefaultEdgeTable().getRow(edge_current.getSUID()).
-                    get("name", String.class)), gbc.right());
-                CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "PTM Edge INFO", edgeinfo, false );
-                edgesPanel.add(collapsableINFO, gbc.down().anchor("north").insets(1,1,1,1));
-            }
-        }              
     }
 }

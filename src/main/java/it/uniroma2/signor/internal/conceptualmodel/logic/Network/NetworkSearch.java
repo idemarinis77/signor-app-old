@@ -26,7 +26,7 @@ public class NetworkSearch {
         //PTMLOADED
         //
         //This method return an HashMap built (filled) coherently to the search type
-        /*QUERY=Q9GZM8, CONNECTSEARCH=false, SPECIES=Homo Sapiens, 
+        /*e.g. QUERY=Q9GZM8, CONNECTSEARCH=false, SPECIES=Homo Sapiens, 
           ALLSEARCH=false, SHORTESTPATHSEARCH=false, INCFIRSTNEISEARCH=false, SINGLESEARCH=true*/ 
         String queryuc = querylc.toUpperCase();
         HashMap<String, Object> buildSearchParams = new HashMap();
@@ -38,8 +38,9 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
-            buildSearchParams.put(NetworkField.QUERY, querylc);
+            buildSearchParams.put(NetworkField.QUERY, queryuc);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
+            buildSearchParams.put(NetworkField.ENTITYNOTFOUND, "");
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
             buildSearchParams.put(NetworkField.PTMLOADED, false);
@@ -55,7 +56,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
-            buildSearchParams.put(NetworkField.QUERY, querylc);
+            buildSearchParams.put(NetworkField.QUERY, queryuc);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
@@ -72,7 +73,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
-            buildSearchParams.put(NetworkField.QUERY, querylc);
+            buildSearchParams.put(NetworkField.QUERY, queryuc);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, include_f_n);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
@@ -89,7 +90,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
-            buildSearchParams.put(NetworkField.QUERY, querylc);
+            buildSearchParams.put(NetworkField.QUERY, queryuc);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
@@ -106,8 +107,9 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, false);
             buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
-            buildSearchParams.put(NetworkField.QUERY, querylc);
+            buildSearchParams.put(NetworkField.QUERY, queryuc);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
+            buildSearchParams.put(NetworkField.ENTITYNOTFOUND, "");
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, "");
             buildSearchParams.put(NetworkField.PTMLOADED, false);
@@ -123,8 +125,9 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.PATHWAYSEARCH, true);
             buildSearchParams.put(NetworkField.PATHWAYINFO, "");
             buildSearchParams.put(NetworkField.DISEASESEARCH, false);
-            buildSearchParams.put(NetworkField.QUERY, querylc);
+            buildSearchParams.put(NetworkField.QUERY, queryuc);
             buildSearchParams.put(NetworkField.INCFIRSTNEISEARCH, false);
+            buildSearchParams.put(NetworkField.ENTITYNOTFOUND, "");
             buildSearchParams.put(NetworkField.SPECIES, organism);
             buildSearchParams.put(NetworkField.PATHWAYID, querylc);
             buildSearchParams.put(NetworkField.PTMLOADED, false);

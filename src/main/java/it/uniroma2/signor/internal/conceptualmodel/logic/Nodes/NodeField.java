@@ -56,6 +56,7 @@ public class NodeField {
     public static final String RNA_CENTRAL = "RNA_CENTRAL";
     public static final String GENE_NAME = "GENE_NAME";
     public static final String FUNCTION = "FUNCTION";
+    public static final String SYNONYMS = "SYNONYMS";
     public static final String PATHWAYLISTADDINFO = "PATHWAYLIST";
 
     
@@ -80,7 +81,8 @@ public class NodeField {
            put(MIRNA_DB_ID, String.class);
            put(RNA_CENTRAL, String.class);
            put(GENE_NAME, String.class);
-           put(FUNCTION, String.class);           
+           put(FUNCTION, String.class);   
+           put(SYNONYMS, String.class);   
            put(PATHWAYLISTADDINFO, String.class);
         }
     };

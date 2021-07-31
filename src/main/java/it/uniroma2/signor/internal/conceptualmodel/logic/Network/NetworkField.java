@@ -14,6 +14,7 @@ public class NetworkField {
     public static String CONNECTSEARCH = "CONNECTSEARCH";
     public static String SHORTESTPATHSEARCH = "SHORTESTPATHSEARCH";
     public static String INCFIRSTNEISEARCH = "INCFIRSTNEISEARCH";
+    public static String ENTITYNOTFOUND = "ENTITYNOTFOUND";
     public static String SPECIES = "SPECIES";
     public static String PTMLOADED  = "PTMLOADED";
     public static String PATHWAYSEARCH = "PATHWAYSEARCH";
@@ -34,6 +35,7 @@ public class NetworkField {
         params.put(NetworkField.DISEASESEARCH, Boolean.class);
         params.put(NetworkField.QUERY, String.class);
         params.put(NetworkField.INCFIRSTNEISEARCH, Boolean.class);
+        params.put(NetworkField.ENTITYNOTFOUND, String.class);
         params.put(NetworkField.SPECIES, String.class);
         params.put(NetworkField.PATHWAYID, String.class);        
         params.put(NetworkField.PTMLOADED, Boolean.class); 

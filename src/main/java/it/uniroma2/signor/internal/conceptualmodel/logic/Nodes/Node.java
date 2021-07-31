@@ -43,14 +43,15 @@ public class Node implements Element {
     //phenotype	SIGNOR-PH92
     // mirna	MI0000300
     //public HashMap<String,String> Summary(){  
-    public void Summary(){  
+    public void Summary(String entity){  
         /*HashMap<String,String> basic_summary = new HashMap<String,String>();        
         Config.NODEFIELD.forEach((basic_node_key, basic_node_value) ->{
             basic_summary.put(basic_node_key , this.nodeRow.get(Config.NAMESPACE, basic_node_key, String.class)); });  */        
         //Now I must retrieve information from pathway
         //I need species to retrieve information from ws entityInfo
         String species = network.parameters.get(NetworkField.SPECIES).toString();
-        String NodeID = this.summary.get(NodeField.ID);
+//        String NodeID = this.summary.get(NodeField.ID);
+        String NodeID= entity;
         network.manager.utils.info("Searching pthw for "+NodeID);
         Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(PathwayField.PTHIDA);
         Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(PathwayField.PATHWAYNAME);

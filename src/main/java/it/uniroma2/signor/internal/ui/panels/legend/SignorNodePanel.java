@@ -30,26 +30,26 @@ import org.cytoscape.util.swing.OpenBrowser;
 
 public class SignorNodePanel extends JPanel {
     private final SignorManager manager;
-    private final JPanel nodesPanel;
+    private JPanel nodesPanel;
+    private final JPanel nodeMain = new JPanel();
     private static Font iconFont;
     private final EasyGBC gbc=new EasyGBC();
-    public Boolean selectionRunning= false;
     public CyNetwork current_cynetwork_to_serch_into;
     
     public SignorNodePanel(SignorManager manager){
         this.manager = manager;
         setLayout(new GridBagLayout());        
         current_cynetwork_to_serch_into = manager.lastCyNetwork;
-        JPanel NodeInfo = new JPanel();
-        NodeInfo.setLayout(new BorderLayout());
-        NodeInfo.setBackground(Color.WHITE);
+        
+        nodeMain.setLayout(new BorderLayout());
+        nodeMain.setBackground(Color.WHITE);
         {
             nodesPanel = new JPanel();
             nodesPanel.setBackground(Color.WHITE);
             nodesPanel.setLayout(new GridBagLayout());
-            NodeInfo.add(nodesPanel, BorderLayout.NORTH);
+            nodeMain.add(nodesPanel, BorderLayout.NORTH);
         }
-        JScrollPane scrollPane = new JScrollPane(NodeInfo, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+        JScrollPane scrollPane = new JScrollPane(nodeMain, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setAlignmentX(LEFT_ALIGNMENT);
         scrollPane.getVerticalScrollBar().setBlockIncrement(10);
@@ -59,59 +59,70 @@ public class SignorNodePanel extends JPanel {
     }   
     
     public void selectedNodes() {        
-        this.selectionRunning=true;
+       
+        long startTime = System.nanoTime();
         Network network = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into);
         Collection<CyNode> selectedNodes = CyTableUtil.getNodesInState(current_cynetwork_to_serch_into, CyNetwork.SELECTED, true); 
+        long getNode = System.nanoTime();
         if(selectedNodes.size()>0){
             nodesPanel.removeAll();
-        }        
-        Iterator iter_sel_nodes = selectedNodes.iterator();
-        while(iter_sel_nodes.hasNext()){                  
-            JPanel nodeinfo = new JPanel();
-            nodeinfo.setLayout(new GridBagLayout());
- 
-            CyNode node_current = (CyNode) iter_sel_nodes.next();
-            if(!current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
-                    get(Config.NAMESPACE, NodeField.TYPE, String.class).equals("residue")){
-                Node node = network.getNodes().get(node_current);            
-                HashMap <String,String> summary = node.getSummary();                
-                String entity_name = summary.get(NodeField.ENTITY);
-                String entity_id = summary.get(NodeField.ID);              
-                Iterator iter = summary.keySet().iterator();
-                Iterator iterv = summary.values().iterator();    
-                while(iter.hasNext()){
-                    String key = iter.next().toString();
-                    String value = iterv.next().toString();
-                    SignorLabelStyledBold id = new SignorLabelStyledBold(key);
-                    nodeinfo.add(id, gbc.down());
-                    if(key!= NodeField.DATABASE){
-                        nodeinfo.add(new JLabel(value), gbc.right());
-                    }
-                    else {
-                        String db_value_norm = value.toLowerCase();
-                        String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
-                        OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
-                        SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(db_value_norm, link_to_db, openBrowser, false);
-                        nodeinfo.add(dbLabel, gbc.right());
-                    }
-                }         
-                SignorButton searchID =  new SignorButton("causal networks");
-                searchID.addActionListener(e-> buildSingleSearch(entity_id, network));
-                nodeinfo.add(new SignorLabelStyledBold("Search in SIGNOR"), gbc.down());
-                nodeinfo.add(searchID, gbc.right());          
-                CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Node INFO", nodeinfo, false );
-                nodesPanel.add(collapsableINFO, gbc.down().anchor("north").insets(1,1,1,1));   
+//            nodesPanel.revalidate();
+//        
+            long secondopasso= System.nanoTime();
+            Iterator iter_sel_nodes = selectedNodes.iterator();
+//            while(iter_sel_nodes.hasNext()){       
+            for (CyNode cynode: selectedNodes){
+                JPanel nodeinfo = new JPanel();
+                nodeinfo.setLayout(new GridBagLayout());
+
+//                CyNode node_current = (CyNode) iter_sel_nodes.next();
+                CyNode node_current = cynode;
+                long primo_attributo= System.nanoTime();
+                if(!current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
+                        get(Config.NAMESPACE, NodeField.TYPE, String.class).equals(EdgeField.RESIDUE.toLowerCase())){
+                    Node node = network.getNodes().get(node_current);            
+                    HashMap <String,String> summary = node.getSummary();                
+                    String entity_name = summary.get(NodeField.ENTITY);
+                    String entity_id = summary.get(NodeField.ID);              
+                    Iterator iter = summary.keySet().iterator();
+                    Iterator iterv = summary.values().iterator();    
+                    while(iter.hasNext()){
+                        String key = iter.next().toString();
+                        String value = iterv.next().toString();
+                        SignorLabelStyledBold id = new SignorLabelStyledBold(key);
+                        nodeinfo.add(id, gbc.down());
+                        if(key!= NodeField.DATABASE){
+                            nodeinfo.add(new JLabel(value), gbc.right());
+                        }
+                        else {
+                            String db_value_norm = value.toLowerCase();
+                            String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
+                            OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
+                            SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(db_value_norm, link_to_db, openBrowser, false);
+                            nodeinfo.add(dbLabel, gbc.right());
+                        }
+                    }         
+                    SignorButton searchID =  new SignorButton("causal networks");
+                    searchID.addActionListener(e-> buildSingleSearch(entity_id, network));
+                    nodeinfo.add(new SignorLabelStyledBold("Search in SIGNOR"), gbc.down());
+                    nodeinfo.add(searchID, gbc.right());  
+                    CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Node INFO", nodeinfo, false );
+                    nodesPanel.add(collapsableINFO, gbc.down().anchor("north").insets(1,1,1,1)); 
+
+                }
+                else {
+                    nodeinfo.add(new SignorLabelStyledBold(EdgeField.Interaction), gbc.down());
+                    nodeinfo.add(new JLabel(current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
+                        get("name", String.class)), gbc.right());
+                    nodeinfo.add(new SignorLabelStyledBold(EdgeField.SEQUENCE), gbc.down());
+                    nodeinfo.add(new JLabel(current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
+                        get(Config.NAMESPACE,NodeField.ID, String.class)), gbc.right());
+                    CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "PTM Node INFO", nodeinfo, false );
+                    nodesPanel.add(collapsableINFO, gbc.down().anchor("north").insets(1,1,1,1));   
+                }
             }
-            else {
-                nodeinfo.add(new SignorLabelStyledBold("INTERACTION"), gbc.down());
-                nodeinfo.add(new JLabel(current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
-                    get("name", String.class)), gbc.right());
-                nodeinfo.add(new SignorLabelStyledBold(EdgeField.SEQUENCE), gbc.down());
-                nodeinfo.add(new JLabel(current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
-                    get(Config.NAMESPACE,NodeField.ID, String.class)), gbc.right());
-                CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "PTM Node INFO", nodeinfo, false );
-                nodesPanel.add(collapsableINFO, gbc.down().anchor("north").insets(1,1,1,1));   
-            }
+            revalidate();
+            repaint();
         }   
     }
     
