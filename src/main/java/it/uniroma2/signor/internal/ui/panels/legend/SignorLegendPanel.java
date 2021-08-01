@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelComponent2;
 import org.cytoscape.application.swing.CytoPanelName;
-import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.utils.IconUtils;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.event.*;
@@ -74,20 +73,14 @@ public class SignorLegendPanel extends JPanel implements
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
                 ptmviewON.setEnabled(false);
-                if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME)
-                    DataUtils.PopulatePTMTables(manager, true); 
-                else if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) != Config.INTERACTOMENAME)
-                    DataUtils.PopulatePTMTables(manager, false); 
+                DataUtils.PopulatePTMTables(manager, false); 
             }
         };
         ActionListener listenerDEF = new ActionListener() {            
             @Override public void actionPerformed(ActionEvent e) { 
                 ptmviewON.setEnabled(true);
                 defviewON.setEnabled(false);
-                if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) == Config.INTERACTOMENAME)
-                    DataUtils.ShowDefaultView(manager, true);
-                else if (manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).parameters.get(NetworkField.QUERY) != Config.INTERACTOMENAME)
-                    DataUtils.ShowDefaultView(manager, false);                                  
+                DataUtils.ShowDefaultView(manager, false);
             }
         };       
 
@@ -180,7 +173,21 @@ public class SignorLegendPanel extends JPanel implements
                     break;
                 }
             }      
-    
+            Network network = manager.presentationManager.signorNetMap.get(newcynet);
+            NetworkView.Type netviewtype = manager.presentationManager.signorViewMap.get(network);
+            if (netviewtype.equals(NetworkView.Type.DEFAULT)) {
+                ptmviewON.setSelected(false);
+                ptmviewON.setEnabled(true);
+                defviewON.setSelected(true);
+                defviewON.setEnabled(false);
+            }
+            else if (netviewtype.equals(NetworkView.Type.PTM)){
+                ptmviewON.setSelected(true);
+                ptmviewON.setEnabled(false);
+                defviewON.setSelected(false);
+                defviewON.setEnabled(true);
+            }
+
             if (event.getNewNetwork().isPathwayNetwork.equals(true)){
                 this.current_cynetwork_to_serch_into = newcynet;
                 snp.current_cynetwork_to_serch_into = newcynet;
@@ -235,19 +242,19 @@ public class SignorLegendPanel extends JPanel implements
                 this.current_cynetwork_to_serch_into = newcynet;
                 this.hideCytoPanel();
             }
-            if(manager.sessionLoaderManager.loadingsession.equals(true) && 
-                    event.getNewNetwork().parameters.get(NetworkField.ROOTNETWORKPTM).equals(true)){
-                ptmviewON.setSelected(true);
-                ptmviewON.setEnabled(false);
-                defviewON.setSelected(false);
-                defviewON.setEnabled(false);
-            }
-            else {
-                ptmviewON.setSelected(false);
-                ptmviewON.setEnabled(true);
-                defviewON.setSelected(true);
-                defviewON.setEnabled(false);
-            }
+//            if(manager.sessionLoaderManager.loadingsession.equals(true) && 
+//                    event.getNewNetwork().parameters.get(NetworkField.ROOTNETWORKPTM).equals(true)){
+//                ptmviewON.setSelected(true);
+//                ptmviewON.setEnabled(false);
+//                defviewON.setSelected(false);
+//                defviewON.setEnabled(false);
+//            }
+//            else {
+//                ptmviewON.setSelected(false);
+//                ptmviewON.setEnabled(true);
+//                defviewON.setSelected(true);
+//                defviewON.setEnabled(false);
+//            }
         }
         catch (Exception e){
             manager.utils.warn("Not SingleSearch query or not Signor Network Created, can't add tabs");

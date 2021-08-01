@@ -66,7 +66,7 @@ public class SignorShortestPathPanel extends JPanel {
             descPanel.add(collapsableINFO, gbc.down().anchor("north"));
         }        
         catch (Exception e){
-            manager.utils.error("SignorDescriptionPanel CreateContent()"+e.toString());
+            manager.utils.error("SignorShortestPath CreateContent()"+e.toString());
         }       
     }
     

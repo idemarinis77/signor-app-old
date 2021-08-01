@@ -35,7 +35,7 @@ public class SignorStyleManager {
             }
         }
         if(newStyle) {
-            manager.utils.info("Loading file style "+filename);
+            manager.utils.info("Loading SIGNOR file style "+filename);
             Set<VisualStyle> vsSet  = manager.utils.getService(LoadVizmapFileTaskFactory.class).loadStyles(getClass().getResourceAsStream(filename));
         }              
     }

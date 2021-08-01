@@ -30,7 +30,7 @@ public class Network {
    
     public Boolean isPathwayNetwork = false;
     public Boolean isDeasesNetwork = false;
-    public Boolean ptm_already_loaded = false;
+//    public Boolean ptm_already_loaded = false;
     public CyNode rootNode;
     private Node networkRootNode;
     private ArrayList<String> pathway_info = new ArrayList<String>();

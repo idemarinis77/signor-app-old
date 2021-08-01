@@ -52,7 +52,7 @@ public class DataUtils {
         subnet.setNetwork(cyNetwork);
         subnet.isDeasesNetwork = parentnet.isDeasesNetwork;
         subnet.isPathwayNetwork = parentnet.isPathwayNetwork;
-        subnet.ptm_already_loaded = parentnet.ptm_already_loaded;
+//        subnet.ptm_already_loaded = parentnet.ptm_already_loaded;
         subnet.SetPathwayInfo(parentnet.getPathwayInfo());
         if(parentnet.isSingleSearch()) {
             String entity = (String) subnet.parameters.get(NetworkField.QUERY);
@@ -69,7 +69,7 @@ public class DataUtils {
 
         try {
             Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);
-            Boolean ptm_already_loaded = networksignor.ptm_already_loaded;
+            Boolean ptm_already_loaded = (Boolean) networksignor.parameters.get(NetworkField.PTMLOADED);
             Map<CyNode, Node> nodes = networksignor.getNodes();
             if( tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
                 tableManager.getAllTables(true).contains(networksignor.PTMedgeTable)){
@@ -146,17 +146,17 @@ public class DataUtils {
                        //manager.utils.flushEvents();
                    }                   
                }       
-               if(!interactome){
+               if(interactome.equals(false)){
                    HideEdgeParentPTM(manager);
                    AlgorithmFactory algfactory = new AlgorithmFactory(networkView, manager);            
                    manager.utils.execute(algfactory.createTaskIterator());
                }
-               networksignor.ptm_already_loaded = false;
-               if(!interactome)
-                  networksignor.parameters.replace(NetworkField.PTMLOADED, true); 
+//               networksignor.ptm_already_loaded = false;
+               networksignor.parameters.replace(NetworkField.PTMLOADED, true); 
                networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.PTM.toString());
                manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.PTM);
                currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, NetworkField.VIEW, NetworkView.Type.PTM.toString());
+               currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, NetworkField.PTMLOADED, true);
             }              
         }
         catch (Exception e) {
@@ -195,13 +195,16 @@ public class DataUtils {
             UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
             manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
             networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.DEFAULT.toString());
-            manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.DEFAULT);   
+            manager.presentationManager.signorViewMap.replace(networksignor, NetworkView.Type.DEFAULT);  
+            
             currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, NetworkField.VIEW, NetworkView.Type.DEFAULT.toString());
+            currentnet.getDefaultNetworkTable().getRow(currentnet.getSUID()).set(Config.NAMESPACE, NetworkField.PTMLOADED, false);
+
             networksignor.PTMnodes.clear();
             networksignor.PTMedges.clear();
         }
         catch (Exception e) {
-            manager.utils.info("DataUtils ShowDefaultView() "+e.toString());            
+            manager.utils.error("DataUtils ShowDefaultView() "+e.toString());            
         }
         
     }
@@ -232,21 +235,27 @@ public class DataUtils {
     }
             
     public static void loadPTMfromTable (Network networksignor, CyNetwork cynet){
-        List uid_parent_edge_to_load = networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, PTMEdgeField.EdgeParent).getValues(Long.class);
-        for (Object uid_parent_edge: uid_parent_edge_to_load){
-                CyEdge edge_to_load = cynet.getEdge((Long) uid_parent_edge);
-                networksignor.ParentEdges.put(edge_to_load, (Long) uid_parent_edge);
+        try{
+            List uid_parent_edge_to_load = networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, PTMEdgeField.EdgeParent).getValues(Long.class);
+            for (Object uid_parent_edge: uid_parent_edge_to_load){
+                    CyEdge edge_to_load = cynet.getEdge((Long) uid_parent_edge);
+                    networksignor.ParentEdges.put(edge_to_load, (Long) uid_parent_edge);
+            }
+            List ptm_edge_to_load = networksignor.PTMedgeTable.getColumn("SUID").getValues(Long.class);
+            for (Object uid_ptm_edge: ptm_edge_to_load){
+                CyEdge edge_to_load = cynet.getEdge((Long) uid_ptm_edge);
+                networksignor.PTMedges.put(edge_to_load, (Long) uid_ptm_edge);
+            }
+            List ptm_node_to_load = networksignor.PTMnodeTable.getColumn("SUID").getValues(Long.class);
+            for (Object uid_ptm_node: ptm_node_to_load){
+                CyNode node_to_load = cynet.getNode((Long) uid_ptm_node);
+                networksignor.PTMnodes.put(node_to_load, (Long) uid_ptm_node);
+            }
+            networksignor.manager.utils.info("Tutti i nodi PTM sono "+networksignor.PTMnodes.toString());
+            networksignor.manager.utils.info("Tutti gli archi PTM sono "+networksignor.PTMedges.toString());
+            networksignor.manager.utils.info("Tutti gli archi genitori sono "+networksignor.ParentEdges.toString());
         }
-        List ptm_edge_to_load = networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, "SUID").getValues(Long.class);
-        for (Object uid_ptm_edge: ptm_edge_to_load){
-            CyEdge edge_to_load = cynet.getEdge((Long) uid_ptm_edge);
-            networksignor.PTMedges.put(edge_to_load, (Long) uid_ptm_edge);
-        }
-        List ptm_node_to_load = networksignor.PTMnodeTable.getColumn(Config.NAMESPACEPTM, "SUID").getValues(Long.class);
-        for (Object uid_ptm_node: ptm_node_to_load){
-            CyNode node_to_load = cynet.getNode((Long) uid_ptm_node);
-            networksignor.PTMnodes.put(node_to_load, (Long) uid_ptm_node);
-        }
+        catch  (Exception e) {networksignor.manager.utils.error("Dentro  Load PTM "+e.toString());}
     }
 
 }

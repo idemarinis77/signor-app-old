@@ -52,7 +52,6 @@ public class Node implements Element {
         String species = network.parameters.get(NetworkField.SPECIES).toString();
 //        String NodeID = this.summary.get(NodeField.ID);
         String NodeID= entity;
-        network.manager.utils.info("Searching pthw for "+NodeID);
         Integer position_of_id_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(PathwayField.PTHIDA);
         Integer position_of_pthw_desc_in_line = Arrays.asList(ConfigPathway.HEADERPTH).indexOf(PathwayField.PATHWAYNAME);
         try {
@@ -65,7 +64,6 @@ public class Node implements Element {
                 if (field[position_of_id_in_line].equals(NodeID)){
                     if (!pathway_found_for_node.contains(field[position_of_pthw_desc_in_line])){
                         pathway_found_for_node += " , "+field[position_of_pthw_desc_in_line];                        
-                        network.manager.utils.info("FOUND PTHW "+field[1]);
                     }
                 }
             }

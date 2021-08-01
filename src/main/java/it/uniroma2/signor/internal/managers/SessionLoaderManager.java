@@ -40,25 +40,28 @@ public class SessionLoaderManager implements SessionLoadedListener  {
                     HashMap <String, Object> params = NetworkSearch.buildParamsFromNetworkRecord(netrow, manager);
                     Network signornet = new Network(manager, params);
                     manager.presentationManager.updateSignorNetworkCreated(cyNetwork, signornet);
-                    String view_type = (String) params.get(NetworkField.VIEW);
-                    
-
+                    String view_type = (String) params.get(NetworkField.VIEW);                  
+                    manager.utils.info(" il type e "+view_type);
                     if(view_type.equals(NetworkView.Type.DEFAULT.toString())){
                         manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.DEFAULT);
-                        manager.utils.info("Il type e "+view_type+" "+signornet.toString()+" "+NetworkView.Type.DEFAULT);
                     }
                     else manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.PTM);
                     String searched_query = (String) params.get(NetworkField.QUERY);
 
                     Collection<CyTableMetadata> tables = loadedSession.getTables();
                     linkPTMTableToNewtork(tables, signornet);
-                    manager.utils.info("reloading network "+cyNetwork.toString()+params.toString());
-                    if(searched_query!=Config.INTERACTOMENAME)
+                    manager.utils.info("Reloading SIGNOR network "+cyNetwork.toString()+params.toString());
+                    if(!searched_query.equals(Config.INTERACTOMENAME)){
                         signornet.setNetwork(cyNetwork);    
-                    if((Boolean)params.get(NetworkField.SINGLESEARCH).equals(true) )
+                        signornet.setEntityNotFound((String) params.get(NetworkField.ENTITYNOTFOUND));
+                    }
+                    manager.utils.info("Reloading SIGNOR network dopo entitynotfodund "+searched_query);
+                    if((Boolean)params.get(NetworkField.SINGLESEARCH).equals(true))
                        signornet.setCyNodeRoot(searched_query);
-                    if((Boolean)params.get(NetworkField.PTMLOADED).equals(true) && searched_query!=Config.INTERACTOMENAME)
+                    manager.utils.info("Reloading SIGNOR network dopo setCyNodeRoot");
+                    if((Boolean)params.get(NetworkField.PTMLOADED).equals(true) && !searched_query.equals(Config.INTERACTOMENAME))
                         DataUtils.loadPTMfromTable(signornet, cyNetwork);
+                    manager.utils.info("Reloading SIGNOR network dopo load PTM");
                     if(!"".equals((String) params.get(NetworkField.PATHWAYINFO))){
                        signornet.isPathwayNetwork = true;
                        String pathway_info_from_db = (String) params.get(NetworkField.PATHWAYINFO);
@@ -93,11 +96,11 @@ public class SessionLoaderManager implements SessionLoadedListener  {
                     if(cynet.getDefaultNetworkTable().getRow(cynet.getSUID()).get("name", String.class).equals(title2)){
                        if(title.endsWith("PTMEdge")){
                            signornet.PTMedgeTable=table;
-                           manager.utils.info(signornet.PTMedgeTable.toString()+"** e rete **"+signornet.toString());
+                           manager.utils.info("Linking tables "+signornet.PTMedgeTable.toString()+" to "+signornet.toString());
                        }
                        if(title.endsWith("PTMNode")){
                            signornet.PTMnodeTable=table;
-                           manager.utils.info(signornet.PTMnodeTable.toString()+"** e rete **"+signornet.toString());
+                           manager.utils.info("Linking tables "+signornet.PTMnodeTable.toString()+" to "+signornet.toString());
                        }                   
                     }                
                 }

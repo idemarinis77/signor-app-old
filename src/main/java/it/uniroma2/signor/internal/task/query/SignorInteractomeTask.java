@@ -80,7 +80,7 @@ public class SignorInteractomeTask extends AbstractTask {
             }
         }
             catch (Exception e){
-                manager.utils.error(e.toString()+"Problem fectching data from "+URL);
+                manager.utils.error(e.toString()+"Problem fectching INTERACTOME data from "+URL);
             }
     }
     

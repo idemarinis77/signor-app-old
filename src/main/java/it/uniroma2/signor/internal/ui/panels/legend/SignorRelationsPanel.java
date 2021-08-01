@@ -7,7 +7,8 @@ package it.uniroma2.signor.internal.ui.panels.legend;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.Network;
-import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.Edge;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Edges.*;
+import it.uniroma2.signor.internal.ui.components.SignorLabelValue;
 import java.awt.*;
 import javax.swing.*;
 import static java.awt.Component.LEFT_ALIGNMENT;
@@ -52,10 +53,14 @@ public class SignorRelationsPanel extends JPanel {
             relPanel.setLayout(new GridLayout(0, 2));
             Network network = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into);
             Map<CyEdge, Edge> cy_net_ed = network.getEdges();
+            if(cy_net_ed.size()>0){
+                relPanel.add(new SignorLabelValue("SOURCE", true), gbc.down());
+                relPanel.add(new SignorLabelValue("TARGET", true), gbc.right());                
+            }           
             for (CyEdge cyEdge : cy_net_ed.keySet()) {            
                 Edge edge = cy_net_ed.get(cyEdge);
-                relPanel.add(new JLabel(edge.source.toString()), gbc.down());
-                relPanel.add(new JLabel(edge.target.toString()), gbc.right());              
+                relPanel.add(new SignorLabelValue(edge.source.toString(), false), gbc.down());
+                relPanel.add(new SignorLabelValue(edge.target.toString(), false), gbc.right());              
             }                           
         }
         catch (Exception e){

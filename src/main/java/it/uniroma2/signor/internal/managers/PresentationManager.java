@@ -110,7 +110,6 @@ public class PresentationManager implements
             CyNetwork cyNetwork = cyNetworkView.getModel();
             try {
                 if (signorNetMap.containsKey(cyNetwork)) {
-                    manager.utils.info("INSIDE NetworkView Created ");
                     if(signorCyNetworkViewMap != null){
                        signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
                     }                
@@ -141,11 +140,9 @@ public class PresentationManager implements
             CySubNetwork newNetwork = (CySubNetwork) cyNetwork;
             // I don't want to make any action if this is the root Network
             if(newNetwork.getRootNetwork().getBaseNetwork() != cyNetwork && DataUtils.isSignorNetwork(cyNetwork)){
-                manager.utils.info(newNetwork.toString()+"** BASE NET **"+newNetwork.getRootNetwork().getBaseNetwork());
                 CyNetwork parentCyNetwork = newNetwork.getRootNetwork().getBaseNetwork();
                 Network parentNetwork = signorNetMap.get(parentCyNetwork);
                 NetworkView.Type nettype = signorViewMap.get(parentNetwork);
-                manager.utils.info("PASSO "+parentNetwork.toString()+nettype.toString());
                 Network subnetwork = DataUtils.prepareSubnetwork(parentNetwork, cyNetwork);
                 if (nettype.name().equals(NetworkView.Type.PTM.name()))
                     subnetwork.parameters.replace(NetworkField.ROOTNETWORKPTM, true);

@@ -18,8 +18,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public class CollapsablePanel extends JPanel {        
-        private static final ImageIcon RIGHT_ARROW = IconUtils.createImageIcon("/images/right_arrow.png");
-        private static final ImageIcon DOWN_ARROW = IconUtils.createImageIcon("/images/down_arrow.png");
+        private static final ImageIcon RIGHT_ARROW = IconUtils.createImageIcon("/images/right_arrow_small.png");
+        private static final ImageIcon DOWN_ARROW = IconUtils.createImageIcon("/images/down_arrow_small.png");
 
 	Font awesomeFont;
 
@@ -79,7 +79,7 @@ public class CollapsablePanel extends JPanel {
 	}
 
 	public CollapsablePanel(Font iconFont, String text, JPanel panel, boolean collapsed) {
-		this(iconFont, text, panel, collapsed, 14);
+		this(iconFont, text, panel, collapsed, 12);
 	}
 
 	public CollapsablePanel(Font iconFont, String text, JPanel panel, boolean collapsed, int fontSize) {

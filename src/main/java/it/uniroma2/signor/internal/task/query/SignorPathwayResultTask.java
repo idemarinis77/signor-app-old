@@ -41,12 +41,11 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
     @Override
     public void run(TaskMonitor monitor) {
         monitor.setTitle("Creating Pathway Network"); 
-        try {
-                      
-            manager.utils.info("SignorPathwayResultTask run(): il pathway ID e "+pathwayid);
-            String URL = ConfigResources.WSSearchoptionMAP.get("PATHWAYSEARCH").queryFunction.apply(pathwayid, "only"); 
-            monitor.setTitle("Querying Signor Network");            
-            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);   
+        String URL = ConfigResources.WSSearchoptionMAP.get("PATHWAYSEARCH").queryFunction.apply(pathwayid, "only");
+        try {                     
+             
+            monitor.setTitle("Querying SIGNOR Database");            
+            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from SIGNOR");   
             ArrayList<String> pathway_info = HttpUtils.parseWSNoheader(
                     HttpUtils.getHTTPSignor(ConfigResources.PATHSINGLEDESCRIPTIONSQUERY+network.parameters.get("PATHWAYID"), manager));
             String pathway_description = pathway_info.get(1).split("\t")[1];
@@ -102,7 +101,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             
         }
         catch(Exception e){
-            manager.utils.error("SignorPathwaResultTask run() "+e.toString());
+            manager.utils.error(e.toString()+"Problem fectching data from SIGNOR "+URL);
         }
         
     }

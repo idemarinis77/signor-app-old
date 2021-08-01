@@ -47,8 +47,8 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
         manager = network.manager;
         
         try {
-            monitor.setTitle("Querying Signor Network");            
-            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from "+URL);
+            monitor.setTitle("Querying SIGNOR Database");            
+            monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from SIGNOR");
             if (cancelled) return;
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             manager.utils.info(br.toString());
@@ -86,6 +86,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                     network.setEntityNotFound(substring);
                 }
                 if (cancelled) return;
+                
                 CyNetwork cynet = manager.createNetwork(netname);
                 manager.presentationManager.updateSignorNetworkCreated(cynet, network);
                 manager.presentationManager.updateSignorViewCreated(network, NetworkView.Type.DEFAULT);
@@ -103,7 +104,6 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                 //Populate my logic netowrk
                 network.setNetwork(cynet);
                 if(network.parameters.get(NetworkField.SINGLESEARCH).equals(true)){
-                    manager.utils.info("Il  nodo summary e "+terms);
                     network.setCyNodeRoot(terms);
                     network.parameters.replace(NetworkField.QUERY, terms);
                 }
@@ -142,7 +142,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
             }
         }
         catch (Exception e){
-            manager.utils.error(e.toString()+"Problem fectching data from "+URL);
+            manager.utils.error(e.toString()+"Problem fectching data from SIGNOR "+URL);
         }
     }
      @ProvidesTitle

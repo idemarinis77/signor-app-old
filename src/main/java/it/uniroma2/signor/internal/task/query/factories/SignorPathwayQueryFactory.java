@@ -65,13 +65,12 @@ public class SignorPathwayQueryFactory extends AbstractNetworkSearchTaskFactory 
         manager.utils.info(parameters.toString());
         HashMap <String, Object> buildParams = NetworkSearch.buildSearch(pathwayid, (String) parameters.get(NetworkField.SPECIES), 
                                                         NetworkField.PATHWAYSEARCH, false);
-        manager.utils.info("nuovo array "+buildParams.toString());
         try { 
-            manager.utils.info("Performing SIGNOR PTH search for "+parameters.toString()); 
+            manager.utils.info("Performing SIGNOR PATHWAY search for "+parameters.toString()); 
             return new TaskIterator(new SignorPathwayResultTask(new Network(manager, buildParams), pathwayid)); 
         }
         catch (Exception e){
-            manager.utils.error("Problems in performing SIGNOR PTH search "+e.toString());
+            manager.utils.error("Problems in performing SIGNOR PATHWAY search "+e.toString());
         }
         return null;
     }

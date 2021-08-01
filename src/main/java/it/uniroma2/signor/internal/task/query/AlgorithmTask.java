@@ -31,10 +31,9 @@ public class AlgorithmTask extends AbstractTask {
     }
     @Override
     public void run(TaskMonitor monitor) {        
-        monitor.setTitle("Algorithm Signor Network");          
+        monitor.setTitle("Applying force-directed algorithm to SIGNOR Network");          
         CyLayoutAlgorithmManager layoutManager = manager.utils.getService(CyLayoutAlgorithmManager.class);
-        if (layoutManager == null )manager.utils.info("Il layoutManager è nullo");
-            CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
+        CyLayoutAlgorithm alg = layoutManager.getLayout("force-directed-cl");
         if (alg == null) alg = layoutManager.getLayout("force-directed");
             Object context = alg.getDefaultLayoutContext();            
         try {

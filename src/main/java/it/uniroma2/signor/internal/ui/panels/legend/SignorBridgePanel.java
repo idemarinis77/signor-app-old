@@ -94,7 +94,7 @@ public class SignorBridgePanel extends JPanel {
             if(!networkCurrent.getEntityNotFound().isBlank()){
                 String not_found = networkCurrent.getEntityNotFound();
                 entity_info.add(new SignorLabelWarning(NodeField.ENTITY), gbc.down());
-                entity_info.add(new SignorLabelWarning(not_found+" entity not found in SIGNOR"), gbc.right());
+                entity_info.add(new SignorLabelWarning(" "+not_found+" entity not found in SIGNOR"), gbc.right());
             }
             bridgePanel.add(entity_info, gbc.anchor("north").down());
         }
@@ -117,12 +117,12 @@ public class SignorBridgePanel extends JPanel {
         HashMap<String, Object> parameters = network.parameters;
         String packed_query = parameters.get(NetworkField.QUERY).toString().replace(" ", "%2C");
         String species = (String) parameters.get(NetworkField.SPECIES);
-        new_parameters = NetworkSearch.buildSearch(packed_query, species, NetworkField.CONNECTSEARCH, true);
+        new_parameters = NetworkSearch.buildSearch((String) parameters.get(NetworkField.QUERY), species, NetworkField.CONNECTSEARCH, true);
         Network newnetwork = new Network(manager, new_parameters);
         manager.utils.info("BridgePanel buildIfn first parameters "+network.parameters.toString());
         manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString());        
         SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(NetworkField.CONNECTSEARCH, true, NetworkField.SPECIES,
-                                                  (String) new_parameters.get(NetworkField.QUERY), newnetwork);
+                                                  packed_query, newnetwork);
         manager.utils.execute(sgrf.createTaskIterator());
     }
     private void addEntity(Network network, String new_entity){
@@ -133,13 +133,13 @@ public class SignorBridgePanel extends JPanel {
         HashMap<String, Object> parameters = network.parameters;
         String packed_query = parameters.get(NetworkField.QUERY).toString().replace(" ", "%2C");
         String species = (String) parameters.get(NetworkField.SPECIES);
-        new_parameters = NetworkSearch.buildSearch(packed_query, species, default_search, true);
+        new_parameters = NetworkSearch.buildSearch((String) parameters.get(NetworkField.QUERY), species, default_search, true);
         Network newnetwork = new Network(manager, new_parameters);
         manager.utils.info("BridgePanel buildIfn first parameters "+network.parameters.toString());
         manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString()+"Default search "+default_search);        
         SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(default_search, 
                 (boolean) new_parameters.get(NetworkField.INCFIRSTNEISEARCH), NetworkField.SPECIES,
-                                                  (String) new_parameters.get(NetworkField.QUERY), newnetwork);
+                                                  packed_query, newnetwork);
         manager.utils.execute(sgrf.createTaskIterator());
     }
 }

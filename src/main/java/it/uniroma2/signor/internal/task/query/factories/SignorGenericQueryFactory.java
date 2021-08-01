@@ -81,9 +81,8 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
                 buildParams = NetworkSearch.buildSearch(terms_for_all, (String) parameters.get(NetworkField.SPECIES), NetworkField.SINGLESEARCH, 
                         (Boolean) parameters.get(NetworkField.INCFIRSTNEISEARCH));
             }
-            manager.utils.info("Performing SIGNOR search for "+parameters.toString()); 
             manager.utils.info("Performing SIGNOR search for buildParams "+buildParams.toString());
-            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, buildParams), SIGNOR_NAME, buildParams, terms));
+            return new TaskIterator(new SignorGenericQueryTask(new Network(manager, buildParams), SIGNOR_NAME, buildParams, terms_for_all));
         }
         catch (Exception e){
             manager.utils.error("Problems in performing SIGNOR search "+e.toString());
