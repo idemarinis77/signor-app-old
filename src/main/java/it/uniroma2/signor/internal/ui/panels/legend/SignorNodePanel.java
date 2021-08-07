@@ -22,6 +22,7 @@ import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.ConfigResources;
 import it.uniroma2.signor.internal.ui.components.SignorButton;
 import it.uniroma2.signor.internal.task.query.factories.SignorGenericRetrieveResultFactory;
+import it.uniroma2.signor.internal.ui.components.SignorLabelMore;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.util.HashMap;
 import org.cytoscape.model.CyNetwork;
@@ -90,7 +91,10 @@ public class SignorNodePanel extends JPanel {
                         SignorLabelStyledBold id = new SignorLabelStyledBold(key);
                         nodeinfo.add(id, gbc.down());
                         if(key!= NodeField.DATABASE){
-                            nodeinfo.add(new JLabel(value), gbc.right());
+                            if(value.length()>20)
+                                nodeinfo.add(new SignorLabelMore(manager, "[...]", value), gbc.right());
+                            else
+                                nodeinfo.add(new JLabel(value), gbc.right());
                         }
                         else {
                             String db_value_norm = value.toLowerCase();
@@ -100,7 +104,6 @@ public class SignorNodePanel extends JPanel {
                             nodeinfo.add(dbLabel, gbc.right());
                         }
                     }         
-                    manager.utils.info(summary.values().toString());
                     SignorButton searchID =  new SignorButton("causal networks");
                     searchID.addActionListener(e-> buildSingleSearch(entity_id, network));
                     nodeinfo.add(new SignorLabelStyledBold("Search in SIGNOR"), gbc.down());
@@ -129,7 +132,12 @@ public class SignorNodePanel extends JPanel {
         } 
 
     }
-    
+    public void cleanPanel(){
+        nodesPanel.removeAll();
+        revalidate();
+        repaint();
+        nodesPanel.add(new JLabel(">> Please select one or more nodes"));
+    }
     private void buildSingleSearch(String id, Network network){
 
         String species = (String) network.parameters.get(NetworkField.SPECIES);

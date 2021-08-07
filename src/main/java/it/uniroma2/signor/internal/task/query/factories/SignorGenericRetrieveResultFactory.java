@@ -33,17 +33,22 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
     
     @Override
     public TaskIterator createTaskIterator() {
-        network.manager.utils.info("Search parameters "+network.parameters.toString()+" you can find them in Network table");
+        network.manager.utils.info("Your search parameters are "+network.parameters.toString()+" you can find them in Network table");
         String terms_upper_case =terms.toUpperCase(); 
         String terms_for_netname=terms_upper_case.replace("%2C", " ").trim();
         String netName = Config.NTWPREFIX+terms_for_netname;
+        String code_species ="";
         String URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms_upper_case);                 
+        network.manager.utils.info("SPECIE  "+Config.SPECIESLIST.get(species));
+        if(!Config.SPECIESLIST.get(species).equals("9606")){
+            code_species = "&organism="+Config.SPECIESLIST.get(species);
+        }
         if(includefirstneighbor)
-            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms_upper_case, "2");
+            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms_upper_case, "2")+code_species;
         else if(search.equals(NetworkField.CONNECTSEARCH))
-            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms_upper_case, "1"); 
+            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms_upper_case, "1")+code_species; 
         else if(search.equals(NetworkField.ALLSEARCH))
-            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms_upper_case, "3");           
+            URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(terms_upper_case, "3")+code_species;           
         else if(search.equals(NetworkField.SHORTESTPATHSEARCH)){
             String terms_no_space = terms_upper_case.replace("%2C", " ").trim();
             String start = terms_no_space.split(" ")[0];

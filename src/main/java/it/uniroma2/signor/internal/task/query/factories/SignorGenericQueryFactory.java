@@ -60,7 +60,7 @@ public class SignorGenericQueryFactory extends AbstractNetworkSearchTaskFactory 
         HashMap <String, Object> buildParams = new HashMap ();
         try { 
             parameters = chooseSearchoption.getParameter();
-            parameters.put(NetworkField.QUERY, terms_for_all);
+//            parameters.put(NetworkField.QUERY, terms_for_all);
             if(parameters.get(NetworkField.ALLSEARCH).equals(true)){
                 buildParams = NetworkSearch.buildSearch(terms_for_all, (String) parameters.get(NetworkField.SPECIES), 
                                                         NetworkField.ALLSEARCH, false);

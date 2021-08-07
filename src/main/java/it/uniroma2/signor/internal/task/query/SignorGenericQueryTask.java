@@ -40,12 +40,9 @@ public class SignorGenericQueryTask extends AbstractTask {
     }
     @Override
     public void run(TaskMonitor monitor) {
-        //Integer fakeresult = 5;
-        
+       
         String search="";        
         Boolean includefirstneighbor = false;
-
-        //Parsing data
         if (parameters.get(NetworkField.SINGLESEARCH).equals(true)) {search = NetworkField.SINGLESEARCH; }
         if (parameters.get(NetworkField.ALLSEARCH).equals(true)) {search = NetworkField.ALLSEARCH; }
         if (parameters.get(NetworkField.CONNECTSEARCH).equals(true)) {search = NetworkField.CONNECTSEARCH; }
@@ -76,7 +73,7 @@ public class SignorGenericQueryTask extends AbstractTask {
                     return;                    
                 }
                 if(results.get(0).startsWith("name")){
-                    //I'm reading the header, could be 1 entry for H.S. and many for the other species
+                    //I'm reading the header, could be 1 entry for H.S. and more than one for the other species
                     String[] field = results.get(0).split("\t");
                     results.remove(0);
                     if (Arrays.toString(field).contains("mirna_db_id")){

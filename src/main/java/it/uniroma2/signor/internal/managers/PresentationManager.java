@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.managers;
-import java.util.HashMap;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Network.*;
 import it.uniroma2.signor.internal.Config;
 import it.uniroma2.signor.internal.conceptualmodel.structures.Table;
@@ -85,7 +84,7 @@ public class PresentationManager implements
     
     @Override
     public void handleEvent(NetworkViewAboutToBeDestroyedEvent e) {
-        signorViewMap.remove(e.getNetworkView());
+        signorCyNetworkViewMap.remove(e.getNetworkView());
     }
     
     @Override
@@ -108,9 +107,12 @@ public class PresentationManager implements
         if(manager.sessionLoaderManager.loadingsession.equals(false)){
             CyNetworkView cyNetworkView = e.getNetworkView();
             CyNetwork cyNetwork = cyNetworkView.getModel();
+            
             try {
+                Boolean view_exist = false;
                 if (signorNetMap.containsKey(cyNetwork)) {
                     if(signorCyNetworkViewMap != null){
+                       if(signorCyNetworkViewMap.containsKey(cyNetworkView)) view_exist = true;
                        signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
                     }                
                     else {
@@ -119,11 +121,14 @@ public class PresentationManager implements
                        };  
                     }    
                     String query = (String) signorNetMap.get(cyNetwork).parameters.get(NetworkField.QUERY);
-                    if(query == Config.INTERACTOMENAME || cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).contains(Config.INTERACTOMENAME)){
+                    if(query.equals(Config.INTERACTOMENAME) || cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).contains(Config.INTERACTOMENAME)){
                         //apply SIGNOR STYLE
-                        List<CyNetwork> nets = new ArrayList<CyNetwork>();  
-                        nets.add(cyNetwork);
+
                         manager.signorStyleManager.applyStyle(cyNetworkView);                        
+                    }
+                    else if (DataUtils.isSignorNetwork(cyNetwork)){
+                        //If you delete a view, this step is necessary to re-apply the style
+                        manager.signorStyleManager.applyStyle(cyNetworkView); 
                     }
                 }
             }
@@ -157,7 +162,7 @@ public class PresentationManager implements
             }
         }
         catch (Exception ex){
-            manager.utils.error("Network Added Event "+ex.toString());
+            manager.utils.error("Cannot add Network "+ex.toString());
         }
     }    
     

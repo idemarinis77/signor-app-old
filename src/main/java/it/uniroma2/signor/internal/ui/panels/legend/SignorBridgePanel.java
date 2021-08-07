@@ -79,10 +79,12 @@ public class SignorBridgePanel extends JPanel {
             JPanel entity_info=new JPanel();
             entity_info.setLayout(new GridBagLayout());
             Map<CyNode, Node> signorNodes = networkCurrent.getSearchedNodes();
+            
             for (Map.Entry<CyNode, Node> entry : signorNodes.entrySet()) {              
                 HashMap<String,String> summary = entry.getValue().getSummary();
                 Iterator iter = summary.keySet().iterator();
-                Iterator iterv = summary.values().iterator();                 
+                Iterator iterv = summary.values().iterator();    
+                manager.utils.error("Dentro BP "+summary.values().toString());
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();

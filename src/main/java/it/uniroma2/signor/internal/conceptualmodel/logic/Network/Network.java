@@ -114,14 +114,15 @@ public class Network {
         this.cyNetwork = cyNetwork;
         String searched_query = (String) this.parameters.get(NetworkField.QUERY);
         List<String> searched_entities = Arrays.asList(searched_query.split(" "));
+        manager.utils.info("La  query e questa "+searched_query);
         
         for (CyNode node: cyNetwork.getNodeList()){
             nodes.put(node, new Node(this, node));
-            if(searched_entities.contains(this.cyNetwork.getDefaultNodeTable().getRow(node.getSUID()).get(Config.NAMESPACE, NodeField.ENTITY, String.class))){
+            if(searched_entities.contains(this.cyNetwork.getDefaultNodeTable().getRow(node.getSUID()).get(Config.NAMESPACE, NodeField.ID, String.class))){
                 searched_nodes.put(node, new Node(this, node));
-            }
+            }            
         }
-
+        manager.utils.info("Il nuovo searched_nodes "+searched_nodes.toString());
         edgeTable = cyNetwork.getDefaultEdgeTable();
         nodeTable = cyNetwork.getDefaultNodeTable();         
        

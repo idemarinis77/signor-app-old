@@ -77,7 +77,11 @@ public class SignorEdgePanel extends JPanel {
 //                    Iterator iterv = summary.values().iterator();
                     edgeinfo.setLayout(new GridBagLayout());
                     edgeinfo.add(new SignorLabelStyledBold("SOURCE - TARGET  "), gbc.down());
-                    edgeinfo.add(new JLabel("<html><body style='width:100px;font-size:8px'>"+
+                    String source_target = edge.source.toString()+"-"+edge.target.toString();
+                    if(source_target.length()>20)
+                        edgeinfo.add(new SignorLabelMore(manager, "[...]", source_target), gbc.right());
+                    else 
+                        edgeinfo.add(new JLabel("<html><body style='width:100px;font-size:8px'>"+
                                              edge.source.toString()+"-"+edge.target.toString()+"</body></html>"), gbc.right());
 //                    while(iter.hasNext()){
                     for  (String key: summary.keySet()){
@@ -124,5 +128,11 @@ public class SignorEdgePanel extends JPanel {
             repaint();
         }
         
+    }
+    public void cleanPanel(){
+        edgesPanel.removeAll();
+        revalidate();
+        repaint();
+        edgesPanel.add(new JLabel(">> Please select one or more edges"));
     }
 }

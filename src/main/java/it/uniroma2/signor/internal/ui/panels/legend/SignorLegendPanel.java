@@ -267,6 +267,8 @@ public class SignorLegendPanel extends JPanel implements
             CyNetwork newcynet = e.getNetwork();
             if (newcynet != null && DataUtils.isSignorNetwork(e.getNetwork())){
                 showCytoPanel();
+                snp.cleanPanel();
+                sep.cleanPanel();
                 if (newcynet != null && DataUtils.isSignorNetwork(newcynet)){
                     if (manager.presentationManager.signorNetMap.containsKey(newcynet)){                           
                            CySubNetwork subCynetowrk = (CySubNetwork) newcynet;
