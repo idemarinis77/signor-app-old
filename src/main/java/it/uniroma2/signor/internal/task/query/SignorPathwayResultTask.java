@@ -57,7 +57,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             ArrayList<String> results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(URL, manager));
             if (cancelled) return;
             
-            network.SetPathwayInfo(pathway_info);
+//            network.SetPathwayInfo(pathway_info);
             network.parameters.replace(NetworkField.PATHWAYINFO, pathway_info.toString());
             Table PthTable = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
             PthTable.buildPTHTable(manager, cynet);

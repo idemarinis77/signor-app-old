@@ -73,7 +73,7 @@ public class SignorLegendPanel extends JPanel implements
             @Override public void actionPerformed(ActionEvent e) { 
                 defviewON.setEnabled(true);
                 ptmviewON.setEnabled(false);
-                DataUtils.PopulatePTMTables(manager, false); 
+                DataUtils.PopulatePTMTablesAndParentEdges(manager, false); 
             }
         };
         ActionListener listenerDEF = new ActionListener() {            

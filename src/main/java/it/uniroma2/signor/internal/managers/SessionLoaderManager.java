@@ -41,13 +41,11 @@ public class SessionLoaderManager implements SessionLoadedListener  {
                     Network signornet = new Network(manager, params);
                     manager.presentationManager.updateSignorNetworkCreated(cyNetwork, signornet);
                     String view_type = (String) params.get(NetworkField.VIEW);                  
-                    manager.utils.info(" il type e "+view_type);
                     if(view_type.equals(NetworkView.Type.DEFAULT.toString())){
                         manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.DEFAULT);
                     }
                     else manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.PTM);
                     String searched_query = (String) params.get(NetworkField.QUERY);
-
                     Collection<CyTableMetadata> tables = loadedSession.getTables();
                     linkPTMTableToNewtork(tables, signornet);
                     manager.utils.info("Reloading SIGNOR network "+cyNetwork.toString()+params.toString());
@@ -55,13 +53,10 @@ public class SessionLoaderManager implements SessionLoadedListener  {
                         signornet.setNetwork(cyNetwork);    
                         signornet.setEntityNotFound((String) params.get(NetworkField.ENTITYNOTFOUND));
                     }
-                    manager.utils.info("Reloading SIGNOR network dopo entitynotfodund "+searched_query);
                     if((Boolean)params.get(NetworkField.SINGLESEARCH).equals(true))
                        signornet.setCyNodeRoot(searched_query);
-                    manager.utils.info("Reloading SIGNOR network dopo setCyNodeRoot");
                     if((Boolean)params.get(NetworkField.PTMLOADED).equals(true) && !searched_query.equals(Config.INTERACTOMENAME))
-                        DataUtils.loadPTMfromTable(signornet, cyNetwork);
-                    manager.utils.info("Reloading SIGNOR network dopo load PTM");
+                        DataUtils.loadPTMInfoFromSession(signornet, cyNetwork);
                     if(!"".equals((String) params.get(NetworkField.PATHWAYINFO))){
                        signornet.isPathwayNetwork = true;
                        String pathway_info_from_db = (String) params.get(NetworkField.PATHWAYINFO);

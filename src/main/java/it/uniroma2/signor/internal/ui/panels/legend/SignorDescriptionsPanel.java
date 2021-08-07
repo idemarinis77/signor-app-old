@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package it.uniroma2.signor.internal.ui.panels.legend;
+import it.uniroma2.signor.internal.conceptualmodel.logic.Network.NetworkField;
 import it.uniroma2.signor.internal.conceptualmodel.logic.Pathway.PathwayField;
 import it.uniroma2.signor.internal.utils.EasyGBC;
 import it.uniroma2.signor.internal.managers.SignorManager;
@@ -50,15 +51,22 @@ public class SignorDescriptionsPanel extends JPanel {
     public void createContent(){
         try {                   
 
-            ArrayList<String> pathInfo = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).getPathwayInfo();
-            String[] header_pth = pathInfo.get(0).split("\t");
-            String[] path_info_packed=pathInfo.get(1).split("\t");
+//            ArrayList<String> pathInfo = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into).getPathwayInfo();
+            
+            String pathInfoString = (String) manager.presentationManager.signorNetMap.
+                    get(current_cynetwork_to_serch_into).parameters.get(NetworkField.PATHWAYINFO);
+ 
+            String[] pathInfo = pathInfoString.split(" ");
+            String[] header_pth = pathInfo[0].split("\t");
+            String[] path_info_packed=pathInfo[1].split("\t");
 
             JPanel pathinfo = new JPanel();
             pathinfo.setLayout(new GridBagLayout());
             
-            for (int i = 0; i < header_pth.length; i++) {                     
-                pathinfo.add(new SignorLabelStyledBold(PathwayField.SIGNORPTHFIELDMAP.get(header_pth[i])), gbc.down());   
+            for (int i = 0; i < header_pth.length; i++) {   
+                String header_cleaned = header_pth[i].replace("[", "");
+                String header_cleaned_final = header_cleaned.replace(",","");
+                pathinfo.add(new SignorLabelStyledBold(PathwayField.SIGNORPTHFIELDMAP.get(header_cleaned_final)), gbc.down());   
                 //Path_curator may not be present and path_info_packed is shorter than header_pth
                 if(i <path_info_packed.length){
                     if ( path_info_packed[i].length() > 20 && header_pth[i].startsWith(PathwayField.SIGNORPTH_DESCRIPTION))

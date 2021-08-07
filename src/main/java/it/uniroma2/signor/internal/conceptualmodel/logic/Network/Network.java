@@ -53,7 +53,7 @@ public class Network {
     public void SetPTMEdgeTable (CyTable cytable){
         this.PTMedgeTable = cytable;
     }
-     public void SetPathwayInfo (ArrayList<String> pathway_info){
+    public void SetPathwayInfo (ArrayList<String> pathway_info){
         this.pathway_info = pathway_info;
     }
     public void writeSearchNetwork(){
@@ -107,14 +107,13 @@ public class Network {
         return edges;
     }
     
-    public ArrayList<String> getPathwayInfo(){
-        return this.pathway_info;
-    }
+//    public ArrayList<String> getPathwayInfo(){
+//        return this.pathway_info;
+//    }
     public void setNetwork(CyNetwork cyNetwork) {
         this.cyNetwork = cyNetwork;
         String searched_query = (String) this.parameters.get(NetworkField.QUERY);
         List<String> searched_entities = Arrays.asList(searched_query.split(" "));
-        manager.utils.info("La  query e questa "+searched_query);
         
         for (CyNode node: cyNetwork.getNodeList()){
             nodes.put(node, new Node(this, node));
@@ -122,7 +121,6 @@ public class Network {
                 searched_nodes.put(node, new Node(this, node));
             }            
         }
-        manager.utils.info("Il nuovo searched_nodes "+searched_nodes.toString());
         edgeTable = cyNetwork.getDefaultEdgeTable();
         nodeTable = cyNetwork.getDefaultNodeTable();         
        
