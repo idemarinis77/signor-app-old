@@ -17,6 +17,7 @@ import org.cytoscape.view.model.events.NetworkViewAddedEvent;
 import org.cytoscape.view.model.events.NetworkViewAddedListener;
 import java.util.*;
 import org.cytoscape.application.CyApplicationManager;
+import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableFactory;
 import org.cytoscape.model.CyTableManager;
@@ -159,6 +160,40 @@ public class PresentationManager implements
                 Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
                 PTMTableEdge.buildPTMTable(parentNetwork.manager, "PTMEdge", cyNetwork); 
                 subnetwork.writeSearchNetwork();
+            }
+            //Maybe i'm cloning
+            else if (DataUtils.isSignorNetwork(cyNetwork) && !signorNetMap.containsKey(cyNetwork) 
+                    && !manager.sessionLoaderManager.loadingsession){
+                //I have to find the network cloned from
+
+                CyRow netrow = cyNetwork.getDefaultNetworkTable().getRow(cyNetwork.getSUID());
+                HashMap <String, Object> params = NetworkSearch.buildParamsFromNetworkRecord(netrow, manager);
+                Network signornet = new Network(manager, params);
+                manager.presentationManager.updateSignorNetworkCreated(cyNetwork, signornet);
+                String view_type = (String) params.get(NetworkField.VIEW);     
+                if(view_type.equals(NetworkView.Type.DEFAULT.toString())){
+                        manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.DEFAULT);
+                }     
+                else manager.presentationManager.updateSignorViewCreated(signornet, NetworkView.Type.PTM);
+                    String searched_query = (String) params.get(NetworkField.QUERY);
+                if(!searched_query.equals(Config.INTERACTOMENAME)){
+                    signornet.setNetwork(cyNetwork);    
+                    signornet.setEntityNotFound((String) params.get(NetworkField.ENTITYNOTFOUND));
+                }
+                if((Boolean)params.get(NetworkField.SINGLESEARCH).equals(true))
+                   signornet.setCyNodeRoot(searched_query);
+                if((Boolean)params.get(NetworkField.PTMLOADED).equals(true) && !searched_query.equals(Config.INTERACTOMENAME))
+                    DataUtils.loadPTMInfoFromSession(signornet, cyNetwork);
+                if(!"".equals((String) params.get(NetworkField.PATHWAYINFO))){
+//                       signornet.isPathwayNetwork = true;
+                   String pathway_info_from_db = (String) params.get(NetworkField.PATHWAYINFO);
+                   String[] pathway_field = pathway_info_from_db.split(",");
+                   ArrayList<String> pathway_info = new ArrayList<String>();
+                   for (int i = 0; i<pathway_field.length; i++) {
+                       pathway_info.add(pathway_field[i]);
+                   }
+                   signornet.SetPathwayInfo(pathway_info);
+                }                
             }
         }
         catch (Exception ex){

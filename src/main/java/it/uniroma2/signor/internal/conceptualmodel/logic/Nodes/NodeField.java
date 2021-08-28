@@ -66,6 +66,7 @@ public class NodeField {
            put(ID, "ID");
            put(TYPE, "TYPE");
            put(FORMEDBY, "FORMED BY");
+           put(DESCRIPTION, "DESCRIPTION");
            put(SIG_ID, "SIGNOR ID");
            put(COMPLEXPORTAL_ID, "COMPLEXPORTAL ID");
            put(ENTITY, "ENTITY");

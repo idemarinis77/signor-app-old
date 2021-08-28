@@ -94,7 +94,6 @@ public class SignorSummaryPanel extends JPanel {
                         }
                     }
                     else {
-                        manager.utils.error("CHIAVE "+key);
                         summary_info_but_path.add(new SignorLabelStyledBold(NodeField.NODESUMMARYMAP.get(key.toUpperCase())), gbc.position(0, it));     
                         if ( value.length() > 20 ) 
                              summary_info_but_path.add(new SignorLabelMore(manager, value.substring(0, 10)+" ... [more]", value), gbc.right());
