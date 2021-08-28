@@ -30,7 +30,7 @@ public class NetworkSearch {
           ALLSEARCH=false, SHORTESTPATHSEARCH=false, INCFIRSTNEISEARCH=false, SINGLESEARCH=true*/ 
         String queryuc = querylc.toUpperCase();
         HashMap<String, Object> buildSearchParams = new HashMap();
-        if(type == NetworkField.SINGLESEARCH){
+        if(type.equals(NetworkField.SINGLESEARCH)){
             buildSearchParams.put(NetworkField.SINGLESEARCH, true);
             buildSearchParams.put(NetworkField.ALLSEARCH, false);
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
@@ -48,7 +48,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false);            
             return buildSearchParams;
         }
-        else if(type == NetworkField.ALLSEARCH){
+        else if(type.equals(NetworkField.ALLSEARCH)){
             buildSearchParams.put(NetworkField.SINGLESEARCH, false);
             buildSearchParams.put(NetworkField.ALLSEARCH, true);
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
@@ -66,7 +66,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
-        else if(type == NetworkField.CONNECTSEARCH){
+        else if(type.equals(NetworkField.CONNECTSEARCH)){
             buildSearchParams.put(NetworkField.SINGLESEARCH, false);
             buildSearchParams.put(NetworkField.ALLSEARCH, false);
             buildSearchParams.put(NetworkField.CONNECTSEARCH, true);
@@ -84,7 +84,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
-         else if(type == NetworkField.SHORTESTPATHSEARCH){
+         else if(type.equals(NetworkField.SHORTESTPATHSEARCH)){
             buildSearchParams.put(NetworkField.SINGLESEARCH, false);
             buildSearchParams.put(NetworkField.ALLSEARCH, false);
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
@@ -102,7 +102,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
-        else if(querylc == Config.INTERACTOMENAME){
+        else if(querylc.equals(Config.INTERACTOMENAME)){
             buildSearchParams.put(NetworkField.SINGLESEARCH, false);
             buildSearchParams.put(NetworkField.ALLSEARCH, false);
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);
@@ -121,7 +121,7 @@ public class NetworkSearch {
             buildSearchParams.put(NetworkField.ROOTNETWORKPTM, false); 
             return buildSearchParams;
         }
-        else if(type == NetworkField.PATHWAYSEARCH) {
+        else if(type.equals(NetworkField.PATHWAYSEARCH)) {
             buildSearchParams.put(NetworkField.SINGLESEARCH, false);
             buildSearchParams.put(NetworkField.ALLSEARCH, false);
             buildSearchParams.put(NetworkField.CONNECTSEARCH, false);

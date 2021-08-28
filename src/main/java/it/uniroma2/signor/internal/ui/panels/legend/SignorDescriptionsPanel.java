@@ -79,7 +79,7 @@ public class SignorDescriptionsPanel extends JPanel {
 
             }      
             CollapsablePanel collapsableINFO = new CollapsablePanel(iconFont, "Pathway INFO", pathinfo, false );
-            descPanel.add(collapsableINFO, gbc.down().anchor("north"));
+            descPanel.add(collapsableINFO, gbc.down().anchor("north").insets(2,0,0,0));
         }        
         catch (Exception e){
             manager.utils.error("SignorDescriptionPanel CreateContent()"+e.toString());

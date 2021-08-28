@@ -81,7 +81,8 @@ public class Node implements Element {
             for (Integer i =0; i< results.length; i++){
                 summary.put(header[i], results[i]);
                 nodeRow.set(Config.NAMESPACE, header[i].toUpperCase(), results[i]);
-            }        
+            }  
+            nodeRow.set(Config.NAMESPACE, NodeField.PATHWAYLISTADDINFO.toUpperCase(), pathway_found_for_node);
         }
         catch (Exception e){
             network.manager.utils.error("Found exception while loading Node Summary "+e.toString());

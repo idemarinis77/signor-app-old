@@ -34,7 +34,12 @@ public class DataUtils {
         try {
             if (cyNetwork!=null){
                 Boolean name_starts_with = cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).startsWith(Config.NTWPREFIX);
-                Boolean column_connectsearch = TableUtil.ifColumnIfExist(cyNetwork.getDefaultNetworkTable(), Config.NAMESPACE, NetworkField.CONNECTSEARCH);
+                Boolean column_connectsearch = true;
+                
+                for (String key: NetworkField.networkTableField().keySet()){
+                  if (!TableUtil.ifColumnIfExist(cyNetwork.getDefaultNetworkTable(), Config.NAMESPACE, key))
+                     return false;                      
+                }
                 if(name_starts_with && column_connectsearch)
                     return true;
             }
@@ -50,8 +55,8 @@ public class DataUtils {
         Network subnet = new Network(parentnet.manager, parentnet.parameters);
         
         subnet.setNetwork(cyNetwork);
-        subnet.isDeasesNetwork = parentnet.isDeasesNetwork;
-        subnet.isPathwayNetwork = parentnet.isPathwayNetwork;
+//        subnet.isDeasesNetwork = parentnet.isDeasesNetwork;
+//        subnet.isPathwayNetwork = parentnet.isPathwayNetwork;
 //        subnet.ptm_already_loaded = parentnet.ptm_already_loaded;
 //        subnet.SetPathwayInfo(parentnet.getPathwayInfo());
         if(parentnet.isSingleSearch()) {
@@ -179,18 +184,7 @@ public class DataUtils {
         }
         catch (Exception e) {
             manager.utils.error("Show ptm view problem "+e.toString());            
-        }
-//        if(tableManager.getAllTables(true).contains(networksignor.PTMnodeTable) &&
-//               tableManager.getAllTables(true).contains(networksignor.PTMedgeTable)){            
-//            List uid_edge_to_hide = networksignor.PTMedgeTable.getColumn(Config.NAMESPACEPTM, "EdgeParent").getValues(Long.class);
-//            Map<CyEdge, Long> edges_to_hide = new HashMap<>();
-//            for (Object uid_edge: uid_edge_to_hide){
-//                CyEdge edge_to_hide = currentnet.getEdge((Long) uid_edge);
-//                edges_to_hide.put(edge_to_hide, (Long) uid_edge);
-//            }
-//            HideTaskFactory htfactory = manager.utils.getService(HideTaskFactory.class);
-//            manager.utils.execute(htfactory.createTaskIterator(networkView, null, edges_to_hide.keySet()));
-//        }           
+        }    
     }
     
     public static void ShowDefaultView(SignorManager manager, Boolean interactome){
@@ -199,9 +193,9 @@ public class DataUtils {
             CyNetwork currentnet = cyApplicationManager.getCurrentNetwork();
             CyNetworkView networkView = cyApplicationManager.getCurrentNetworkView();
             Network networksignor = manager.presentationManager.signorNetMap.get(currentnet);            
-            
-            currentnet.removeNodes(networksignor.PTMnodes.keySet());
             currentnet.removeEdges(networksignor.PTMedges.keySet());
+            currentnet.removeNodes(networksignor.PTMnodes.keySet());
+            
             UnHideTaskFactory unfactory = manager.utils.getService(UnHideTaskFactory.class);
             manager.utils.execute(unfactory.createTaskIterator(networkView, null, networksignor.ParentEdges.keySet()));
             networksignor.parameters.replace(NetworkField.VIEW, NetworkView.Type.DEFAULT.toString());

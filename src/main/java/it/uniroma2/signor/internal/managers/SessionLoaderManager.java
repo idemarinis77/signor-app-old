@@ -58,7 +58,7 @@ public class SessionLoaderManager implements SessionLoadedListener  {
                     if((Boolean)params.get(NetworkField.PTMLOADED).equals(true) && !searched_query.equals(Config.INTERACTOMENAME))
                         DataUtils.loadPTMInfoFromSession(signornet, cyNetwork);
                     if(!"".equals((String) params.get(NetworkField.PATHWAYINFO))){
-                       signornet.isPathwayNetwork = true;
+//                       signornet.isPathwayNetwork = true;
                        String pathway_info_from_db = (String) params.get(NetworkField.PATHWAYINFO);
                        String[] pathway_field = pathway_info_from_db.split(",");
                        ArrayList<String> pathway_info = new ArrayList<String>();

@@ -59,7 +59,34 @@ public class NodeField {
     public static final String SYNONYMS = "SYNONYMS";
     public static final String PATHWAYLISTADDINFO = "PATHWAYLIST";
 
-    
+    public static final HashMap<String,String> NODESUMMARYMAP= new HashMap(){
+        {
+           put(NAME,"NAME" );
+           put(DATABASE,"DATABASE" );
+           put(ID, "ID");
+           put(TYPE, "TYPE");
+           put(FORMEDBY, "FORMED BY");
+           put(SIG_ID, "SIGNOR ID");
+           put(COMPLEXPORTAL_ID, "COMPLEXPORTAL ID");
+           put(ENTITY, "ENTITY");
+           put(ENTITY_ALIAS, "ALIAS");
+           put(ENTITY_DB_ID, "ENTITY DB");
+           put(ALT_ID, "ALT_ID");
+           put(FORMULA, "FORMULA");
+           put(IUPAC, "IUPAC");
+           put(FP_DESCRIPTION, "FP DESCRIPTION");
+           put(FP_SEQUENCE, "FP SEQUENCE");
+           put(IDS, "IDS");
+           put(PF_DESCRIPTION, "PF DESCRIPTION");
+           put(STIM_DESCRIPTION, "STIMULUS DESCRIPTION");
+           put(PHE_DESCRIPTION, "PHE. DESCRIPTION");
+           put(MIRNA_DB_ID, "MIRNA DB ID");
+           put(RNA_CENTRAL, "RNA CENTRAL");
+           put(GENE_NAME, "GENE NAME");
+           put(FUNCTION, "FUNCTION");
+           put(PATHWAYLISTADDINFO, "PATHWAYLISTADDINFO");
+        }
+    };
     public static final HashMap<String,Class<?>> NODEFIELDADDITIONAL= new HashMap(){
         {
            put(NAME, String.class);

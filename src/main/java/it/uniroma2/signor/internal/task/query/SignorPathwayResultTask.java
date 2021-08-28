@@ -51,7 +51,7 @@ public class SignorPathwayResultTask extends AbstractTask implements TaskObserve
             String pathway_description = pathway_info.get(1).split("\t")[1];
             CyNetwork cynet = manager.createNetwork(Config.NTWPREFIX+pathway_description);
             manager.presentationManager.updateSignorNetworkCreated(cynet, network);
-            network.isPathwayNetwork = true;
+//            network.isPathwayNetwork = true;
             manager.presentationManager.updateSignorViewCreated(network, NetworkView.Type.DEFAULT);
             
             ArrayList<String> results = HttpUtils.parseWSNoheader(HttpUtils.getHTTPSignor(URL, manager));

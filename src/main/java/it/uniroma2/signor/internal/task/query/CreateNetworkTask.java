@@ -45,19 +45,26 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
     public void run(TaskMonitor monitor) {
         //SignorManager manager = network.manager;
         manager = network.manager;
-        
+  
         try {
             monitor.setTitle("Querying SIGNOR Database");            
             monitor.showMessage(TaskMonitor.Level.INFO, "Fetching data from SIGNOR");
             if (cancelled) return;
             manager.utils.info("Gettingdata from "+URL);
+
             BufferedReader br = HttpUtils.getHTTPSignor(URL, manager);
             manager.utils.info(br.toString());
             ArrayList<String> results = HttpUtils.parseWS(br, Config.HEADERSINGLESEARCH, 
                     (Boolean) network.parameters.get(NetworkField.SHORTESTPATHSEARCH), manager);
             String newterms = terms.replace("%2C", " ");
             String new_for_warning = terms.replace("%2C", ",");
+            manager.utils.info("Shortest path **"+results.get(0)+"**");
             if(results.isEmpty()){                
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
+                    "No results", JOptionPane.ERROR_MESSAGE));
+                return;
+            }
+            if(results.get(0).isEmpty()){
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
                 return;

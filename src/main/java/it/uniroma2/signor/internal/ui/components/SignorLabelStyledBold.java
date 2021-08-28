@@ -48,7 +48,7 @@ public class SignorLabelStyledBold extends JLabel{
     }
 
     public SignorLabelStyledBold(String label, String link, final OpenBrowser openBrowser, boolean bold) {
-        super(label);
+        super(label.toUpperCase());
         this.openBrowser = openBrowser;
         if (bold) this.setFont(new Font(label, Font.BOLD, 11));
         if (openBrowser != null) {

@@ -79,7 +79,7 @@ public class SignorResultPanel extends JPanel {
             String[] fields = line.split("\t");
             if(Config.SPECIESLIST.get(species)=="10090" || Config.SPECIESLIST.get(species) == "10116")
                 i++;
-            SignorPanelRow listresults = new SignorPanelRow(1, 4, manager);
+            SignorPanelRow listresults = new SignorPanelRow(1, 4);
             JLabel primaentity = new JLabel(fields[i]);
             JLabel primaid = new JLabel(fields[i+1]);
             listresults.add(primaentity, layoutHelper.insets(2,2,2,2));

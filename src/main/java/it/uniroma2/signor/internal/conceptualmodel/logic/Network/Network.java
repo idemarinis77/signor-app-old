@@ -21,15 +21,15 @@ public class Network {
     private final Map<CyNode, Node> searched_nodes = new HashMap<>();
     private final Map<CyEdge, Edge> edges = new HashMap<>();
 
-    private String entityNotFound="";
+//    private String entityNotFound="";
     private final Map<NodeCouple, List<CyEdge>> coupleToDefaultEdges = new HashMap<>();
     
     public  Map<CyNode, Long> PTMnodes = new HashMap<>();
     public  Map<CyEdge, Long> PTMedges = new HashMap<>();
     public  Map<CyEdge, Long> ParentEdges = new HashMap<>();
    
-    public Boolean isPathwayNetwork = false;
-    public Boolean isDeasesNetwork = false;
+//    public Boolean isPathwayNetwork = false;
+//    public Boolean isDeasesNetwork = false;
 //    public Boolean ptm_already_loaded = false;
     public CyNode rootNode;
     private Node networkRootNode;
@@ -119,7 +119,10 @@ public class Network {
             nodes.put(node, new Node(this, node));
             if(searched_entities.contains(this.cyNetwork.getDefaultNodeTable().getRow(node.getSUID()).get(Config.NAMESPACE, NodeField.ID, String.class))){
                 searched_nodes.put(node, new Node(this, node));
-            }            
+            }    
+            else if (searched_entities.contains(this.cyNetwork.getDefaultNodeTable().getRow(node.getSUID()).get(Config.NAMESPACE, NodeField.ENTITY, String.class))){
+                searched_nodes.put(node, new Node(this, node));
+            } 
         }
         edgeTable = cyNetwork.getDefaultEdgeTable();
         nodeTable = cyNetwork.getDefaultNodeTable();         

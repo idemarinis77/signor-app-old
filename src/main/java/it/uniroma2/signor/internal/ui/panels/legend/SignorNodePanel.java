@@ -75,9 +75,10 @@ public class SignorNodePanel extends JPanel {
 
 //                CyNode node_current = (CyNode) iter_sel_nodes.next();
                 CyNode node_current = cynode;
-                if(!current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
-                        get(Config.NAMESPACE, NodeField.TYPE, String.class).equals(EdgeField.RESIDUE.toLowerCase())){
-                    Node node = network.getNodes().get(node_current);            
+                Node node = network.getNodes().get(node_current);
+//                if(!current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
+//                        get(Config.NAMESPACE, NodeField.TYPE, String.class).equals(EdgeField.RESIDUE.toLowerCase())){
+                if(!network.PTMnodes.containsKey(node_current)){         
                     HashMap <String,String> summary = node.getSummary();                
                     String entity_name = summary.get(NodeField.ENTITY);
                     String entity_id = summary.get(NodeField.ID);              
@@ -100,7 +101,7 @@ public class SignorNodePanel extends JPanel {
                             String db_value_norm = value.toLowerCase();
                             String link_to_db = ConfigResources.DBLINKSMAP.get(db_value_norm).queryFunction.apply(entity_id);
                             OpenBrowser openBrowser = manager.utils.getService(OpenBrowser.class);
-                            SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(db_value_norm, link_to_db, openBrowser, false);
+                            SignorLabelStyledBold dbLabel = new SignorLabelStyledBold(db_value_norm.toUpperCase(), link_to_db, openBrowser, true);
                             nodeinfo.add(dbLabel, gbc.right());
                         }
                     }         

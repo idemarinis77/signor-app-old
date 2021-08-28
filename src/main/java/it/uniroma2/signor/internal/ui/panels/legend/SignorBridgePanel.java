@@ -58,7 +58,7 @@ public class SignorBridgePanel extends JPanel {
             Network networkCurrent = manager.presentationManager.signorNetMap.get(current_cynetwork_to_serch_into);
             bridgePanel.setLayout(new GridBagLayout());
             if(networkCurrent.parameters.get(NetworkField.INCFIRSTNEISEARCH).equals(false)
-                    && networkCurrent.parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(false)){
+                    && networkCurrent.parameters.get(NetworkField.CONNECTSEARCH).equals(true)){
                SignorButton ifn = new SignorButton("Include first neighbor");
                ifn.addActionListener(e-> buildIfn(networkCurrent));
                JPanel buttonPanel = new JPanel();
@@ -84,7 +84,6 @@ public class SignorBridgePanel extends JPanel {
                 HashMap<String,String> summary = entry.getValue().getSummary();
                 Iterator iter = summary.keySet().iterator();
                 Iterator iterv = summary.values().iterator();    
-                manager.utils.error("Dentro BP "+summary.values().toString());
                 while(iter.hasNext()){
                     String key = iter.next().toString();
                     String value = iterv.next().toString();
@@ -123,7 +122,7 @@ public class SignorBridgePanel extends JPanel {
         Network newnetwork = new Network(manager, new_parameters);
         manager.utils.info("BridgePanel buildIfn first parameters "+network.parameters.toString());
         manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString());        
-        SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(NetworkField.CONNECTSEARCH, true, NetworkField.SPECIES,
+        SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(NetworkField.CONNECTSEARCH, true, species,
                                                   packed_query, newnetwork);
         manager.utils.execute(sgrf.createTaskIterator());
     }
@@ -140,7 +139,7 @@ public class SignorBridgePanel extends JPanel {
         manager.utils.info("BridgePanel buildIfn first parameters "+network.parameters.toString());
         manager.utils.info("BridgePanel buildIfn after parameters "+new_parameters.toString()+"Default search "+default_search);        
         SignorGenericRetrieveResultFactory sgrf = new SignorGenericRetrieveResultFactory(default_search, 
-                (boolean) new_parameters.get(NetworkField.INCFIRSTNEISEARCH), NetworkField.SPECIES,
+                (boolean) new_parameters.get(NetworkField.INCFIRSTNEISEARCH), species,
                                                   packed_query, newnetwork);
         manager.utils.execute(sgrf.createTaskIterator());
     }

@@ -26,12 +26,12 @@ import org.cytoscape.work.ProvidesTitle;
 public class SignorGenericQueryTask extends AbstractTask {
         private final SignorManager manager;
         private final Network network;
-        private final HashMap<String, ?> parameters;      
+        private final HashMap<String, Object> parameters;      
         private final String panelTitle;
         private final String terms;
            
     
-    public SignorGenericQueryTask(Network network,String panelTitle, HashMap<String, ?> parameters, String terms){
+    public SignorGenericQueryTask(Network network,String panelTitle, HashMap<String, Object> parameters, String terms){
         this.network=network;
         this.manager=network.manager;
         this.panelTitle=panelTitle;
@@ -49,7 +49,19 @@ public class SignorGenericQueryTask extends AbstractTask {
         if (parameters.get(NetworkField.SHORTESTPATHSEARCH).equals(true)) {search = NetworkField.SHORTESTPATHSEARCH; }
         if (parameters.get(NetworkField.INCFIRSTNEISEARCH).equals(true)) {includefirstneighbor = true; }            
         String species = parameters.get(NetworkField.SPECIES).toString();
-
+        
+        //I check the terms lenght, if user tyope only ine entity I forse single search
+        String terms_no_space = terms.replace(" ", "%2C").trim();
+        String terms_for_all = terms_no_space.replace("\n", "%2C").trim();
+        int number_of_terms = terms_for_all.split("%2C").length;
+        if(number_of_terms==1){
+            search = NetworkField.SINGLESEARCH;
+            parameters.replace(NetworkField.SINGLESEARCH, true);
+            parameters.replace(NetworkField.ALLSEARCH, false);
+            parameters.replace(NetworkField.CONNECTSEARCH, false);
+            parameters.replace(NetworkField.SHORTESTPATHSEARCH, false);
+            parameters.replace(NetworkField.INCFIRSTNEISEARCH, false);
+        }
         try{
             if (search == NetworkField.SINGLESEARCH){
                 final Boolean fneighcopy = includefirstneighbor;
@@ -57,7 +69,7 @@ public class SignorGenericQueryTask extends AbstractTask {
                 final String terms_trimmed = terms.trim();
                 Integer position_of_primary_id=0;
                 if (terms_trimmed.indexOf(" ")>0){             
-                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Please type only one of these terms:"+terms_trimmed,
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Please type only one of these entities:"+terms_trimmed,
                         "No results", JOptionPane.ERROR_MESSAGE));
                     return;                    
                 }
@@ -108,9 +120,27 @@ public class SignorGenericQueryTask extends AbstractTask {
                 }
                 
             }
-            if (search == NetworkField.CONNECTSEARCH || search == NetworkField.ALLSEARCH || search == NetworkField.SHORTESTPATHSEARCH){                
-                String terms_no_space = terms.replace(" ", "%2C").trim();
-                String terms_for_all = terms_no_space.replace("\n", "%2C").trim();
+            if (search.equals(NetworkField.CONNECTSEARCH) || search.equals(NetworkField.ALLSEARCH)){                
+//                terms_no_space = terms.replace(" ", "%2C").trim();
+//                terms_for_all = terms_no_space.replace("\n", "%2C").trim();
+//                number_of_terms = terms_for_all.split("%2C").length;
+                if(number_of_terms < 2){
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Please type more than one entity ",
+                        "No results", JOptionPane.ERROR_MESSAGE));
+                    return;   
+                }
+                TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), terms_for_all, network);
+                manager.utils.execute(factory.createTaskIterator());                
+            }
+            if (search.equals(NetworkField.SHORTESTPATHSEARCH)){                
+//                String terms_no_space = terms.replace(" ", "%2C").trim();
+//                String terms_for_all = terms_no_space.replace("\n", "%2C").trim();
+//                int number_of_terms = terms_for_all.split("%2C").length;
+                if(number_of_terms!= 2){
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Please type only two entities ",
+                        "No results", JOptionPane.ERROR_MESSAGE));
+                    return;   
+                }
                 TaskFactory factory = new SignorGenericRetrieveResultFactory(search, includefirstneighbor, parameters.get("SPECIES").toString(), terms_for_all, network);
                 manager.utils.execute(factory.createTaskIterator());                
             }

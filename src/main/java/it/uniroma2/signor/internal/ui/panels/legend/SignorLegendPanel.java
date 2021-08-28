@@ -188,7 +188,7 @@ public class SignorLegendPanel extends JPanel implements
                 defviewON.setEnabled(true);
             }
 
-            if (event.getNewNetwork().isPathwayNetwork.equals(true)){
+            if (event.getNewNetwork().parameters.get(NetworkField.PATHWAYSEARCH).equals(true)){
                 this.current_cynetwork_to_serch_into = newcynet;
                 snp.current_cynetwork_to_serch_into = newcynet;
                 sep.current_cynetwork_to_serch_into = newcynet;
@@ -309,7 +309,7 @@ public class SignorLegendPanel extends JPanel implements
                               this.hideCytoPanel();
                               manager.utils.info("set current interactome loaded session");
                           }
-                          else if (manager.presentationManager.signorNetMap.get(newcynet).isPathwayNetwork.equals(true)){
+                          else if (manager.presentationManager.signorNetMap.get(newcynet).parameters.get(NetworkField.PATHWAYSEARCH).equals(true)){
                                 this.current_cynetwork_to_serch_into = newcynet;
                                 snp.current_cynetwork_to_serch_into = newcynet;
                                 sep.current_cynetwork_to_serch_into = newcynet; 

@@ -58,132 +58,132 @@ public class ConfigPathway {
         public static int interaction_position= 12;
     
     
-        public static final HashMap<String,String> PathwayDiseaseList = new HashMap() {
-      
-            {
-                     put("SIGNOR-AD", "Alzheimer");
-                     put("SIGNOR-FSGS", "Focal segmental glomerulosclerosis");
-                     put("SIGNOR-MSP", "Multiple sclerosis");
-                     put("SIGNOR-NS", "Noonan syndrome");
-                     put("SIGNOR-PD", "Parkinson");
-            }
-        };
-        
-        public static final HashMap<String,String> PathwayTumorList = new HashMap() {
-                   {
-                     put("SIGNOR-AML-MiniPathway", "Acute Myeloid Leukemia");
-                     put("SIGNOR-CRC", "Colorectal Carcinoma");
-                     put("SIGNOR-GBM", "Glioblastoma Multiforme");
-                     put("SIGNOR-HT", "Hepatocellular Tumor");
-                     put("SIGNOR-LBC", "Luminal Breast Cancer");
-                     put("SIGNOR-MM", "Malignant");
-                     put("SIGNOR-PDAP", "Pancreatic");
-                     put("SIGNOR-PC", "Prostate");
-                     put("SIGNOR-RMS", "Rhabdomyosarcoma");
-                     put("SIGNOR-TC", "Thyroid cancer");
-                   }
-        };
-        
-        public static final HashMap<String,String> PathwayList = new HashMap() {
-                    {
-                     put("SIGNOR-AC", "Adipogenesis");
-                     put("SIGNOR-AMPK", "AMPK");
-                     put("SIGNOR-Autophagy", "Autophagy");
-                     put("SIGNOR-CM", "Catecholamine");
-                     put("SIGNOR-G1-S_trans", "Cell cycle: G1/S phase transition");
-                     put("SIGNOR-G2-M_trans", "Cell cycle: G2/M phase transitio");
-                     put("SIGNOR-CS", "Complement signal");
-                     put("SIGNOR-DR", "Death receptor signaling");
-                     put("SIGNOR-EGF", "EGFR signaling");
-                     put("SIGNOR-Fibrosis", "Fibrosis");
-                     put("SIGNOR-GCR", "Glucocorticoid receptor Signaling");
-                     put("SIGNOR-HPP", "Hippo Signaling");
-                     put("SIGNOR-IL1R", "IL1 Signaling");
-                     put("SIGNOR-IL6", "IL6 Signaling");
-                     put("SIGNOR-Inflammosome", "Inflammosome Activation");
-                     put("SIGNOR-IOA", "Inhibition of Apoptosis");
-                     put("SIGNOR-Inflammosome", "Inflammosome Activation");
-                     put("SIGNOR-IIS", "Innate Immune Response");
-                     put("SIGNOR-INSR", "Insulin Signaling");
-                     put("SIGNOR-IS", "Integrin Signaling");
-                     put("SIGNOR-LR", "Leptin Signaling");
-                     put("SIGNOR-M1M2", "Macrophage polarization");
-                     put("SIGNOR-MCAPO", "Mitochondrial control of Apoptosis");
-                     put("SIGNOR-MS", "MTOR Signaling");
-                     put("SIGNOR-NFKBC", "NF-KB Canonical");
-                     put("SIGNOR-NFKBNC", "NF-KB non canonical");
-                     put("SIGNOR-NOTCH", "NOTCH Signaling");
-                     put("SIGNOR-P38", "P38 Signaling");
-                     put("SIGNOR-PI3K-AKT", "PI3K/AKT Signaling");
-                     put("SIGNOR-SAPK-JNK", "SAPK/JNK Signaling");
-                     put("SIGNOR-Hedgehog", "Sonic  HedgeHog");
-                     put("SIGNOR-TCA", "T Cell Activation");
-                     put("SIGNOR-TGFb", "TGF-beta Signaling");
-                     put("SIGNOR-TA", "TNF-alpha");
-                     put("SIGNOR-TLR", "Toll like receptor");
-                     put("SIGNOR-VEGF", "VEGF Signaling");
-                     put("SIGNOR-WNT", "WNT Signaling");
-                    }
-        };
-                     
-        public static final HashMap<String,String> MapPathwayDescID = new HashMap() {
-      
-            {                     
-                     put("Alzheimer", "SIGNOR-AD");
-                     put("Focal segmental glomerulosclerosis", "SIGNOR-FSGS");
-                     put("Multiple sclerosis", "SIGNOR-MSP");
-                     put("Noonan syndrome", "SIGNOR-NS");
-                     put("Parkinson", "SIGNOR-PD");            
-                     put("Acute Myeloid Leukemia", "SIGNOR-AML-MiniPathway");
-                     put("Colorectal Carcinoma", "SIGNOR-CRC");
-                     put("Glioblastoma Multiforme", "SIGNOR-GBM");
-                     put("Hepatocellular Tumor", "SIGNOR-HT");
-                     put("Luminal Breast Cancer", "SIGNOR-LBC");
-                     put("Malignant", "SIGNOR-MM");
-                     put("Pancreatic", "SIGNOR-PDAP");
-                     put("Prostate", "SIGNOR-PC");
-                     put("Rhabdomyosarcoma", "SIGNOR-RMS");
-                     put("Thyroid cancer", "SIGNOR-TC");                   
-                     put("Adipogenesis", "SIGNOR-AC");
-                     put("AMPK", "SIGNOR-AMPK");
-                     put("Autophagy", "SIGNOR-Autophagy");
-                     put("Catecholamine", "SIGNOR-CM");
-                     put("Cell cycle: G1/S phase transition", "SIGNOR-G1-S_trans");
-                     put("Cell cycle: G2/M phase transitio", "SIGNOR-G2-M_trans");
-                     put("Complement signal", "SIGNOR-CS");
-                     put("Death receptor signaling", "SIGNOR-DR");
-                     put("EGFR signaling", "SIGNOR-EGF");
-                     put("Fibrosis", "SIGNOR-Fibrosis");
-                     put("Glucocorticoid receptor Signaling", "SIGNOR-GCR");
-                     put("Hippo Signaling", "SIGNOR-HPP");
-                     put("IL1 Signaling", "SIGNOR-IL1R");
-                     put("IL6 Signaling", "SIGNOR-IL6");
-                     put("Inflammosome Activation", "SIGNOR-Inflammosome");
-                     put("Inhibition of Apoptosis", "SIGNOR-IOA");
-                     put("Inflammosome Activation", "SIGNOR-Inflammosome");
-                     put("Innate Immune Response", "SIGNOR-IIS");
-                     put("Insulin Signaling", "SIGNOR-INSR");
-                     put("Integrin Signaling", "SIGNOR-IS");
-                     put("Leptin Signaling", "SIGNOR-LR");
-                     put("Macrophage polarization", "SIGNOR-M1M2");
-                     put("Mitochondrial control of Apoptosis", "SIGNOR-MCAPO");
-                     put("MTOR Signaling", "SIGNOR-MS");
-                     put("NF-KB Canonical", "SIGNOR-NFKBC");
-                     put("NF-KB non canonical", "SIGNOR-NFKBNC");
-                     put("NOTCH Signaling", "SIGNOR-NOTCH");
-                     put("P38 Signaling", "SIGNOR-P38");
-                     put("PI3K/AKT Signaling", "SIGNOR-PI3K-AKT");
-                     put("SAPK/JNK Signaling", "SIGNOR-SAPK-JNK");
-                     put("Sonic  HedgeHog", "SIGNOR-Hedgehog");
-                     put("T Cell Activation", "SIGNOR-TCA");
-                     put("TGF-beta Signaling", "SIGNOR-TGFb");
-                     put("TNF-alpha", "SIGNOR-TA");
-                     put("Toll like receptor", "SIGNOR-TLR");
-                     put("VEGF Signaling", "SIGNOR-VEGF");
-                     put("WNT Signaling", "SIGNOR-WNT");
-                    }
-        };
-                     
+//        public static final HashMap<String,String> PathwayDiseaseList = new HashMap() {
+//      
+//            {
+//                     put("SIGNOR-AD", "Alzheimer");
+//                     put("SIGNOR-FSGS", "Focal segmental glomerulosclerosis");
+//                     put("SIGNOR-MSP", "Multiple sclerosis");
+//                     put("SIGNOR-NS", "Noonan syndrome");
+//                     put("SIGNOR-PD", "Parkinson");
+//            }
+//        };
+//        
+//        public static final HashMap<String,String> PathwayTumorList = new HashMap() {
+//                   {
+//                     put("SIGNOR-AML-MiniPathway", "Acute Myeloid Leukemia");
+//                     put("SIGNOR-CRC", "Colorectal Carcinoma");
+//                     put("SIGNOR-GBM", "Glioblastoma Multiforme");
+//                     put("SIGNOR-HT", "Hepatocellular Tumor");
+//                     put("SIGNOR-LBC", "Luminal Breast Cancer");
+//                     put("SIGNOR-MM", "Malignant");
+//                     put("SIGNOR-PDAP", "Pancreatic");
+//                     put("SIGNOR-PC", "Prostate");
+//                     put("SIGNOR-RMS", "Rhabdomyosarcoma");
+//                     put("SIGNOR-TC", "Thyroid cancer");
+//                   }
+//        };
+//        
+//        public static final HashMap<String,String> PathwayList = new HashMap() {
+//                    {
+//                     put("SIGNOR-AC", "Adipogenesis");
+//                     put("SIGNOR-AMPK", "AMPK");
+//                     put("SIGNOR-Autophagy", "Autophagy");
+//                     put("SIGNOR-CM", "Catecholamine");
+//                     put("SIGNOR-G1-S_trans", "Cell cycle: G1/S phase transition");
+//                     put("SIGNOR-G2-M_trans", "Cell cycle: G2/M phase transitio");
+//                     put("SIGNOR-CS", "Complement signal");
+//                     put("SIGNOR-DR", "Death receptor signaling");
+//                     put("SIGNOR-EGF", "EGFR signaling");
+//                     put("SIGNOR-Fibrosis", "Fibrosis");
+//                     put("SIGNOR-GCR", "Glucocorticoid receptor Signaling");
+//                     put("SIGNOR-HPP", "Hippo Signaling");
+//                     put("SIGNOR-IL1R", "IL1 Signaling");
+//                     put("SIGNOR-IL6", "IL6 Signaling");
+//                     put("SIGNOR-Inflammosome", "Inflammosome Activation");
+//                     put("SIGNOR-IOA", "Inhibition of Apoptosis");
+//                     put("SIGNOR-Inflammosome", "Inflammosome Activation");
+//                     put("SIGNOR-IIS", "Innate Immune Response");
+//                     put("SIGNOR-INSR", "Insulin Signaling");
+//                     put("SIGNOR-IS", "Integrin Signaling");
+//                     put("SIGNOR-LR", "Leptin Signaling");
+//                     put("SIGNOR-M1M2", "Macrophage polarization");
+//                     put("SIGNOR-MCAPO", "Mitochondrial control of Apoptosis");
+//                     put("SIGNOR-MS", "MTOR Signaling");
+//                     put("SIGNOR-NFKBC", "NF-KB Canonical");
+//                     put("SIGNOR-NFKBNC", "NF-KB non canonical");
+//                     put("SIGNOR-NOTCH", "NOTCH Signaling");
+//                     put("SIGNOR-P38", "P38 Signaling");
+//                     put("SIGNOR-PI3K-AKT", "PI3K/AKT Signaling");
+//                     put("SIGNOR-SAPK-JNK", "SAPK/JNK Signaling");
+//                     put("SIGNOR-Hedgehog", "Sonic  HedgeHog");
+//                     put("SIGNOR-TCA", "T Cell Activation");
+//                     put("SIGNOR-TGFb", "TGF-beta Signaling");
+//                     put("SIGNOR-TA", "TNF-alpha");
+//                     put("SIGNOR-TLR", "Toll like receptor");
+//                     put("SIGNOR-VEGF", "VEGF Signaling");
+//                     put("SIGNOR-WNT", "WNT Signaling");
+//                    }
+//        };
+//                     
+//        public static final HashMap<String,String> MapPathwayDescID = new HashMap() {
+//      
+//            {                     
+//                     put("Alzheimer", "SIGNOR-AD");
+//                     put("Focal segmental glomerulosclerosis", "SIGNOR-FSGS");
+//                     put("Multiple sclerosis", "SIGNOR-MSP");
+//                     put("Noonan syndrome", "SIGNOR-NS");
+//                     put("Parkinson", "SIGNOR-PD");            
+//                     put("Acute Myeloid Leukemia", "SIGNOR-AML-MiniPathway");
+//                     put("Colorectal Carcinoma", "SIGNOR-CRC");
+//                     put("Glioblastoma Multiforme", "SIGNOR-GBM");
+//                     put("Hepatocellular Tumor", "SIGNOR-HT");
+//                     put("Luminal Breast Cancer", "SIGNOR-LBC");
+//                     put("Malignant", "SIGNOR-MM");
+//                     put("Pancreatic", "SIGNOR-PDAP");
+//                     put("Prostate", "SIGNOR-PC");
+//                     put("Rhabdomyosarcoma", "SIGNOR-RMS");
+//                     put("Thyroid cancer", "SIGNOR-TC");                   
+//                     put("Adipogenesis", "SIGNOR-AC");
+//                     put("AMPK", "SIGNOR-AMPK");
+//                     put("Autophagy", "SIGNOR-Autophagy");
+//                     put("Catecholamine", "SIGNOR-CM");
+//                     put("Cell cycle: G1/S phase transition", "SIGNOR-G1-S_trans");
+//                     put("Cell cycle: G2/M phase transitio", "SIGNOR-G2-M_trans");
+//                     put("Complement signal", "SIGNOR-CS");
+//                     put("Death receptor signaling", "SIGNOR-DR");
+//                     put("EGFR signaling", "SIGNOR-EGF");
+//                     put("Fibrosis", "SIGNOR-Fibrosis");
+//                     put("Glucocorticoid receptor Signaling", "SIGNOR-GCR");
+//                     put("Hippo Signaling", "SIGNOR-HPP");
+//                     put("IL1 Signaling", "SIGNOR-IL1R");
+//                     put("IL6 Signaling", "SIGNOR-IL6");
+//                     put("Inflammosome Activation", "SIGNOR-Inflammosome");
+//                     put("Inhibition of Apoptosis", "SIGNOR-IOA");
+//                     put("Inflammosome Activation", "SIGNOR-Inflammosome");
+//                     put("Innate Immune Response", "SIGNOR-IIS");
+//                     put("Insulin Signaling", "SIGNOR-INSR");
+//                     put("Integrin Signaling", "SIGNOR-IS");
+//                     put("Leptin Signaling", "SIGNOR-LR");
+//                     put("Macrophage polarization", "SIGNOR-M1M2");
+//                     put("Mitochondrial control of Apoptosis", "SIGNOR-MCAPO");
+//                     put("MTOR Signaling", "SIGNOR-MS");
+//                     put("NF-KB Canonical", "SIGNOR-NFKBC");
+//                     put("NF-KB non canonical", "SIGNOR-NFKBNC");
+//                     put("NOTCH Signaling", "SIGNOR-NOTCH");
+//                     put("P38 Signaling", "SIGNOR-P38");
+//                     put("PI3K/AKT Signaling", "SIGNOR-PI3K-AKT");
+//                     put("SAPK/JNK Signaling", "SIGNOR-SAPK-JNK");
+//                     put("Sonic  HedgeHog", "SIGNOR-Hedgehog");
+//                     put("T Cell Activation", "SIGNOR-TCA");
+//                     put("TGF-beta Signaling", "SIGNOR-TGFb");
+//                     put("TNF-alpha", "SIGNOR-TA");
+//                     put("Toll like receptor", "SIGNOR-TLR");
+//                     put("VEGF Signaling", "SIGNOR-VEGF");
+//                     put("WNT Signaling", "SIGNOR-WNT");
+//                    }
+//        };
+//                     
     
 /*SIGNOR-CCN COVID-19
 SIGNOR-Myogenesis IGF

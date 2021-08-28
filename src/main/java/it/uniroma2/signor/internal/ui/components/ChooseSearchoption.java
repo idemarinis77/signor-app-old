@@ -18,7 +18,7 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
     private final ButtonGroup btn = new ButtonGroup();
     //private JLabel specie = new JLabel("Choose specie");
     private final JComboBox organism = new JComboBox(Config.SPECIESLIST.keySet().toArray());
-    private final JRadioButton singlebutton = new JRadioButton("single", true);
+    private final JRadioButton singlebutton = new JRadioButton("single", false);
     private final JRadioButton allbutton = new JRadioButton("all", true);
     private final JRadioButton connbutton= new JRadioButton("connect", false);
     private final JRadioButton shortpath= new JRadioButton("shortest path", false);
