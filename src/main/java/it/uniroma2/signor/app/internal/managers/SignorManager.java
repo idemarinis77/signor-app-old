@@ -158,8 +158,10 @@ public class SignorManager {
 //                String label = attributes[0]+"_"+residue+"_"+mechanism;
                 if(mechanism.startsWith("de")) mechanism = mechanism.substring(2);
                 String ptmprefix = Config.PTMprefix.get(mechanism);
+                //String label = signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).
+//                        get(Config.NAMESPACE, NodeField.ENTITY, String.class)+"_"+ptmprefix+residue+"_"+mechanism;
                 String label = signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).
-                        get(Config.NAMESPACE, NodeField.ENTITY, String.class)+"_"+ptmprefix+residue+"_"+mechanism;
+                        get(Config.NAMESPACE, NodeField.ENTITY, String.class)+"_"+ptmprefix+residue;
                 
                 if(!residue.isBlank()){
                     CyNode ptm;
@@ -208,6 +210,10 @@ public class SignorManager {
                 
                 String attribute = Config.HEADERSINGLESEARCH[Config.edge_positions[a]];
                 String map_attribute = EdgeField.EDGEFIELDMAP.get(attribute);
+                if(attribute.equals("DIRECT")){
+                    signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Config.DIRECTMAP.get(attributes[Config.edge_positions[a]]));
+                    continue;
+                }
                 try {
                      if(attributes[Config.edge_positions[a]].startsWith("0.") || Config.edge_positions[a] == 27){
                         //I'm reading the last field (Score) 
@@ -282,6 +288,7 @@ public class SignorManager {
             for (int a = 0; a < ConfigPathway.node_target_positions.length; a++){
                   String attribute = ConfigPathway.HEADERPTH[ConfigPathway.node_target_positions[a]];
                   String map_attribute = NodeField.NODEFIELDMAP.get(attribute);
+                  
                   try {
                         signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).set(Config.NAMESPACE, map_attribute, attributes[ConfigPathway.node_target_positions[a]]);
                         if(map_attribute==NodeField.ENTITY){
@@ -307,6 +314,10 @@ public class SignorManager {
             for (int a = 0; a < limit; a++){                
                 String attribute = ConfigPathway.HEADERPTH[ConfigPathway.edge_positions[a]];
                 String map_attribute = PathwayField.EDGEFIELDPTHMAP.get(attribute);
+                if(attribute.equals("DIRECT")){
+                    signornet.getDefaultEdgeTable().getRow(edge.getSUID()).set(Config.NAMESPACE, map_attribute, Config.DIRECTMAP.get(attributes[Config.edge_positions[a]]));
+                    continue;
+                }
                 try {
                     if(attributes[ConfigPathway.edge_positions[a]].startsWith("0.")){
                     //if((a == limit -1) && attributes[edge_positions[a]].startsWith("0.")){

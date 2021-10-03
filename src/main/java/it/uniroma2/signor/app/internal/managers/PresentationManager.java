@@ -25,6 +25,7 @@ import org.cytoscape.model.events.NetworkAboutToBeDestroyedEvent;
 import org.cytoscape.model.events.NetworkAboutToBeDestroyedListener;
 import org.cytoscape.model.subnetwork.CySubNetwork;
 import org.cytoscape.model.subnetwork.CyRootNetworkManager;
+import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.model.events.NetworkViewAboutToBeDestroyedEvent;
 import org.cytoscape.view.model.events.NetworkViewAboutToBeDestroyedListener;
 
@@ -111,7 +112,10 @@ public class PresentationManager implements
             
             try {
                 Boolean view_exist = false;
+                manager.utils.info("Ho aggiunto la vista "+cyNetworkView);
+
                 if (signorNetMap.containsKey(cyNetwork)) {
+                    
                     if(signorCyNetworkViewMap != null){
                        if(signorCyNetworkViewMap.containsKey(cyNetworkView)) view_exist = true;
                        signorCyNetworkViewMap.put(cyNetworkView, cyNetwork);
@@ -124,7 +128,7 @@ public class PresentationManager implements
                     String query = (String) signorNetMap.get(cyNetwork).parameters.get(NetworkField.QUERY);
                     if(query.equals(Config.INTERACTOMENAME) || cyNetwork.getRow(cyNetwork).get(CyNetwork.NAME, String.class).contains(Config.INTERACTOMENAME)){
                         //apply SIGNOR STYLE
-
+   
                         manager.signorStyleManager.applyStyle(cyNetworkView);                        
                     }
                     else if (DataUtils.isSignorNetwork(cyNetwork)){
@@ -154,7 +158,8 @@ public class PresentationManager implements
                     subnetwork.parameters.replace(NetworkField.ROOTNETWORKPTM, true);
                 signorNetMap.put(cyNetwork, subnetwork);
                 signorViewMap.put(subnetwork, nettype);
-//                Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
+                               
+                //                Table PTMTableNode = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);
 //                PTMTableNode.buildPTMTable(parentNetwork.manager, "PTMNode", cyNetwork);
 
 //                Table PTMTableEdge = new Table("SUID", true, true, CyTableFactory.InitialTableSize.MEDIUM);

@@ -104,7 +104,8 @@ public class DataUtils {
                        String effect = cyrow.get(Config.NAMESPACE, EdgeField.Interaction, String.class);
                        if(mechanism.startsWith("de")) mechanism = mechanism.substring(2);
                        String ptmprefix = Config.PTMprefix.get(mechanism);
-                       String label = networksignor.getNodes().get(cyNodeTargetParent).toString()+"_"+ptmprefix+residue+"_"+mechanism;
+//                       String label = networksignor.getNodes().get(cyNodeTargetParent).toString()+"_"+ptmprefix+residue+"_"+mechanism;
+                       String label = networksignor.getNodes().get(cyNodeTargetParent).toString()+"_"+ptmprefix+residue;
                        
 //                       CyNode cyNode = currentnet.addNode(); 
                        CyNode cyNode;

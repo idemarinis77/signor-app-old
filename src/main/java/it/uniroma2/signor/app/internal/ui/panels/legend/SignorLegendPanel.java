@@ -289,7 +289,7 @@ public class SignorLegendPanel extends JPanel implements
                                }
                           }
                             if(subCynetowrk.getRootNetwork().getBaseNetwork() != newcynet){
-                                manager.utils.info("Sono in set network "+newcynet.toString());
+                                
                                 Network subNetwork = manager.presentationManager.signorNetMap.get(newcynet);
                                 if(manager.presentationManager.signorViewMap.get(subNetwork)==NetworkView.Type.PTM){
                                     defviewON.setEnabled(false);

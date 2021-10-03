@@ -113,7 +113,7 @@ public class SignorNodePanel extends JPanel {
 
                 }
                 else {
-                    nodeinfo.add(new SignorLabelStyledBold(EdgeField.Interaction.toUpperCase()), gbc.down());
+                    nodeinfo.add(new SignorLabelStyledBold(EdgeField.MODIFIEDRESIDUE.toUpperCase()), gbc.down());
                     String ptm_interaction_value = current_cynetwork_to_serch_into.getDefaultNodeTable().getRow(node_current.getSUID()).
                         get("name", String.class);
                     nodeinfo.add(new JLabel("<html><body style='width:150px;font-size:8px'>"+ptm_interaction_value

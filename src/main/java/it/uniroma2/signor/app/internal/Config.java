@@ -26,7 +26,10 @@ public class Config {
          put ("Rattus norvegicus", "rat");
         }
     };
-    
+    public static final HashMap<String,String> DIRECTMAP = new HashMap<>(){
+        {put ("t", "YES");
+         put ("f", "NO");}
+    };
     public static final String identifier_panel = "it.uniroma2.signor.app.details";
     public static final String[] HEADERSINGLESEARCH = {"ENTITYA", "TYPEA", "IDA", "DATABASEA", "ENTITYB", "TYPEB", "IDB",
                                                     "DATABASEB", "EFFECT", "MECHANISM", "RESIDUE", "SEQUENCE", "TAX_ID", 

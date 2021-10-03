@@ -31,6 +31,7 @@ public class EdgeField {
     public static final String SENTENCE="SENTENCE";
     public static final String SCORE="SCORE";
     public static final String SIGNOR_ID="SIGNOR_ID";
+    public static final String MODIFIEDRESIDUE = "MODIFIED RESIDUE";
         
     public static final HashMap<String,Class<?>> EDGEFIELD = new HashMap(){
         {
