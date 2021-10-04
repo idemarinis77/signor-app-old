@@ -112,7 +112,6 @@ public class PresentationManager implements
             
             try {
                 Boolean view_exist = false;
-                manager.utils.info("Ho aggiunto la vista "+cyNetworkView);
 
                 if (signorNetMap.containsKey(cyNetwork)) {
                     
