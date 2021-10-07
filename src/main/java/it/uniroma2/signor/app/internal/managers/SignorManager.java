@@ -160,7 +160,7 @@ public class SignorManager {
                 String ptmprefix = Config.PTMprefix.get(mechanism);
                 //String label = signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).
 //                        get(Config.NAMESPACE, NodeField.ENTITY, String.class)+"_"+ptmprefix+residue+"_"+mechanism;
-                String label = signornet.getDefaultNodeTable().getRow(nodeSource.getSUID()).
+                String label = signornet.getDefaultNodeTable().getRow(nodeTarget.getSUID()).
                         get(Config.NAMESPACE, NodeField.ENTITY, String.class)+"_"+ptmprefix+residue;
                 
                 if(!residue.isBlank()){
