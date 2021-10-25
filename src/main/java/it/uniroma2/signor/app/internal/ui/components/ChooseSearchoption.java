@@ -19,10 +19,10 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
     //private JLabel specie = new JLabel("Choose specie");
     private final JComboBox organism = new JComboBox(Config.SPECIESLIST.keySet().toArray());
     private final JRadioButton singlebutton = new JRadioButton("entity query", false);
-    private final JRadioButton allbutton = new JRadioButton("all", true);
-    private final JRadioButton connbutton= new JRadioButton("connect", false);
+    private final JRadioButton allbutton = new JRadioButton("all interactions", true);
+    private final JRadioButton connbutton= new JRadioButton("Connect entity in the list", false);
     private final JRadioButton shortpath= new JRadioButton("shortest path", false);
-    private final JRadioButton inclfirstnei = new JRadioButton("include bridge proteins query", false);
+    private final JRadioButton inclfirstnei = new JRadioButton("Connect by including bridge entities", false);
     
     public ChooseSearchoption(SignorManager manager){
         super(new GridBagLayout());
@@ -32,15 +32,15 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
         connbutton.addChangeListener(this);
         
         Box searchoptions = Box.createVerticalBox();
-        btn.add(singlebutton);
-        btn.add(allbutton);
+        btn.add(singlebutton);        
         btn.add(connbutton);
         btn.add(shortpath);
-        searchoptions.add(singlebutton);
-        searchoptions.add(allbutton);
+        btn.add(allbutton);
+        searchoptions.add(singlebutton);        
         searchoptions.add(connbutton);
         searchoptions.add(inclfirstnei);
         searchoptions.add(shortpath);
+        searchoptions.add(allbutton);
         searchoptions.setBorder(BorderFactory.createTitledBorder("Search type"));
         add(searchoptions, layoutHelper.anchor("north"));
         

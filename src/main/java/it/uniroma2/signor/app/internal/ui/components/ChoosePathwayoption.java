@@ -88,17 +88,12 @@ public class ChoosePathwayoption extends JPanel {
         Object[] covidlist2 = Arrays.copyOf(covidlist, covidlist.length + 1);
         covidlist2[0]= (Object) "Select COVID pathway";
         System.arraycopy(covidlist, 0, covidlist2, 1, covidlist.length);
-        covid = new JComboBox(covidlist2);   
-        
-        Box covid_box = Box.createVerticalBox();
-        covid_box.add(covid);
-        covid_box.setBorder(BorderFactory.createTitledBorder("COVID"));
-        add(covid_box, layoutHelper.anchor("northwest"));        
+        covid = new JComboBox(covidlist2);           
         
         Box pathway_box = Box.createVerticalBox();
         pathway_box.add(pathway);
         pathway_box.setBorder(BorderFactory.createTitledBorder("Pathway"));
-        add(pathway_box, layoutHelper.down().anchor("west"));  
+        add(pathway_box, layoutHelper.anchor("northwest"));      
         
         Box disease_box = Box.createVerticalBox();
         disease_box.add(disease);
@@ -109,6 +104,11 @@ public class ChoosePathwayoption extends JPanel {
         tumor_box.add(tumor);
         tumor_box.setBorder(BorderFactory.createTitledBorder("Tumor pathway"));
         add(tumor_box, layoutHelper.down().anchor("west"));
+        
+        Box covid_box = Box.createVerticalBox();
+        covid_box.add(covid);
+        covid_box.setBorder(BorderFactory.createTitledBorder("COVID"));
+        add(covid_box, layoutHelper.down().anchor("west"));  
         
         add(clear, layoutHelper.down());
         clear.addActionListener(new ActionListener(){

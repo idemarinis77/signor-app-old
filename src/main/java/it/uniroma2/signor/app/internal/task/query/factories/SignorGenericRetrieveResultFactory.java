@@ -39,7 +39,6 @@ public class SignorGenericRetrieveResultFactory extends AbstractTaskFactory{
         String netName = Config.NTWPREFIX+terms_for_netname;
         String code_species ="";
         String URL = ConfigResources.WSSearchoptionMAP.get(search).queryFunction.apply(Config.SPECIESLIST.get(species), terms_upper_case);                 
-        network.manager.utils.info("SPECIE  "+Config.SPECIESLIST.get(species));
         if(!Config.SPECIESLIST.get(species).equals("9606")){
             code_species = "&organism="+Config.SPECIESLIST.get(species);
         }
