@@ -20,9 +20,9 @@ public class ChooseSearchoption extends JPanel implements ChangeListener{
     private final JComboBox organism = new JComboBox(Config.SPECIESLIST.keySet().toArray());
     private final JRadioButton singlebutton = new JRadioButton("entity query", false);
     private final JRadioButton allbutton = new JRadioButton("all interactions", true);
-    private final JRadioButton connbutton= new JRadioButton("Connect entity in the list", false);
+    private final JRadioButton connbutton= new JRadioButton("connect entity in the list", false);
     private final JRadioButton shortpath= new JRadioButton("shortest path", false);
-    private final JRadioButton inclfirstnei = new JRadioButton("Connect by including bridge entities", false);
+    private final JRadioButton inclfirstnei = new JRadioButton("connect by including bridge entities", false);
     
     public ChooseSearchoption(SignorManager manager){
         super(new GridBagLayout());

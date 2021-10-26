@@ -58,7 +58,7 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                     (Boolean) network.parameters.get(NetworkField.SHORTESTPATHSEARCH), manager);
             String newterms = terms.replace("%2C", " ");
             String new_for_warning = terms.replace("%2C", ",");
-            manager.utils.info("Shortest path **"+results.get(0)+"**");
+ 
             if(results.isEmpty()){                
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
                     "No results", JOptionPane.ERROR_MESSAGE));
@@ -91,8 +91,14 @@ public class CreateNetworkTask extends AbstractTask implements TaskObserver{
                         !results.get(0).endsWith(new_for_warning)) {
                     String  begin_substring = "Warning: The following proteins were not found :";
                     String  substring = results.get(0).substring(begin_substring.length());
-                    network.setEntityNotFound(substring);                    
+                    network.setEntityNotFound(substring);  
+                    if(results.get(1).isEmpty()){
+                        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "No results for "+newterms,
+                            "No results", JOptionPane.ERROR_MESSAGE));
+                        return;
+                    }
                 }
+                
                 if (cancelled) return;
                 
                 CyNetwork cynet = manager.createNetwork(netname);
